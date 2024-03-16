@@ -12,6 +12,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,10 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -33,17 +38,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
 import java.util.Calendar
 import java.util.Date
@@ -119,6 +130,29 @@ fun InfoBox(){
         fieldInfo(title = "Ngày sinh", fieldValue = "11-08-2002", type = "date")
         Spacer(modifier = Modifier.size(10.dp))
         fieldInfo(title = "Email", fieldValue = "minhtuan.1108tn@gmail.com")
+        Spacer(modifier = Modifier.size(40.dp))
+        Column {
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF3DB1FF),
+                    disabledBackgroundColor = Color(0xC83DB1FF),
+                    contentColor = Color(1f,1f,1f,1f)
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Lưu", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            }
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xF0FA233C),
+                    disabledBackgroundColor = Color(0xC5FA233C),
+                    contentColor = Color(1f,1f,1f,1f)
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Đăng xuất", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            }
+        }
     }
 }
 
@@ -129,14 +163,20 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
             text = title,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Start,
-            color = Color.Blue
+            color = Color.Blue,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
         )
         if(type.equals("text", true)){
-            TextField(value = fieldValue,
-                onValueChange = {},
+            var textValue by remember{ mutableStateOf(fieldValue) }
+            OutlinedTextField(value = textValue,
+                onValueChange = {textValue = it},
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
+                textStyle = TextStyle(
+                    fontSize=14.sp
+                ),
                 shape = RoundedCornerShape(15.dp),
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor =  Color.Transparent,
@@ -159,16 +199,16 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
             mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
 
             mCalendar.time = Date()
-            val mDate = remember { mutableStateOf("") }
+            val mDate = remember { mutableStateOf(fieldValue) }
 
             val mDatePickerDialog = DatePickerDialog(
                 LocalContext.current,
                 { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
-                    mDate.value = "$mDayOfMonth/${mMonth+1}/$mYear"
+                    mDate.value = "$mDayOfMonth-${mMonth+1}-$mYear"
                 }, mYear, mMonth, mDay
             )
 
-            TextField(
+            OutlinedTextField(
                 value = mDate.value,
                 onValueChange = {},
                 modifier = Modifier
