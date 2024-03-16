@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="aqua">#79C9E5</color>
+    <color name="aqua_light">#BFE8F3</color>
     <color name="yellow">#FFDF37</color>
 </resources>
