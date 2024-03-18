@@ -26,12 +26,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * An composable layout template will help to render an screen like profile, list items and notification list,...
+ * Look at example in this link:
+ * https://www.figma.com/file/ePgTPBhDsomJAj92Ha9C3D/Android-n%C3%A2ng-cao?type=design&node-id=18-2016&mode=design&t=WB9wX1GIO6hKoYi7-4
+ */
 @Composable
 fun MainBackgroundScreen(title : String, content: @Composable () -> Unit){
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(color = Color(0xFF21B4FC))
+        .background(color = Color(0xFF46BEF8))
     ) {
+        /**
+         * The header of screen which will show that the title off screen
+         */
         Row(modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
@@ -65,17 +73,15 @@ fun MainBackgroundScreen(title : String, content: @Composable () -> Unit){
                     modifier = Modifier.align(Alignment.CenterVertically))
             }
         }
+        /**
+         * The main container which will contain your content @Composable layout
+         */
         Column {
-            MainContainer(content = content)
+            Card(modifier = Modifier
+                .fillMaxSize(),
+                shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
+                content = content
+            )
         }
     }
-}
-
-@Composable
-fun MainContainer(content: @Composable () -> Unit){
-    Card(modifier = Modifier
-        .fillMaxSize(),
-        shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
-        content = content
-    )
 }
