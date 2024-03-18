@@ -59,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import java.util.Calendar
 import java.util.Date
 
@@ -77,60 +78,11 @@ class ProfileActivity : ComponentActivity(){
 }
 
 @Composable
-fun MainBackgroundScreen(){
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color(0xFF21B4FC))
-    ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(20.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.background(Color.White, RoundedCornerShape(50))
-                    .size(40.dp)
-            ) {
-                Icon(
-                    Icons.Filled.ArrowBackIosNew,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(50))
-                        .size(24.dp)
-                )
-            }
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .offset(-20.dp, 0.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Tài khoản",
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterVertically))
-            }
-        }
-        Column {
-            MainContainer()
-        }
-    }
-}
-
-@Composable
-fun MainContainer(){
-    Card(modifier = Modifier
-        .fillMaxSize(),
-        shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
-    ) {
-        Column(Modifier.padding(40.dp, 20.dp)) {
-            CircleAvatar()
-            Spacer(modifier = Modifier.size(20.dp))
-            InfoBox()
-        }
+fun MainContent(){
+    Column(Modifier.padding(40.dp, 20.dp)) {
+        CircleAvatar()
+        Spacer(modifier = Modifier.size(20.dp))
+        InfoBox()
     }
 }
 
@@ -286,7 +238,9 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
 @Preview
 @Composable
 fun DefaultPreview(){
-    MainBackgroundScreen()
+    MainBackgroundScreen("Tài khoản"){
+        MainContent()
+    }
 }
 
 
