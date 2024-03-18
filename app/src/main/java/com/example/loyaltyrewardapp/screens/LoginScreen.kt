@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -82,8 +85,6 @@ fun Tilte() {
             )
         )
     }
-
-
 }
 
 @Composable
@@ -97,7 +98,11 @@ fun getField() {
         var numberPhone by remember {
             mutableStateOf("")
         }
-        Text(text = "Số điện thoại", style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp), color = Color.Black.copy(alpha = 0.5f))
+        Text(
+            text = "Số điện thoại",
+            style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+            color = Color.Black.copy(alpha = 0.5f)
+        )
         TextField(
             label = { Text("123456") },
             value = numberPhone,
@@ -105,7 +110,8 @@ fun getField() {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Phone
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 20.dp)
                 .background(Color.White)
                 .clip(RoundedCornerShape(10.dp))
@@ -125,11 +131,30 @@ fun getField() {
             onValueChange = { password = it },
             label = { Text("*******") },
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 20.dp)
                 .clip(RoundedCornerShape(10.dp)),
 
             )
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 30.dp)
+                .clip(RoundedCornerShape(10.dp)),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF37A1ED)),
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp)
+        ) {
+            Text(
+                text = "Đăng nhập",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 3.dp, bottom = 3.dp)
+            )
+        }
     }
 }
 
