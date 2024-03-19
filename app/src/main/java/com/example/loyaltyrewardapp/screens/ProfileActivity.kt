@@ -78,10 +78,10 @@ class ProfileActivity : ComponentActivity(){
 }
 
 @Composable
-fun MainContent(){
-    Column(Modifier.padding(40.dp, 20.dp)) {
+fun ProfileContent(){
+    Column(Modifier.padding(40.dp, 30.dp)) {
         CircleAvatar()
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.size(40.dp))
         InfoBox()
     }
 }
@@ -237,9 +237,9 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
 }
 @Preview
 @Composable
-fun DefaultPreview(){
+fun ProfilePreview(){
     MainBackgroundScreen("Tài khoản"){
-        MainContent()
+        ProfileContent()
     }
 }
 
