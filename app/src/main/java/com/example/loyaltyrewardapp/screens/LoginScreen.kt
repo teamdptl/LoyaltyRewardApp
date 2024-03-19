@@ -151,7 +151,7 @@ fun getField() {
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("1237492") },
+            label = { Text("********") },
             visualTransformation = if (isPasswordVisible)
                 VisualTransformation.None
             else PasswordVisualTransformation(),
@@ -233,13 +233,19 @@ fun getField() {
                     .clip(RoundedCornerShape(10.dp)),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5))
             ) {
-                Image(painter = painterResource(id = R.drawable.google), contentDescription = "Icon Google", modifier = Modifier.size(size = 18.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.google),
+                    contentDescription = "Icon Google",
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .size(size = 18.dp)
+                )
                 Text(
                     text = "Google", fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .padding(start = 5.dp, top = 10.dp, end = 30.dp, bottom = 10.dp)
                         .align(Alignment.CenterVertically),
-                    fontSize = 14.sp,
+                    fontSize = 14.sp
                 )
             }
             Button(
@@ -252,10 +258,15 @@ fun getField() {
                     .clip(RoundedCornerShape(10.dp)),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFF5F5F5))
             ) {
-                Icon((Icons.Filled.Facebook), contentDescription = "", tint = Color.Blue)
+                Icon(
+                    (Icons.Filled.Facebook),
+                    contentDescription = "",
+                    tint = Color.Blue,
+                    modifier = Modifier.padding(start = 10.dp)
+                )
                 Text(
                     text = "Facebook", fontWeight = FontWeight.Bold, modifier = Modifier
-                        .padding(start = 5.dp, top = 10.dp, end = 25.dp, bottom = 10.dp)
+                        .padding(start = 5.dp, top = 10.dp, end = 10.dp, bottom = 10.dp)
                         .align(Alignment.CenterVertically), fontSize = 14.sp
                 )
             }
@@ -270,7 +281,7 @@ fun getField() {
         ) {
             Text(text = "Chưa có tài khoản ?", modifier = Modifier.alpha(0.5f))
             Text(
-                text = "Đăng ký", modifier = Modifier
+                text = "Đăng ký", fontWeight = FontWeight.Bold,modifier = Modifier
                     .clickable(onClick = {
                         Unit
                     })
