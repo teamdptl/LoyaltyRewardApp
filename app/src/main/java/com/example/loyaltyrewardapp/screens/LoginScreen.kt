@@ -34,6 +34,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -122,7 +123,7 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            label = { Text("123456") },
+            label = { Text(text="Số điện thoại", color = Color.Black.copy(alpha=0.2f)) },
             value = numberPhone,
             onValueChange = { numberPhone = it },
             keyboardOptions = KeyboardOptions(
@@ -134,11 +135,11 @@ fun getField() {
                 .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
 
         )
-        var password by remember {
+        val password = remember {
             mutableStateOf("")
 
         }
-        var isPasswordVisible by remember {
+        var isPasswordVisible = remember {
             mutableStateOf(false)
         }
         Text(
@@ -149,19 +150,20 @@ fun getField() {
                 .copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("********") },
-            visualTransformation = if (isPasswordVisible)
+            value = password.value,
+            onValueChange = { password.value = it },
+            label = { Text(text="Mật khẩu", color=Color.Black.copy(alpha=0.2f)) },
+            visualTransformation = if (isPasswordVisible.value)
                 VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        isPasswordVisible = !isPasswordVisible
+                        isPasswordVisible.value = !isPasswordVisible.value
                     }
                 ) {
-                    Icon(Icons.Rounded.VisibilityOff, contentDescription = "Show password")
+                    val icon = if(isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
+                    Icon(icon, contentDescription = "Hidden/Show password")
                 }
             },
             modifier = Modifier

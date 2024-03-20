@@ -3,13 +3,10 @@ package com.example.loyaltyrewardapp.screens
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,17 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.ButtonElevation
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +46,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -110,8 +106,8 @@ fun Tilte() {
 }
 @Composable
 fun ChangeUserRegister() {
-    var selectedButton by remember {
-        mutableStateOf("Khách hàng")
+    val selectedButton = remember {
+        mutableStateOf(true)
     }
 
     Row(
@@ -123,30 +119,31 @@ fun ChangeUserRegister() {
             .background(color = Color.Gray.copy(alpha = 0.1f)),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Button(
-            onClick = { selectedButton = "Khách hàng" }, // Khi click vào button "Khách hàng"
+        TextButton(
+            onClick = { selectedButton.value = true},
             modifier = Modifier
                 .width(width = 151.dp)
                 .height(height = 48.dp)
                 .padding(start = 5.dp)
                 .align(Alignment.CenterVertically),
-            colors = if (selectedButton == "Khách hàng") ButtonDefaults.buttonColors(backgroundColor = Color.White) else ButtonDefaults.outlinedButtonColors(),
+            colors = if (selectedButton.value) ButtonDefaults.buttonColors(backgroundColor = Color.White) else ButtonDefaults.buttonColors(
+                Color.Transparent
+            ),
             shape = RoundedCornerShape(8.dp)
 
         ) {
             Text(text = "Khách hàng", color = Color.Black, fontWeight = FontWeight.Bold)
         }
-        Button(
-            onClick = { selectedButton = "Chủ cửa hàng" }, // Khi click vào button "Chủ cửa hàng"
+        TextButton(
+            onClick = { selectedButton.value = false }, // Khi click vào button "Chủ cửa hàng"
             modifier = Modifier
                 .width(width = 152.dp)
                 .height(height = 48.dp)
                 .padding(end = 5.dp)
                 .align(Alignment.CenterVertically),
-            colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
-//            colors = if (selectedButton == "Chủ cửa hàng") ButtonDefaults.buttonColors(
-//                backgroundColor = Color.White
-//            ) else ButtonDefaults.outlinedButtonColors(),
+            colors = if (!selectedButton.value)  ButtonDefaults.buttonColors(
+                backgroundColor = Color.White
+            )  else ButtonDefaults.buttonColors(Color.Transparent),
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(text = "Chủ cửa hàng", color = Color.Black, fontWeight = FontWeight.Bold)
@@ -170,7 +167,7 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            label = { Text("Nguyễn Văn A") },
+            label = {Text( text = "Họ tên", color = Color.Black.copy(alpha = 0.2f))},
             value = userName,
             onValueChange = { userName = it },
             keyboardOptions = KeyboardOptions(
@@ -192,7 +189,7 @@ fun getField() {
             modifier = Modifier.padding(top = 20.dp)
         )
         OutlinedTextField(
-            label = { Text("123456") },
+            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
             value = numberPhone,
             onValueChange = { numberPhone = it },
             keyboardOptions = KeyboardOptions(
@@ -204,11 +201,10 @@ fun getField() {
                 .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
 
         )
-        var password by remember {
+        val password = remember {
             mutableStateOf("")
-
         }
-        var isPasswordVisible by remember {
+        val isPasswordVisible = remember {
             mutableStateOf(false)
         }
         Text(
@@ -219,19 +215,23 @@ fun getField() {
                 .copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("********") },
-            visualTransformation = if (isPasswordVisible)
+            value = password.value,
+            onValueChange = {
+                password.value = it
+                } ,
+            keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password) ,
+            label = { Text(text="Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
+            visualTransformation = if (isPasswordVisible.value)
                 VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        isPasswordVisible = !isPasswordVisible
+                        isPasswordVisible.value = !isPasswordVisible.value
                     }
                 ) {
-                    Icon(Icons.Rounded.VisibilityOff, contentDescription = "Show password")
+                    val icon = if (isPasswordVisible.value)Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
+                    Icon(icon, contentDescription = "Hidden/Show password")
                 }
             },
             modifier = Modifier
