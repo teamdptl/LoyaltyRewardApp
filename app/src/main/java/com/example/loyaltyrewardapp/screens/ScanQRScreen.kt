@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
+import com.lightspark.composeqr.DotShape
 import com.lightspark.composeqr.QrCodeView
 
 @Composable
@@ -52,7 +53,8 @@ fun ScanQRContent(){
                 QrCodeView(
                     data = "2500323123123123|321312",
                     modifier = Modifier.size(qrSize)
-                        .offset((containQRWidth - qrSize)/2, (containQRHeight - qrSize)/2)
+                        .offset((containQRWidth - qrSize)/2, (containQRHeight - qrSize)/2),
+                    dotShape = DotShape.Circle
                 )
             }
         }
