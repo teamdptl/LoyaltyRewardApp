@@ -32,6 +32,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldColors
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.rounded.Visibility
@@ -49,6 +51,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -114,27 +117,14 @@ fun getField() {
             .fillMaxHeight()
             .offset(x = 27.dp, y = 121.dp)
     ) {
-        var numberPhone by remember {
+
+
+        val isTypingPhoneNumber = remember { mutableStateOf(false) }
+        val isTypingPassword = remember { mutableStateOf(false) }
+
+        val numberPhone = remember {
             mutableStateOf("")
         }
-        Text(
-            text = "Số điện thoại",
-            style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
-            color = Color.Black.copy(alpha = 0.5f)
-        )
-        OutlinedTextField(
-            label = { Text(text="Số điện thoại", color = Color.Black.copy(alpha=0.2f)) },
-            value = numberPhone,
-            onValueChange = { numberPhone = it },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Phone
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
-
-        )
         val password = remember {
             mutableStateOf("")
 
@@ -142,6 +132,41 @@ fun getField() {
         var isPasswordVisible = remember {
             mutableStateOf(false)
         }
+        val isPhoneNumberValid =
+            numberPhone.value.isNotEmpty() && isValidPhoneNumber(numberPhone.value)
+        val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
+        val isLoginEnabled = isPhoneNumberValid && isPasswordValid
+        Text(
+            text = "Số điện thoại",
+            style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+            color = Color.Black.copy(alpha = 0.5f)
+        )
+        OutlinedTextField(
+            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
+            value = numberPhone.value,
+            onValueChange = { newNumberPhone ->
+                if (newNumberPhone.length <= 10 && newNumberPhone.all { it.isDigit() })
+                    numberPhone.value = newNumberPhone
+                isTypingPhoneNumber.value = true
+            },
+            colors = if (isTypingPhoneNumber.value && isValidPhoneNumber(numberPhone.value)) {
+                TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
+            } else {
+                TextFieldDefaults.outlinedTextFieldColors()
+            },
+            isError = isTypingPhoneNumber.value && numberPhone.value.isNotEmpty() && !isValidPhoneNumber(
+                numberPhone.value
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 5.dp)
+                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
+
+        )
+
         Text(
             text = "Mật khẩu",
             modifier = Modifier.padding(top = 20.dp),
@@ -151,8 +176,22 @@ fun getField() {
         )
         OutlinedTextField(
             value = password.value,
-            onValueChange = { password.value = it },
-            label = { Text(text="Mật khẩu", color=Color.Black.copy(alpha=0.2f)) },
+            onValueChange = {
+                password.value = it
+                password.value.length >= 6
+                isTypingPassword.value = true
+            },
+            label = { Text(text = "Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
+            isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
+            colors = if (isTypingPassword.value && password.value.length >= 6) {
+                TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
+            } else {
+                TextFieldDefaults.outlinedTextFieldColors()
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
             visualTransformation = if (isPasswordVisible.value)
                 VisualTransformation.None
             else PasswordVisualTransformation(),
@@ -162,13 +201,15 @@ fun getField() {
                         isPasswordVisible.value = !isPasswordVisible.value
                     }
                 ) {
-                    val icon = if(isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
+                    val icon =
+                        if (isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                     Icon(icon, contentDescription = "Hidden/Show password")
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp), shape = RoundedCornerShape(10.dp)
+                .padding(top = 5.dp),
+            shape = RoundedCornerShape(10.dp)
         )
         Button(
             onClick = { /*TODO*/ },
@@ -178,7 +219,8 @@ fun getField() {
                 .padding(top = 30.dp)
                 .clip(RoundedCornerShape(10.dp)),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF37A1ED)),
-            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp)
+            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
+            enabled = isLoginEnabled
         ) {
             Text(
                 text = "Đăng nhập",
@@ -283,7 +325,7 @@ fun getField() {
         ) {
             Text(text = "Chưa có tài khoản ?", modifier = Modifier.alpha(0.5f))
             Text(
-                text = "Đăng ký", fontWeight = FontWeight.Bold,modifier = Modifier
+                text = "Đăng ký", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
                         Unit
                     })
@@ -293,6 +335,12 @@ fun getField() {
         }
 
     }
+}
+
+fun isValidPhoneNumber(phoneNumber: String): Boolean {
+    if (phoneNumber.isBlank()) return false
+    val prefixList = listOf("03", "05", "07", "08", "09")
+    return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
 
 @Preview(showBackground = true)
