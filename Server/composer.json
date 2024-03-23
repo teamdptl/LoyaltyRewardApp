@@ -6,10 +6,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "kreait/firebase-php": "^7.9",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "mongodb/laravel-mongodb": "^4.2"
+        "mongodb/laravel-mongodb": "^4.2",
+        "predis/predis": "^2.2",
+        "ext-redis": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
