@@ -1,0 +1,10 @@
+{
+    "environments": {
+      "test": {
+        "scripts": {
+          "test-setup": "heroku-php-apache2 >/dev/null 2>&1 & sleep 5",
+          "test": "codecept run"
+        }
+      }
+    }
+}
