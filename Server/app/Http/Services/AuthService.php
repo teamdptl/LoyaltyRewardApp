@@ -16,10 +16,11 @@ class AuthService
     public function __construct()
     {
         try{
-            $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS', ''));
-            $this->auth = $factory->createAuth();
+            $this->auth = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS', ''))->createAuth();
+//            $this->auth = app('firebase.auth');
         } catch (Exception $e){
             print("Thiếu định nghĩa file loyalty_reward.json ở trong .env rồi! Liên hệ Duy đi");
+            print($e);
             exit(0);
         }
     }
