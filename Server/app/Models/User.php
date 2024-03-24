@@ -43,9 +43,4 @@ class User extends Model
             'password' => 'hashed',
         ];
     }
-
-    public function posts()
-    {
-        return $this->embedsMany(Post::class);
-    }
 }

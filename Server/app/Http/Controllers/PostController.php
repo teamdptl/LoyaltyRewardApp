@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\AuthService;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,8 @@ class PostController extends Controller
 {
     public function show($title)
     {
-        return Post::where('_id', '=', $title)->first();
+        $auth = new AuthService;
+//        return Post::where('_id', '=', $title)->first();
     }
 
     public function store(Request $request)

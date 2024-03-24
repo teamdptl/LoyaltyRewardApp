@@ -20,5 +20,13 @@ Route::post('/show/{title}', [\App\Http\Controllers\PostController::class, 'show
 Route::post('/create', [\App\Http\Controllers\PostController::class, 'store']);
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+    return $request->user;
+})->middleware('auth-firebase');
+
+//Route::middleware('auth-firebase')->group(function () {
+//    Route::middleware('auth-firebase-user')->group(function () {
+//        Route::get('/user', function (Request $request) {
+//            return $request->user;
+//        });
+//    });
+//});
