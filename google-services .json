@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165038119533",
+    "project_id": "loyaltyreward-95033",
+    "storage_bucket": "loyaltyreward-95033.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165038119533:android:e44501bf2a84acec567d64",
+        "android_client_info": {
+          "package_name": "com.example.loyaltyrewardapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165038119533-e6qrcteuu2uqlvhsh0tn9qsgv1eceo3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4NKEsE2VphMiDwyaWQ1yTGouzxnCphF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165038119533-e6qrcteuu2uqlvhsh0tn9qsgv1eceo3h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

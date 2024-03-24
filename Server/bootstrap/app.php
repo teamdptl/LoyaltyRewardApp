@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'auth-firebase' => \App\Http\Middleware\FirebaseUserMiddleware::class,
+            'auth-firebase-user' => \App\Http\Middleware\IsUserMiddleware::class,
+            'auth-firebase-shop-owner' => \App\Http\Middleware\IsShopOwnerMiddlerware::class,
+            'auth-firebase-admin' => \App\Http\Middleware\IsAdminMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
