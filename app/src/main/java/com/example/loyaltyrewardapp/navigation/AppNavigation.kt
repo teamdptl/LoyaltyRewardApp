@@ -42,6 +42,8 @@ import com.example.loyaltyrewardapp.screens.HistoryScreen
 import com.example.loyaltyrewardapp.screens.HomeScreen
 import com.example.loyaltyrewardapp.screens.NotificationsPreview
 import com.example.loyaltyrewardapp.screens.ProfileContent
+import com.example.loyaltyrewardapp.screens.ProfilePreview
+import com.example.loyaltyrewardapp.screens.QRScreenPreview
 import com.example.loyaltyrewardapp.screens.ScanQRContent
 
 
@@ -139,13 +141,13 @@ fun AppNavigation(){
                 HistoryPreview()
             }
             composable(route = Screens.ScanQRScreen.name){
-                ScanQRContent()
+                QRScreenPreview()
             }
             composable(route = Screens.NotificationsScreen.name){
                 NotificationsPreview()
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfileContent()
+                ProfilePreview()
             }
         }
     }

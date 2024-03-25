@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,11 @@ Route::get('/test-redis', function(){
     }
     return ['name' => $name, 'isExistName' => $isExistName];
 });
+
+Route::get('/post/all', function(){
+    return Post::all();
+});
+
 
 Route::post('/show/{title}', [\App\Http\Controllers\PostController::class, 'show']);
 Route::post('/create', [\App\Http\Controllers\PostController::class, 'store']);
