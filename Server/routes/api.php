@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,10 +14,6 @@ Route::get('/test-redis', function(){
         Redis::set('name', $name);
     }
     return ['name' => $name, 'isExistName' => $isExistName];
-});
-
-Route::get('/post/all', function(){
-    return Post::all();
 });
 
 

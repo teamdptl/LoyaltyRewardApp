@@ -13,13 +13,15 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,16 +51,23 @@ fun MainBackgroundScreen(title : String, content: @Composable () -> Unit){
         ) {
             IconButton(
                 onClick = { /*TODO*/ },
+                colors = IconButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.Gray,
+                    disabledContentColor = Color.Black
+                ),
                 modifier = Modifier
-                    .background(Color.White, RoundedCornerShape(50))
-                    .size(40.dp)
+                    .clip(RoundedCornerShape(50))
+                    .size(40.dp),
             ) {
                 Icon(
                     Icons.Filled.ArrowBackIosNew,
                     contentDescription = null,
                     modifier = Modifier
-                        .background(Color.White, RoundedCornerShape(50))
-                        .size(24.dp)
+                        .clip(RoundedCornerShape(50))
+                        .size(24.dp),
+                    tint = Color.Black
                 )
             }
             Row(modifier = Modifier

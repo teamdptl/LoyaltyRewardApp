@@ -191,7 +191,7 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            label = { Text(text = "Họ tên", color = Color.Black.copy(alpha = 0.2f)) },
+//            label = { Text(text = "Họ tên", color = Color.Black.copy(alpha = 0.2f)) },
             value = userName.value,
             onValueChange = {
                 userName.value = it

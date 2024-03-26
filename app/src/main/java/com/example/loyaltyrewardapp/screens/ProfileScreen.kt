@@ -167,7 +167,8 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 textStyle = TextStyle(
-                    fontSize=14.sp
+                    fontSize=14.sp,
+                    color = Color.Black,
                 ),
                 shape = RoundedCornerShape(15.dp),
                 )
