@@ -10,4 +10,5 @@ Route::get('/info', function () {
     phpinfo();
 });
 
-Route::get('/post/{title}', [\App\Http\Controllers\PostController::class, 'show']);
+Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index']);
+Route::post('/shop/store', [App\Http\Controllers\ShopController::class, 'store']);

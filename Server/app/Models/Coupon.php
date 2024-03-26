@@ -5,24 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
-class Service extends Model
+class Coupon extends Model
 {
     use HasFactory;
     protected $connection = 'mongodb';
     protected $fillable = [
         'name',
         'description',
-        'should_notification',
-        'period',
-        'points_reward'
+        'require_point',
+        'icon',
+        'is_active'
     ];
 
-    
-    public function shop(){
-        return $this->belongsToMany(Shop::class);
+    public function users(){
+        return $this->belongsToMany(User::class)->withPivot('expired_at');
     }
 
-    public function transactions(){
-        return $this->hasMany(Transaction::class);
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 }
