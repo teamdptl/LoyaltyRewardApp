@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.BottomNavigation
+import androidx.compose.material.MaterialTheme
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.google.firebase.auth.FirebaseAuth
 
