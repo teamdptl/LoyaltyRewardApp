@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -31,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +60,15 @@ fun AppNavigation(){
     Scaffold (
         bottomBar = {
             NavigationBar(
-                Modifier.background(Color.Yellow)
+                containerColor = Color.White,
+                tonalElevation = 1.dp,
+                modifier = Modifier
+                    .graphicsLayer {
+                        clip = true
+                        shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                        shadowElevation = 2.2f
+                    }
+                    .height(80.dp),
             ) {
 
 
@@ -105,7 +115,9 @@ fun AppNavigation(){
                                         Icon(
                                             imageVector = navItem.selectedIcon,
                                             contentDescription = null,
+                                            tint = Color.Unspecified,
                                             modifier = Modifier.size(35.dp)
+
                                         )
                                     }
                                 } else {
@@ -121,7 +133,9 @@ fun AppNavigation(){
 
 
                         label = {
-                            Text(text = navItem.label,   fontSize = 8.sp)
+                            if (navItem.label.isNotEmpty()) {
+                                Text(text = navItem.label,   fontSize = 8.sp)
+                            }
                         }
                     )
                 }
