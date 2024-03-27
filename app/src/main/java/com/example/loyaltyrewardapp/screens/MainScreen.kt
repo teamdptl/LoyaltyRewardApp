@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.example.loyaltyrewardapp.navigation.AppNavigation
+import com.example.loyaltyrewardapp.screens.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 
 class MainScreen : AppCompatActivity() {
@@ -38,9 +42,17 @@ class MainScreen : AppCompatActivity() {
                 }
             }
         setContent {
-            BottomNavigation {
-                AppNavigation()
+            LoyaltyRewardAppTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                ) {
+                    BottomNavigation {
+                        AppNavigation()
+                    }
+                }
             }
         }
     }
+
 }

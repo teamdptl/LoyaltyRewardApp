@@ -14,10 +14,10 @@ object HistoryProvider {
     val history =
         HistoryModel(
             id = 1,
-            title = "Cua hang tien loi",
+            title = "Cua hang tien loi cua Phuc va Duy",
             pictureUrl = R.drawable.avatar,
             time = dateFormat.format(currentTimeMillis),
-            des = "sao cung duoc, kì cục dữ vậy, bực quá à, tức ",
+            des = "sao cung duoc, kì cục dữ vậy, bực quá à, tức quá trời tức rồi trời ơi là trời ",
             point = 10
         )
 
