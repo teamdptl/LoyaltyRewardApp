@@ -191,7 +191,6 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-//            label = { Text(text = "Họ tên", color = Color.Black.copy(alpha = 0.2f)) },
             value = userName.value,
             onValueChange = {
                 userName.value = it
@@ -221,7 +220,6 @@ fun getField() {
             modifier = Modifier.padding(top = 20.dp)
         )
         OutlinedTextField(
-            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
             value = numberPhone.value,
             onValueChange = { newNumberPhone ->
                 if (newNumberPhone.length <= 10 && newNumberPhone.all { it.isDigit() })
@@ -264,7 +262,6 @@ fun getField() {
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            label = { Text(text = "Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)

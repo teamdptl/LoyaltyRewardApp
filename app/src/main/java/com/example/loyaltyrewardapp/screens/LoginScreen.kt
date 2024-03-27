@@ -142,7 +142,6 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
             value = numberPhone.value,
             onValueChange = { newNumberPhone ->
                 if (newNumberPhone.length <= 10 && newNumberPhone.all { it.isDigit() })
@@ -159,7 +158,7 @@ fun getField() {
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),
+            ),textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -181,7 +180,6 @@ fun getField() {
                 password.value.length >= 6
                 isTypingPassword.value = true
             },
-            label = { Text(text = "Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
@@ -205,7 +203,7 @@ fun getField() {
                         if (isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                     Icon(icon, contentDescription = "Hidden/Show password")
                 }
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),
