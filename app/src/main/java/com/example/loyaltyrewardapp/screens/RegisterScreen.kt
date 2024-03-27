@@ -206,7 +206,7 @@ fun getField() {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
             } else {
                 TextFieldDefaults.outlinedTextFieldColors()
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -238,7 +238,7 @@ fun getField() {
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),
+            ),textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -284,7 +284,7 @@ fun getField() {
                         if (isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                     Icon(icon, contentDescription = "Hidden/Show password")
                 }
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp), shape = RoundedCornerShape(10.dp)
