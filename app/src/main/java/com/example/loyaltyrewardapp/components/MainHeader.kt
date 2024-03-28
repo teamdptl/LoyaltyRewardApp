@@ -40,6 +40,7 @@ import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
 import com.example.loyaltyrewardapp.ui.theme.Yellow
 import com.lightspark.composeqr.QrCodeView
+import com.example.loyaltyrewardapp.screens.ui.theme.Typography
 
 
 @Composable
@@ -47,13 +48,13 @@ fun userCard() {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(horizontal = 32.dp)
+            .padding(horizontal = 24.dp)
             .padding(top = 4.dp)
             .background(color = Color.White, shape = RoundedCornerShape(10.dp))
             .fillMaxWidth()
             .padding(12.dp)
             .padding(horizontal = 12.dp)) {
-        Text(text = "Đưa mã này cho nhân viên để tích điểm", fontSize = 12.sp)
+        Text(text = "Đưa mã này cho nhân viên để tích điểm", fontSize = 12.sp, fontWeight = FontWeight.Bold)
         Row (modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)){
@@ -62,21 +63,22 @@ fun userCard() {
                 modifier = Modifier.size(140.dp)
             )
             Column(modifier = Modifier.padding(start = 12.dp)) {
-                Text(text = "Thẻ thành viên", fontSize = 14.sp,
+                Text(text = "Thẻ thành viên", fontSize = Typography.bodyLarge.fontSize,
                     fontWeight = FontWeight.Medium, color = MainColor,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth())
                 Column(modifier = Modifier.padding(top = 8.dp)){
                     Text(text = "Họ tên:", fontWeight = FontWeight.Medium, fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
-                    Text(text = "Huỳnh Khánh Duy", fontWeight = FontWeight.Light)
+                    Text(text = "Huỳnh Khánh Duy", fontWeight = FontWeight.Light, fontSize = Typography.labelSmall.fontSize,maxLines = 1)
                 }
                 Column(modifier = Modifier.padding(top = 8.dp)){
                     Text(text = "Điện thoại: ", fontWeight = FontWeight.Medium, fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
-                    Text(text = "01234567", fontWeight = FontWeight.Light)
+                    Text(text = "01234567", fontWeight = FontWeight.Light, maxLines = 1, fontSize = Typography.labelSmall.fontSize,)
                 }
-                Text(text = "Ngày tham gia: 24/12/2023", fontSize = 10.sp, textAlign = TextAlign.Right, modifier = Modifier.padding(top = 10.dp))
             }
         }
+        Text(text = "Ngày tham gia: 24/12/2023", fontSize = 10.sp, textAlign = TextAlign.Right, modifier = Modifier.padding(top = 10.dp))
+
     }
 }
 
@@ -84,7 +86,7 @@ fun userCard() {
 fun MainHeader(){
     Box(modifier = Modifier
         .fillMaxWidth()
-        .height(300.dp)){
+        .height(350.dp)){
         Image(painter = painterResource(id = R.drawable.background), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         Column{
             Row(modifier = Modifier

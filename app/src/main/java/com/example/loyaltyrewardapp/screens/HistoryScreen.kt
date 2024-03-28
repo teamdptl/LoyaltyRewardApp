@@ -58,56 +58,6 @@ fun HistoryContent(){
 }
 
 
-//@Composable
-//fun HistoryItem(history: HistoryModel){
-//    CardList(){
-//        Row(Modifier.clickable {  }) {
-//            SquareImage(
-//                item = history,
-//                pictureUrlProperty = HistoryModel::pictureUrl
-//            )
-//                Column( // Left half for history details
-//                    modifier = Modifier
-//                        .padding(8.dp)
-////                        .fillMaxWidth(0.8f) // Occupy 50% of width
-//                        .weight(1f), // Ensure equal weight with Text
-//                    horizontalAlignment = Alignment.Start
-//                ) {
-//                    Text(text = history.title, fontWeight = FontWeight.SemiBold, maxLines = 1)
-//                    Text(text = history.time, maxLines = 1,modifier = Modifier.offset(y = 6.dp))
-//                    Text(text = history.des, maxLines = 2,modifier = Modifier.offset(y = 15.dp), fontWeight = FontWeight.Normal)
-//                }
-//
-////                Spacer(modifier = Modifier.weight(0.01f)) // Tiny spacer for visual separation
-//
-//                Column(
-//                    modifier = Modifier
-//                        .padding(35.dp)
-////                        .fillMaxWidth(0.2f) // Set width if needed, adjust as necessary
-//                        .weight(1f) // Ensure equal weight with Column
-//                        .fillMaxHeight(1f),
-//
-//                    horizontalAlignment = Alignment.Start,
-//                    verticalArrangement = Arrangement.Center
-//
-//                ) {
-//                    Text(
-//                        text = "+ " + history.point + "đ",
-//                        color = Color(0xFF11942C),
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .padding(horizontal = 8.dp)
-//                            .fillMaxHeight()
-//
-//                    )
-//                }
-//
-//
-//        }
-//    }
-//}
-
 @Preview
 @Composable
 fun HistoryPreview(){
