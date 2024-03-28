@@ -76,14 +76,14 @@ class RegisterScreen : ComponentActivity() {
 @Composable
 fun registerScreen() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Tilte()
+        Title()
         ChangeUserRegister()
         getField()
     }
 }
 
 @Composable
-fun Tilte() {
+fun Title() {
     Box(
         modifier = Modifier
             .width(307.dp)

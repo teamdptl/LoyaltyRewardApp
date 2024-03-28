@@ -77,14 +77,14 @@ class Login : ComponentActivity() {
 @Composable
 fun LoginScreen() {
     Column(Modifier.fillMaxSize()) {
-        Tilte()
+        Title()
         getField()
     }
 }
 
 
 @Composable
-fun Tilte() {
+fun Title() {
     Box(
         modifier = Modifier
             .width(226.dp)
