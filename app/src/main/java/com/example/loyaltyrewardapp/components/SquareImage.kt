@@ -11,12 +11,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import kotlin.reflect.KProperty1
 
 @Composable
 fun <T> SquareImage(
     item: T,
-    pictureUrlProperty: KProperty1<T, Int>,
+    pictureUrlProperty: (T) -> Int,
     modifier: Modifier = Modifier
 ) {
     Image(
