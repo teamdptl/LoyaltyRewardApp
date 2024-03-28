@@ -4,7 +4,8 @@ import java.io.Serializable
 
 data class ShopModel(
     val id: Int,
-    val name: String,
+    val title: String,
     val pictureUrl: Int = 0,
     val address: String,
+    val status: Boolean
 ): Serializable

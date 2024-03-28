@@ -50,7 +50,7 @@ fun <T : Any> NotificationsItem(
                     Text(
                         text = timeProvider(item),
                         maxLines = 1,
-                        fontSize = 12.sp,
+                        fontSize = 8.sp,
                         textAlign = TextAlign.End,
                         modifier = Modifier.fillMaxWidth(1f)
                     )
