@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('services', function (Blueprint $collection) {
+            $collection->id();
+            $collection->string('name');
+            $collection->text('description');
+            $collection->boolean('should_notification')->default(false);
+            $collection->timestamps('period');
+            $collection->integer('points_reward')->default(0);
+            $collection->timestamps();
         });
     }
 
