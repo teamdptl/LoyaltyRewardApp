@@ -76,14 +76,14 @@ class RegisterScreen : ComponentActivity() {
 @Composable
 fun registerScreen() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Tilte()
+        Title()
         ChangeUserRegister()
         getField()
     }
 }
 
 @Composable
-fun Tilte() {
+fun Title() {
     Box(
         modifier = Modifier
             .width(307.dp)
@@ -191,7 +191,6 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-//            label = { Text(text = "Họ tên", color = Color.Black.copy(alpha = 0.2f)) },
             value = userName.value,
             onValueChange = {
                 userName.value = it
@@ -206,7 +205,7 @@ fun getField() {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
             } else {
                 TextFieldDefaults.outlinedTextFieldColors()
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -221,7 +220,6 @@ fun getField() {
             modifier = Modifier.padding(top = 20.dp)
         )
         OutlinedTextField(
-            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
             value = numberPhone.value,
             onValueChange = { newNumberPhone ->
                 if (newNumberPhone.length <= 10 && newNumberPhone.all { it.isDigit() })
@@ -238,7 +236,7 @@ fun getField() {
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),
+            ),textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -264,7 +262,6 @@ fun getField() {
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
-            label = { Text(text = "Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
@@ -284,7 +281,7 @@ fun getField() {
                         if (isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                     Icon(icon, contentDescription = "Hidden/Show password")
                 }
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp), shape = RoundedCornerShape(10.dp)
