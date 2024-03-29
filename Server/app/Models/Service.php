@@ -19,7 +19,11 @@ class Service extends Model
 
     
     public function shop(){
-        return $this->belongsToMany(Shop::class);
+        return $this->belongsTo(Shop::class);
+    }
+
+    public function coupons(){
+        return $this->hasMany(Coupon::class);
     }
 
     public function transactions(){
