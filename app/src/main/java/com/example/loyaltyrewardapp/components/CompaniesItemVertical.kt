@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.loyaltyrewardapp.screens.ui.theme.GrayMap
+import com.example.loyaltyrewardapp.ui.theme.GrayMap
 
 @Composable
 fun <T : Any> CompaniesItemVertical(
@@ -38,8 +38,8 @@ fun <T : Any> CompaniesItemVertical(
                 item = item,
                 pictureUrlProperty = pictureUrlProvider,
                 modifier = Modifier
-                    .weight(2.5f),
-                size = 90.dp
+                    .weight(2.5f).padding(8.dp),
+
             )
             Column(
                 modifier = Modifier.weight(7.5f)
