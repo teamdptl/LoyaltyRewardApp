@@ -76,22 +76,28 @@ class Login : ComponentActivity() {
 
 @Composable
 fun LoginScreen() {
-    Column(Modifier.fillMaxSize()) {
-        Tilte()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
+        Title()
         getField()
     }
 }
 
 
 @Composable
-fun Tilte() {
-    Box(
-        modifier = Modifier
-            .width(226.dp)
-            .height(66.dp)
-            .offset(x = 28.dp, y = 85.dp)
+fun Title() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
 
+        Image(
+            painter = painterResource(id = R.drawable.login_background),
+            contentDescription = null,
+            modifier = Modifier.padding(top = 20.dp).size(width = 300.dp, height = 200.dp)
+        )
         Text(
             text = "Đăng nhập",
             style = androidx.compose.ui.text.TextStyle(fontSize = 32.sp),
@@ -99,8 +105,7 @@ fun Tilte() {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Hệ thống tích điểm tiện ích",
-            modifier = Modifier.align(Alignment.BottomStart),
+            text = "Hệ thống tích điểm tiện ích cho cửa hàng",
             style = androidx.compose.ui.text.TextStyle(
                 fontSize = 16.sp,
                 color = Color.Black.copy(alpha = 0.5f)
@@ -113,9 +118,8 @@ fun Tilte() {
 fun getField() {
     Column(
         modifier = Modifier
-            .width(327.dp)
-            .fillMaxHeight()
-            .offset(x = 27.dp, y = 121.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
 
 
@@ -142,7 +146,6 @@ fun getField() {
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
-            label = { Text(text = "Số điện thoại", color = Color.Black.copy(alpha = 0.2f)) },
             value = numberPhone.value,
             onValueChange = { newNumberPhone ->
                 if (newNumberPhone.length <= 10 && newNumberPhone.all { it.isDigit() })
@@ -159,7 +162,7 @@ fun getField() {
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),
+            ),textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -181,7 +184,6 @@ fun getField() {
                 password.value.length >= 6
                 isTypingPassword.value = true
             },
-            label = { Text(text = "Mật khẩu", color = Color.Black.copy(alpha = 0.2f)) },
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
@@ -205,7 +207,7 @@ fun getField() {
                         if (isPasswordVisible.value) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff
                     Icon(icon, contentDescription = "Hidden/Show password")
                 }
-            },
+            },textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp),

@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("io.realm.kotlin") version "1.11.0"
 }
 
 android {
@@ -98,8 +99,15 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Coil load image
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // QrCode display
     implementation("com.lightspark:compose-qr-code:1.0.1")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // RealmDB local key-value database
+    implementation("io.realm.kotlin:library-base:1.11.0")
+    implementation("io.realm.kotlin:library-sync:1.11.0") // If using Device Sync
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // If using coroutines with the SDK
 }

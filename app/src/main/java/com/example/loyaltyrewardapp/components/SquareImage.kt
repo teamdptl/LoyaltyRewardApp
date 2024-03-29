@@ -26,7 +26,6 @@ fun <T> SquareImage(
         contentDescription = null,
         contentScale = ContentScale.Crop,
         modifier = modifier
-            .padding(8.dp)
             .size(size)
             .clip(shape)
     )

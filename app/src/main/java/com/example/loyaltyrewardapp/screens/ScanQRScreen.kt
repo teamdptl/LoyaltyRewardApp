@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
-import com.example.loyaltyrewardapp.screens.ui.theme.PrimaryColor
+import com.example.loyaltyrewardapp.ui.theme.PrimaryColor
 import com.lightspark.composeqr.DotShape
 import com.lightspark.composeqr.QrCodeView
 
