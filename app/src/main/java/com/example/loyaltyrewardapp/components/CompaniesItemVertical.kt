@@ -1,9 +1,8 @@
 package com.example.loyaltyrewardapp.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -11,59 +10,52 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.screens.ui.theme.GrayMap
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : Any> CompaniesItem(
+fun <T : Any> CompaniesItemVertical(
     item: T,
     nameProvider: (T) -> String,
     addressProvider: (T) -> String,
-    pictureUrlProvider: (T) -> Int // Provider for picture URL
+    pictureUrlProvider: (T) -> Int
 ) {
     CardList(
         modifier = Modifier
-            .width(180.dp)
-            .height(250.dp)
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+            .fillMaxWidth()
+            .height(100.dp)
+    ){
+        Row() {
             SquareImage(
                 item = item,
                 pictureUrlProperty = pictureUrlProvider,
-                size = 160.dp,
+                modifier = Modifier
+                    .weight(2.5f),
+                size = 90.dp
             )
             Column(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-
-                ) {
+                modifier = Modifier.weight(7.5f)
+            ) {
                 Text(
                     text = nameProvider(item),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(top = 8.dp)
                 )
-                Row(verticalAlignment = Alignment.CenterVertically,   modifier = Modifier.padding(top = 5.dp)) {
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = "",
-                        modifier = Modifier.size(18.dp)
-                    )   
+                Row(verticalAlignment = Alignment.CenterVertically,   modifier = Modifier.padding(top = 10.dp)) {
+//                    Icon(
+//                        Icons.Filled.LocationOn,
+//                        contentDescription = "",
+//                        modifier = Modifier.size(18.dp)
+//                    )
                     Text(
                         text = addressProvider(item),
                         style = MaterialTheme.typography.bodySmall,

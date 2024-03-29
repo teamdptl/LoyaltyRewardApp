@@ -59,7 +59,7 @@ fun HomeScreen(){
                     )
                 }
             }
-            val companies = remember { ShopProvider.homeList }
+            val companies = remember { ShopProvider.shopList }
 
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
