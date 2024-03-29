@@ -76,7 +76,10 @@ class Login : ComponentActivity() {
 
 @Composable
 fun LoginScreen() {
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Color.White)) {
         Title()
         getField()
     }
@@ -85,13 +88,16 @@ fun LoginScreen() {
 
 @Composable
 fun Title() {
-    Box(
-        modifier = Modifier
-            .width(226.dp)
-            .height(66.dp)
-            .offset(x = 28.dp, y = 85.dp)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
 
+        Image(
+            painter = painterResource(id = R.drawable.login_background),
+            contentDescription = null,
+            modifier = Modifier.padding(top = 20.dp).size(width = 300.dp, height = 200.dp)
+        )
         Text(
             text = "Đăng nhập",
             style = androidx.compose.ui.text.TextStyle(fontSize = 32.sp),
@@ -99,8 +105,7 @@ fun Title() {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Hệ thống tích điểm tiện ích",
-            modifier = Modifier.align(Alignment.BottomStart),
+            text = "Hệ thống tích điểm tiện ích cho cửa hàng",
             style = androidx.compose.ui.text.TextStyle(
                 fontSize = 16.sp,
                 color = Color.Black.copy(alpha = 0.5f)
@@ -113,9 +118,8 @@ fun Title() {
 fun getField() {
     Column(
         modifier = Modifier
-            .width(327.dp)
-            .fillMaxHeight()
-            .offset(x = 27.dp, y = 121.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
 
 

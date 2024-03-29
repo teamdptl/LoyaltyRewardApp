@@ -74,15 +74,19 @@ fun UserCard() {
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth())
                 Column(modifier = Modifier.padding(top = 4.dp)){
+                    Text(text = "Mã thành viên: ", style = Typography.displaySmall)
+                    Text(text = "3123122452", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                Column(modifier = Modifier.padding(top = 4.dp)){
                     Text(text = "Họ tên:", style = Typography.displaySmall)
-                    Text(text = "Huỳnh Khánh Duy", style = Typography.bodyMedium, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(text = "Huỳnh Khánh Duy", style = Typography.bodySmall, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Column(modifier = Modifier.padding(top = 4.dp)){
                     Text(text = "Điện thoại: ", style = Typography.displaySmall)
-                    Text(text = "01234567", style = Typography.bodyMedium,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(text = "01234567", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Text(text = "Ngày tham gia: 24/12/2023", style = Typography.bodySmall, fontSize = 11.sp,
-                    modifier = Modifier.padding(top = 6.dp))
+                    modifier = Modifier.padding(top = 3.dp))
             }
         }
 
@@ -157,7 +161,7 @@ fun MainHeader(){
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically){
-                    Text(text = "Điểm: 0", textAlign = TextAlign.Center, color = TextBlackColor, modifier = Modifier
+                    Text(text = "Xem điểm", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 12.sp, modifier = Modifier
                         .width(80.dp)
                         .background(color = Yellow, shape = RoundedCornerShape(10.dp))
                         .padding(10.dp))
