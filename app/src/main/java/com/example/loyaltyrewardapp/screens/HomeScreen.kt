@@ -44,9 +44,25 @@ fun HomeScreen(){
         ) {
 
             Text(text = "Danh sách các công ty", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f) )
-            TextButton(
-                onClick = {
-                },
+                TextButton(
+                    onClick = {
+                    }
+                ) {
+                    Text(
+                        text = "Tất cả",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Icon(
+                        Icons.Filled.KeyboardDoubleArrowRight,
+                        contentDescription = "",
+                    )
+                }
+            }
+            val companies = remember { ShopProvider.shopList }
+
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+
             ) {
                 Text(
                     text = "Xem thêm",

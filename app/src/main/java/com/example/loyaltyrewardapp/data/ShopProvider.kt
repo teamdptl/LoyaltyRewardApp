@@ -5,7 +5,7 @@ import com.example.loyaltyrewardapp.data.model.ShopModel
 
 object ShopProvider {
 
-    val home =
+    val shop =
         ShopModel(
             id = 1,
             title = "Tiệm rửa xe của Phúc",
@@ -14,8 +14,8 @@ object ShopProvider {
             status = true,
         )
 
-    val homeList = listOf(
-        home,
+    val shopList = listOf(
+        shop,
         ShopModel(
             id = 2,
             title = "Tiệm giặt ủi bà Hai",
