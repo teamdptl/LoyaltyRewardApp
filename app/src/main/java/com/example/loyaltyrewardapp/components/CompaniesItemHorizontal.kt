@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.loyaltyrewardapp.screens.ui.theme.GrayMap
+import com.example.loyaltyrewardapp.ui.theme.GrayMap
 
 
 @OptIn(ExperimentalMaterial3Api::class)

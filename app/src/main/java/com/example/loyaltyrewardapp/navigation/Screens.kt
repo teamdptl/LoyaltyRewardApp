@@ -5,7 +5,6 @@ enum class Screens {
     HistoryScreen,
     ScanQRScreen,
     NotificationsScreen,
-    ProfileActivity
-
-
+    ProfileActivity,
+    CouponScreen,
 }

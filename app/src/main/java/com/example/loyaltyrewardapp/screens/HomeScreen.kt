@@ -25,64 +25,58 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.data.ShopProvider
 
 @Composable
 fun HomeScreen(){
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center
-    ) {
-        Column {
-            MainHeader()
-            Row(
-                modifier = Modifier.padding(start = 22.dp, top = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+        MainHeader()
+        // Bỏ đoạn này làm cái composable để tái sử dụng
+        Row(
+            modifier = Modifier.padding(start = 22.dp, top = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
             Text(text = "Danh sách các công ty", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f) )
-                TextButton(
-                    onClick = {
-                    }
-                ) {
-                    Text(
-                        text = "Tất cả",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Icon(
-                        Icons.Filled.KeyboardDoubleArrowRight,
-                        contentDescription = "",
-                    )
-                }
-            }
-            val companies = remember { ShopProvider.homeList }
-
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            TextButton(
+                onClick = {
+                },
             ) {
-                items(
-                    items = companies,
-                    itemContent = {
-                        CompaniesItem(
-                            item = it,
-                            nameProvider = { it.title },
-                            addressProvider = { it.address },
-                            pictureUrlProvider = { it.pictureUrl }
-                        )
-                    }
+                Text(
+                    text = "Tất cả",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Icon(
+                    Icons.Filled.KeyboardDoubleArrowRight,
+                    contentDescription = "",
                 )
             }
-
-
         }
+        val companies = remember { ShopProvider.homeList }
 
-
-
-
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(
+                items = companies,
+                itemContent = {
+                    CompaniesItem(
+                        item = it,
+                        nameProvider = { it.title },
+                        addressProvider = { it.address },
+                        pictureUrlProvider = { it.pictureUrl }
+                    )
+                }
+            )
         }
+    }
+}
 
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen()
 }

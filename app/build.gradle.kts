@@ -98,6 +98,9 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
+    // Coil load image
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     // QrCode display
     implementation("com.lightspark:compose-qr-code:1.0.1")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

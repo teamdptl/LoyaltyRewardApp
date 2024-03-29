@@ -10,7 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.loyaltyrewardapp.navigation.AppNavigation
-import com.example.loyaltyrewardapp.screens.ui.theme.LoyaltyRewardAppTheme
+import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 
 class MainScreen : AppCompatActivity() {
@@ -42,16 +42,10 @@ class MainScreen : AppCompatActivity() {
                 }
             }
         setContent {
-            LoyaltyRewardAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
-                ) {
-                    BottomNavigation {
-                        AppNavigation()
-                    }
-                }
+            MaterialTheme {
+                AppNavigation()
             }
+
         }
     }
 
