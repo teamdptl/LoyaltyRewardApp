@@ -26,7 +26,7 @@ class User extends Model
 
 
     public function shop(){
-        return $this->hasOne('App\Models\Shop');
+        return $this->hasOne('App\Models\Shop', 'user_id');
     }
 
     public function user_point(){

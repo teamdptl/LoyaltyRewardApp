@@ -16,7 +16,9 @@ class UserController extends Controller
     }
 
     public function show(Request $request){
-
+        $token = $request->header('Authorization','');
+        $uid = (new AuthService())->validateIdToken($token);
+        return User::find($uid);
     }
 
     public function store(Request $request){

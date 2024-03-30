@@ -30,7 +30,11 @@ Route::get('/user', function (Request $request) {
 //});
 
 
-Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index']);
-Route::post('/shop/store', [App\Http\Controllers\ShopController::class, 'store']);
+Route::get('/shop/all', [App\Http\Controllers\ShopController::class, 'index']);
+Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'show']);
+Route::post('/shop/add', [App\Http\Controllers\ShopController::class, 'store']);
 
-Route::post('/user/store', [App\Http\Controllers\UserController::class, 'store']);
+
+Route::get('/user/all', [App\Http\Controllers\UserController::class, 'index']);
+Route::get('user/show', [App\Http\Controllers\UserController::class, 'show']);
+Route::post('/user/add', [App\Http\Controllers\UserController::class, 'store']);

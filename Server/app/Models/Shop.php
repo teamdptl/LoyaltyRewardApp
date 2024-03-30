@@ -9,11 +9,10 @@ class Shop extends Model
 {
     use HasFactory;
     protected $connection ='mongodb';
-    protected $collection = 'Shop';
     protected $fillable = ['name', 'address', 'logo', 'point_trigger'];
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function services(){
