@@ -132,9 +132,6 @@ object IsButtonVisible {
     val isButtonVisible: MutableState<Boolean> = mutableStateOf(false)
 
 }
-object IsOutlineTextField{
-    val isOutlineTextField: MutableState<Boolean> =  mutableStateOf(true)
-}
 @Composable
 fun InputOTP(
     length: Int,
@@ -143,9 +140,9 @@ fun InputOTP(
     var otp by remember { mutableStateOf(mutableListOf("","","","","","")) }
     val focusManager = LocalFocusManager.current
     val focusRequesters = remember { List(length) { FocusRequester() } }
-//    val isOutlineTextField = remember { List(length) { mutableStateOf(false) } }
-//    val isOutlineTextField = remember { mutableStateOf(false)
-//    }
+    val isOutlineTextField = remember { List(length) { mutableStateOf(true) } }
+    var startFocusLast = remember { mutableStateOf(false) }
+//    var focusedIndex by remember { mutableStateOf(0) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -158,41 +155,55 @@ fun InputOTP(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            var stopRecieveKeyEvent = false
             for (i in 0 until length) {
                 OtpDigitInput(
                     value = otp[i],
                     focusRequester = focusRequesters[i],
-                    modifier = Modifier.onKeyEvent { event->
-                            if(event.type == KeyEventType.KeyUp && event.key == Key.Backspace && i > 0){
-                                Log.d("In key event", event.key.toString())
-                                otp = otp.toMutableList().also {
-                                    it[i-1] = ""
-                                }
-                                focusRequesters[i-1].requestFocus()
+                    modifier = Modifier
+                        .onKeyEvent { event ->
+                            Log.d("In key event", otp[i])
+                            if (event.key == Key.Backspace && i > 0 && !stopRecieveKeyEvent) {
+                                Log.d("In key event", otp[i])
+                                otp = otp
+                                    .toMutableList()
+                                    .also {
+                                        it[i - 1] = ""
+                                    }
+                                focusRequesters[i - 1].requestFocus()
+                                stopRecieveKeyEvent = true
                                 return@onKeyEvent true;
                             }
-                        false
-                    },
+                            false
+                        }
+                        .clickable{
+                        Log.d("onclick", otp[i])
+                            if (!startFocusLast.value) {
+                                focusRequesters[5].requestFocus()
+                            }
+                        }
+                    ,
+                    isOutlineTextField = isOutlineTextField[i],
                     onValueChange = { newValue ->
                         otp = otp.toMutableList().also {
                             it[i] = newValue.takeLast(1)
-                                IsOutlineTextField.isOutlineTextField.value = it.isNotEmpty() && it.all { it.isDigitsOnly() }
                         }
                         Log.d("Tuan", "InputOTP: "+ newValue+" " + i+" " + otp[i])
 
                         if (newValue.length == 1 && i < length-1 ) {
                             focusRequesters[i + 1].requestFocus()
-//                            IsOutlineTextField.isOutlineTextField.value = true
                         }
-                        else{
-//                            IsOutlineTextField.isOutlineTextField.value = false
 
+                        if(newValue.isEmpty() ){
+                            stopRecieveKeyEvent = true
                         }
+
                         if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() }) {
                             onOtpEntered(otp.joinToString(separator = ""))
                             focusManager.clearFocus()
+                            startFocusLast.value = true
                         }
-                        if (newValue.isNotEmpty() && i == 5){
+                        if (newValue.isNotEmpty() ){
                             IsButtonVisible.isButtonVisible.value = true
 
                         }else{
@@ -203,12 +214,12 @@ fun InputOTP(
             }
         }
     }
-    LaunchedEffect(Unit) {
-//        isOutlineTextField.value = true
-        focusRequesters[0].requestFocus()
-
+    LaunchedEffect(otp) {
+        val nextEmptyIndex = otp.indexOfFirst { it.isBlank() }
+        if (nextEmptyIndex != -1) {
+            focusRequesters[nextEmptyIndex].requestFocus()
+        }
     }
-
 }
 
 @Composable
@@ -216,8 +227,10 @@ private fun OtpDigitInput(
     value: String,
     focusRequester: FocusRequester,
     modifier: Modifier,
+    isOutlineTextField: MutableState<Boolean>,
     onValueChange: (String) -> Unit
 ) {
+
     OutlinedTextField(
         value = value,
         onValueChange = { newValue ->
@@ -237,7 +250,7 @@ private fun OtpDigitInput(
             unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.12f),
             backgroundColor = Color(0xFFD9D9D9)
         ),
-        enabled = IsOutlineTextField.isOutlineTextField.value,
+        enabled = isOutlineTextField.value,
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
             .padding(4.dp)
@@ -283,13 +296,13 @@ fun BtnConfirm() {
                 .clip(RoundedCornerShape(100.dp)),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF37A1ED)),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
-//            enabled = IsButtonVisible.isButtonVisible.value
+            enabled = IsButtonVisible.isButtonVisible.value
         ) {
             Text(
                 text = "Xác nhận",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 20.sp,
                 modifier = Modifier.padding(top = 3.dp, bottom = 3.dp)
             )
         }
