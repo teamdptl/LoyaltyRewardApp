@@ -62,6 +62,7 @@ fun <T : Any> CompaniesItem(
                     maxLines = 1,
                     color = GrayMap
                 )
+
             }
         }
     }

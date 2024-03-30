@@ -21,7 +21,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +33,7 @@ import com.example.loyaltyrewardapp.ui.theme.MainColor
 
 @Composable
 fun HomeScreen(){
-    Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+    Column (modifier = Modifier.verticalScroll(rememberScrollState())) {
         MainHeader()
         // Bỏ đoạn này làm cái composable để tái sử dụng
         Row(
@@ -43,10 +42,15 @@ fun HomeScreen(){
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(text = "Danh sách các công ty", fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f) )
+            Text(
+                text = "Danh sách các công ty",
+                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f)
+            )
             TextButton(
                 onClick = {
-                },
+                }
             ) {
                 Text(
                     text = "Xem thêm",
@@ -61,7 +65,9 @@ fun HomeScreen(){
                 )
             }
         }
-        val companies = remember { ShopProvider.homeList }
+
+
+        val companies = remember { ShopProvider.shopList }
 
         LazyRow(
             contentPadding = PaddingValues(horizontal = 16.dp)
@@ -79,7 +85,8 @@ fun HomeScreen(){
             )
         }
     }
-}
+    }
+
 
 @Preview(showBackground = true)
 @Composable

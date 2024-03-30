@@ -2,6 +2,21 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CompaniesListVerticalScreen">
+        <State />
+      </entry>
+      <entry key="GreetingPreview">
+        <State />
+      </entry>
+      <entry key="HomeScreenPreview">
+        <State />
+      </entry>
+      <entry key="NotificationsPreview">
+        <State />
+      </entry>
+      <entry key="QRScreenPreview">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>

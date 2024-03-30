@@ -52,32 +52,30 @@ class MainScreen : AppCompatActivity() {
             }
         }
 
-//        auth.signInWithEmailAndPassword("duy@gmail.com", "duy@gmail.com")
-//            .addOnCompleteListener(this) { task ->
-//                if (task.isSuccessful) {
-//                    // Sign in success, update UI with the signed-in user's information
-//                    Log.d("User", "signInWithEmail:success")
-//                    val user = auth.currentUser;
+        auth.signInWithEmailAndPassword("duy@gmail.com", "duy@gmail.com")
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("User", "signInWithEmail:success")
+                    val user = auth.currentUser;
+                    user?.getIdToken(false)?.addOnCompleteListener(this){
+                        if(it.isSuccessful){
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
+                        }
+                    }
+
 //                    user?.getIdToken(false)?.addOnCompleteListener(this){
 //                        if(it.isSuccessful){
 //                            val idToken = it.result?.token
 //                            Log.d("User", "idToken: $idToken")
 //                        }
 //                    }
-//
-//                    user?.getIdToken(false)?.addOnCompleteListener(this){
-//                        if(it.isSuccessful){
-//                            val idToken = it.result?.token
-//                            Log.d("User", "idToken: $idToken")
-//                        }
-//                    }
-//                } else {
-//                    Log.d("User", "signInWithEmail:fail")
-//                }
-//            }
-//        setContent {
-//
-//        }
+                } else {
+                    Log.d("User", "signInWithEmail:fail")
+                }
+            }
+
     }
 
 }
