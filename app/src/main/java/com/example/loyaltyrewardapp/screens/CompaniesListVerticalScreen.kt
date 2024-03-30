@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.CompaniesItemVertical
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.ShopProvider
@@ -22,14 +23,14 @@ fun CompaniesListVerticalScreen(){
     val companies = remember { ShopProvider.shopList }
     MainBackgroundScreen("Danh sách các công ty") {
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Fixed(1),
+            columns = StaggeredGridCells.Fixed(2),
 
-//            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
         ) {
             items(
                 items = companies,
                 itemContent = {
-                    CompaniesItemVertical(
+                    CompaniesItem(
                         item = it,
                         nameProvider = { it.title },
                         addressProvider = { it.address },
