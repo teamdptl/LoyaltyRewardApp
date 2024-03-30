@@ -85,24 +85,29 @@ fun GiftCardItem(){
 
                     Text(
                         buildAnnotatedString {
-                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 20.sp, fontWeight = FontWeight.Bold)){
-                                append("Voucher")
+                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 12.sp, fontWeight = FontWeight.Bold)){
+                                append("Cửa hàng sửa xe Thanh Phúc")
                             }
                         },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        fontFamily = FontFamily.Cursive
+                        fontFamily = FontFamily.Serif
                     )
+                    Spacer(modifier = Modifier.size(8.dp))
 
                     Text(
                         buildAnnotatedString {
-                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 42.sp, fontWeight = FontWeight.W900)){
-                                append("100% ")
+                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 20.sp, fontWeight = FontWeight.W900)){
+                                append("Miễn phí thay nhớt")
                             }
-                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 28.sp, fontWeight = FontWeight.Light, fontFamily = FontFamily.Serif)){
-                                append("Off")
-                            }
+//                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 28.sp, fontWeight = FontWeight.Light, fontFamily = FontFamily.Serif)){
+//                                append("Off")
+//                            }
                         },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
                         fontFamily = FontFamily.Serif
@@ -114,15 +119,24 @@ fun GiftCardItem(){
 //                        overflow = TextOverflow.Ellipsis,
 //                        maxLines = 2)
 
-                    Spacer(modifier = Modifier.size(15.dp))
+                    Spacer(modifier = Modifier.size(6.dp))
+
+                    Text(
+                        text = "Miễn phí 1 chai nhớt castol power khi đổi 5 điểm tiêu dùng",
+                        fontSize = 10.sp,
+                        color = Color.Black.copy(alpha = 0.7f),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
 
                     Text(
                         buildAnnotatedString {
-                            withStyle(SpanStyle(fontStyle = FontStyle.Italic)){
-                                append("100 point")
+                            withStyle(SpanStyle(fontStyle = FontStyle.Italic, color = Color.Black)){
+                                append("Hạn dùng: 20/2/2024")
                             }
                         },
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
 
                     )
 
@@ -137,13 +151,14 @@ fun GiftCardItem(){
                 Row(
                     Modifier
                         .fillMaxHeight()
-                        .weight(3.5f)
+                        .weight(3.0f)
                         .padding(10.dp, 5.dp, 5.dp, 5.dp)
                 ) {
-                    Image(painter = painterResource(id = R.drawable.lego),
+                    Image(painter = painterResource(id = R.drawable.background),
                         contentDescription = "Lego logo",
-                        Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit)
+                        Modifier.fillMaxSize()
+                            .clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.Fit,)
                 }
             }
         }

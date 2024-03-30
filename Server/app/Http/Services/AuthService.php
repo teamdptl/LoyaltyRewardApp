@@ -46,9 +46,9 @@ class AuthService
             // $user = $this->auth->getUser($uid);
             // return $user;
         } catch (FailedToVerifyToken $e) {
-           return 'The token is invalid: '.$e->getMessage();
+        //    return 'The token is invalid: '.$e->getMessage();
         } catch (AuthException|FirebaseException $e) {
-           return 'An error occurred: '.$e->getMessage();
+        //    return 'An error occurred: '.$e->getMessage();
         }
         return null;
     }
