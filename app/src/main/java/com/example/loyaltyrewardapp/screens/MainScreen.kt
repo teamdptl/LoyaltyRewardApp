@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.screens.ui.theme.LoyaltyRewardAppTheme
+import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.google.firebase.auth.FirebaseAuth
 
 class MainScreen : AppCompatActivity() {
@@ -47,9 +48,10 @@ class MainScreen : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.background
                 ) {
-                    BottomNavigation {
-                        AppNavigation()
-                    }
+//                    BottomNavigation {
+//                        AppNavigation()
+//                    }
+                    OTPPreview()
                 }
             }
         }

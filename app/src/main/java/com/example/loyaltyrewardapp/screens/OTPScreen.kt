@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -31,6 +32,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -44,6 +46,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -74,7 +81,7 @@ fun OTPScreens() {
     Column(modifier = Modifier.fillMaxSize()) {
         btnIconBackScreen()
         TitleOTP()
-        InputOTP(length = 6, onOtpEntered = { otp -> Unit })
+        InputOTP(length = 6, onOtpEntered = { otp -> Log.d("OTP value", "val: $otp") })
         BackSendCodeOTP()
         BtnConfirm()
     }
@@ -125,16 +132,20 @@ object IsButtonVisible {
     val isButtonVisible: MutableState<Boolean> = mutableStateOf(false)
 
 }
-
+object IsOutlineTextField{
+    val isOutlineTextField: MutableState<Boolean> =  mutableStateOf(true)
+}
 @Composable
 fun InputOTP(
     length: Int,
     onOtpEntered: (String) -> Unit
 ) {
-    var otp by remember { mutableStateOf(List(length) { "" }) }
+    var otp by remember { mutableStateOf(mutableListOf("","","","","","")) }
     val focusManager = LocalFocusManager.current
     val focusRequesters = remember { List(length) { FocusRequester() } }
-
+//    val isOutlineTextField = remember { List(length) { mutableStateOf(false) } }
+//    val isOutlineTextField = remember { mutableStateOf(false)
+//    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -151,17 +162,31 @@ fun InputOTP(
                 OtpDigitInput(
                     value = otp[i],
                     focusRequester = focusRequesters[i],
+                    modifier = Modifier.onKeyEvent { event->
+                            if(event.type == KeyEventType.KeyUp && event.key == Key.Backspace && i > 0){
+                                Log.d("In key event", event.key.toString())
+                                otp = otp.toMutableList().also {
+                                    it[i-1] = ""
+                                }
+                                focusRequesters[i-1].requestFocus()
+                                return@onKeyEvent true;
+                            }
+                        false
+                    },
                     onValueChange = { newValue ->
                         otp = otp.toMutableList().also {
                             it[i] = newValue.takeLast(1)
+                                IsOutlineTextField.isOutlineTextField.value = it.isNotEmpty() && it.all { it.isDigitsOnly() }
                         }
                         Log.d("Tuan", "InputOTP: "+ newValue+" " + i+" " + otp[i])
 
-                        if (newValue.length == 1 && i < length-1) {
+                        if (newValue.length == 1 && i < length-1 ) {
                             focusRequesters[i + 1].requestFocus()
+//                            IsOutlineTextField.isOutlineTextField.value = true
                         }
-                        else if (newValue.isEmpty() && i > 0) {
-                            focusRequesters[i - 1].requestFocus()
+                        else{
+//                            IsOutlineTextField.isOutlineTextField.value = false
+
                         }
                         if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() }) {
                             onOtpEntered(otp.joinToString(separator = ""))
@@ -169,15 +194,20 @@ fun InputOTP(
                         }
                         if (newValue.isNotEmpty() && i == 5){
                             IsButtonVisible.isButtonVisible.value = true
+
                         }else{
                             IsButtonVisible.isButtonVisible.value = false
                         }
-                    }
+              }
                 )
             }
         }
     }
+    LaunchedEffect(Unit) {
+//        isOutlineTextField.value = true
+        focusRequesters[0].requestFocus()
 
+    }
 
 }
 
@@ -185,6 +215,7 @@ fun InputOTP(
 private fun OtpDigitInput(
     value: String,
     focusRequester: FocusRequester,
+    modifier: Modifier,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
@@ -206,8 +237,9 @@ private fun OtpDigitInput(
             unfocusedBorderColor = MaterialTheme.colors.onSurface.copy(alpha = 0.12f),
             backgroundColor = Color(0xFFD9D9D9)
         ),
+        enabled = IsOutlineTextField.isOutlineTextField.value,
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
+        modifier = modifier
             .padding(4.dp)
             .width(50.dp)
             .height(50.dp)
@@ -251,7 +283,7 @@ fun BtnConfirm() {
                 .clip(RoundedCornerShape(100.dp)),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF37A1ED)),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
-            enabled = IsButtonVisible.isButtonVisible.value
+//            enabled = IsButtonVisible.isButtonVisible.value
         ) {
             Text(
                 text = "Xác nhận",
