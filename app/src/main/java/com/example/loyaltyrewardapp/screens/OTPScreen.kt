@@ -140,21 +140,29 @@ fun InputOTP(
     var otp by remember { mutableStateOf(mutableListOf("","","","","","")) }
     val focusManager = LocalFocusManager.current
     val focusRequesters = remember { List(length) { FocusRequester() } }
-    val isOutlineTextField = remember { List(length) { mutableStateOf(true) } }
+    var isOutlineTextField = remember { List(length) { mutableStateOf(true) } }
     var startFocusLast = remember { mutableStateOf(false) }
-//    var focusedIndex by remember { mutableStateOf(0) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(top = 120.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() && !startFocusLast.value}){
+                    focusRequesters[5].requestFocus()
+                    startFocusLast.value = true
+                }
+            },
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                ,
             verticalAlignment = Alignment.CenterVertically,
         ) {
+
             var stopRecieveKeyEvent = false
             for (i in 0 until length) {
                 OtpDigitInput(
@@ -176,12 +184,7 @@ fun InputOTP(
                             }
                             false
                         }
-                        .clickable{
-                        Log.d("onclick", otp[i])
-                            if (!startFocusLast.value) {
-                                focusRequesters[5].requestFocus()
-                            }
-                        }
+
                     ,
                     isOutlineTextField = isOutlineTextField[i],
                     onValueChange = { newValue ->
@@ -197,11 +200,10 @@ fun InputOTP(
                         if(newValue.isEmpty() ){
                             stopRecieveKeyEvent = true
                         }
-
                         if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() }) {
                             onOtpEntered(otp.joinToString(separator = ""))
                             focusManager.clearFocus()
-                            startFocusLast.value = true
+                            startFocusLast.value = false
                         }
                         if (newValue.isNotEmpty() ){
                             IsButtonVisible.isButtonVisible.value = true
