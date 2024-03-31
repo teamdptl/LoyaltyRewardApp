@@ -16,24 +16,42 @@ class ServiceController extends Controller
         return Service::all();
     }
 
+    public function show($id){
+        return Service::find($id);
+    }
+
+
     public function store(Request $request){
 
-        $tokenID = $request->input('idTokenString');
-        printf($tokenID);
-        // $auth = new AuthService();
-        // $user = $auth->validateIdToken($tokenID);
-        // dd($user);
-        // $service = new Service;
-        // $service->name = 'Thay nhớt';
-        // $service->description = 'Nhớt castrol mới siêu mạnh mẽ lun';
-        // $service->points_reward = 10;
+        $validated = $request->validate(
+            [
+                'name' =>'required|string|max:255',
+                'description' =>'required|string|max:255',
+                'should_notification' =>'required|boolean',
+                'period' => 'required|string',
+                'points_reward' => 'required|digits_between:1,2',
+            ]
+        );
+        // printf($tokenID);
+        $auth = new AuthService();
+        $uid = $auth->validateIdToken($request->header('Authorization', ''));
+        
+        if(!$uid){
+            return Response("Token không hợp lệ!", 404);
+        }
 
+        $user = User::find($uid);
+        if(!$user){
+            return Response("User không tồn tại!", 404);
+        }
 
+        $shop = $user->shop()->get()->first();
+        if(!$shop){
+            return Response("User không đủ quyền truy cập trang này!", 404);
+        }
 
-        //Tương tự bên Shop cần userID để xác định shop của user
-        // $shop = User::find($request->input('user_id'))->shop()->get();
-
-        // //Lưu service của shop
-        // $shop->service()->create($service);
+        $service = new Service($validated);
+        $service->shop()->associate($shop);
+        return $service->save();
     }
 }
