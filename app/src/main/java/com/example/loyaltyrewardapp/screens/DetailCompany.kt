@@ -1,10 +1,14 @@
 package com.example.loyaltyrewardapp.screens
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
@@ -17,11 +21,16 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -50,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.SquareImage
 import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
@@ -57,6 +67,20 @@ import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 import kotlinx.coroutines.launch
 
+class DetailCompanyActivity : ComponentActivity(){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent{
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = androidx.compose.material.MaterialTheme.colors.background
+            ) {
+                DetailCompany()
+            }
+        }
+    }
+
+}
 
 enum class SelectedItem {
     First, Second, Third
@@ -66,53 +90,11 @@ enum class SelectedItem {
 fun DetailCompany() {
     val company = remember { ShopProvider.shop }
     var selectedItem by remember { mutableStateOf(SelectedItem.First) }
+    val companies = remember { ShopProvider.shopList }
 
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.background),
-                contentDescription = null,
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop
-            )
-            IconButton(
-                onClick = { /*TODO*/ },
-                colors = IconButtonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black,
-                    disabledContainerColor = Color.Gray,
-                    disabledContentColor = Color.Black
-                ),
-                modifier = Modifier
-                    .clip(shape = CircleShape)
-                    .size(50.dp)
-                    .padding(all = 10.dp)
-            ) {
-                Icon(
-                    Icons.Filled.ArrowBackIosNew,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(50))
-                        .size(20.dp),
-                    tint = Color.Black.copy(alpha = 0.6f)
-                )
-            }
 
-//            SquareImage(
-//                item = company,
-//                pictureUrlProperty = { it.pictureUrl },
-//                size = 160.dp
-//            )
-
-        }
 
         Column(
             modifier = Modifier
@@ -121,6 +103,48 @@ fun DetailCompany() {
                 .background(Color.White),
 
             ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.background),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
+                IconButton(
+                    onClick = { /*TODO*/ },
+                    colors = IconButtonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Black
+                    ),
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(50.dp)
+                        .padding(all = 10.dp)
+                ) {
+                    Icon(
+                        Icons.Filled.ArrowBackIosNew,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .size(20.dp),
+                        tint = Color.Black.copy(alpha = 0.6f)
+                    )
+                }
+
+//            SquareImage(
+//                item = company,
+//                pictureUrlProperty = { it.pictureUrl },
+//                size = 160.dp
+//            )
+
+            }
             Text(
                 text = "Cửa hàng của Duy",
                 fontWeight = FontWeight.SemiBold,
@@ -138,114 +162,131 @@ fun DetailCompany() {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 2.dp)
             )
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 50.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TextButton(onClick = {
-                        selectedItem = SelectedItem.First
 
-                    }
-                    ) {
-                        Text("Ưu đãi",   style = MaterialTheme.typography.bodyMedium,
-                            color = OrangeColor)
+                TextButton(onClick = {
+                    selectedItem = SelectedItem.First
 
-
-                    }
-                    TextButton(onClick = {
-                        selectedItem = SelectedItem.Second
-
-                    }
-                    ) {
-                        Text("Dịch vụ",  style = MaterialTheme.typography.bodyMedium,
-                            color = OrangeColor)
-                    }
-                    TextButton(onClick = {
-                        selectedItem = SelectedItem.Third
-
-                    }
-                    ) {
-                        Text("Chi tiết",  style = MaterialTheme.typography.bodyMedium,
-                            color = OrangeColor)
-                    }
                 }
-                // Content
-                when (selectedItem) {
-                    SelectedItem.First -> {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth().padding(horizontal = 50.dp)
-                                ,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .height(1.dp)
-                                    .background(color = OrangeColor)
-                            )
-                            Spacer(modifier = Modifier
-                                .weight(1.15f))
-                            Spacer(modifier = Modifier
-                                .weight(1.15f))
-                        }
-                        Text("Nội dung cho Ưu đãi")
-                    }
-
-                    SelectedItem.Second -> {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth().padding(horizontal = 50.dp)
-                            ,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Spacer(modifier = Modifier
-                                .weight(1f))
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .height(1.dp)
-                                    .background(color = OrangeColor)
-                            )
-                            Spacer(modifier = Modifier
-                                .weight(1f))
-                        }
-                        Text("Nội dung cho Dịch vụ")
-                    }
-
-                    SelectedItem.Third -> {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth().padding(horizontal = 50.dp)
-                            ,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
+                ) {
+                    Text("Ưu đãi",   style = MaterialTheme.typography.bodyMedium,
+                        color = OrangeColor, fontWeight = FontWeight.SemiBold)
 
 
-                            Spacer(modifier = Modifier
-                                .weight(1.15f))
-                            Spacer(modifier = Modifier
-                                .weight(1.15f))
-                            Spacer(
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .height(1.dp)
-                                    .background(color = OrangeColor)
-                            )
-                        }
-                        Text("Nội dung cho Chi tiết")
-                    }
+                }
+                TextButton(onClick = {
+                    selectedItem = SelectedItem.Second
+
+                }
+                ) {
+                    Text("Dịch vụ",  style = MaterialTheme.typography.bodyMedium,
+                        color = OrangeColor, fontWeight = FontWeight.SemiBold)
+                }
+                TextButton(onClick = {
+                    selectedItem = SelectedItem.Third
+
+                }
+                ) {
+                    Text("Chi tiết",  style = MaterialTheme.typography.bodyMedium,
+                        color = OrangeColor, fontWeight = FontWeight.SemiBold)
                 }
             }
+            // Content
+            when (selectedItem) {
+                SelectedItem.First -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 50.dp)
+                        ,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Spacer(
+                            modifier = Modifier
+                                .weight(0.7f)
+                                .height(1.dp)
+                                .background(color = OrangeColor)
+                        )
+                        Spacer(modifier = Modifier
+                            .weight(1.15f))
+                        Spacer(modifier = Modifier
+                            .weight(1.15f))
+                    }
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = 3.dp,
+
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                    ) {
+                        items(
+                            items = companies,
+                            itemContent = {
+                                DetailRewardPreview(
+
+                                )
+                            }
+                        )
+                    }
+
+
+                }
+
+                SelectedItem.Second -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 50.dp)
+                        ,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Spacer(modifier = Modifier
+                            .weight(1f))
+                        Spacer(
+                            modifier = Modifier
+                                .weight(0.7f)
+                                .height(1.dp)
+                                .background(color = OrangeColor)
+                        )
+                        Spacer(modifier = Modifier
+                            .weight(1f))
+                    }
+                    Text("Nội dung cho Dịch vụ")
+                }
+
+                SelectedItem.Third -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 50.dp)
+                        ,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+
+                        Spacer(modifier = Modifier
+                            .weight(1.15f))
+                        Spacer(modifier = Modifier
+                            .weight(1.15f))
+                        Spacer(
+                            modifier = Modifier
+                                .weight(0.7f)
+                                .height(1.dp)
+                                .background(color = OrangeColor)
+                        )
+                    }
+                    Text("Nội dung cho Chi tiết")
+                }
+
+            }
         }
-    }
+
+
+
 }
 
