@@ -54,6 +54,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,6 +66,8 @@ import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
 import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
+import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
+import com.example.loyaltyrewardapp.ui.theme.Yellow
 import kotlinx.coroutines.launch
 
 class DetailCompanyActivity : ComponentActivity(){
@@ -115,27 +118,36 @@ fun DetailCompany() {
                         .fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
-                IconButton(
-                    onClick = { /*TODO*/ },
-                    colors = IconButtonColors(
-                        containerColor = Color.White,
-                        contentColor = Color.Black,
-                        disabledContainerColor = Color.Gray,
-                        disabledContentColor = Color.Black
-                    ),
-                    modifier = Modifier
-                        .clip(shape = CircleShape)
-                        .size(50.dp)
-                        .padding(all = 10.dp)
-                ) {
-                    Icon(
-                        Icons.Filled.ArrowBackIosNew,
-                        contentDescription = null,
+                Row(){
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                        colors = IconButtonColors(
+                            containerColor = Color.White,
+                            contentColor = Color.Black,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.Black
+                        ),
                         modifier = Modifier
-                            .clip(RoundedCornerShape(50))
-                            .size(20.dp),
-                        tint = Color.Black.copy(alpha = 0.6f)
-                    )
+                            .clip(shape = CircleShape)
+                            .size(50.dp)
+                            .padding(all = 10.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.ArrowBackIosNew,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .size(20.dp),
+                            tint = Color.Black.copy(alpha = 0.6f)
+                        )
+                    }
+                    Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(all = 10.dp)){
+                        Text(text = "Điểm 10", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 12.sp, modifier = Modifier
+                            .width(100.dp)
+                            .background(color = Yellow, shape = RoundedCornerShape(10.dp))
+                            .padding(10.dp))
+                    }
+
                 }
 
 //            SquareImage(
@@ -256,7 +268,22 @@ fun DetailCompany() {
                         Spacer(modifier = Modifier
                             .weight(1f))
                     }
-                    Text("Nội dung cho Dịch vụ")
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(1),
+                        verticalItemSpacing = 5.dp,
+
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                    ) {
+                        items(
+                            items = companies,
+                            itemContent = {
+                                DetailRewardPreview(
+
+                                )
+                            }
+                        )
+                    }
+
                 }
 
                 SelectedItem.Third -> {
