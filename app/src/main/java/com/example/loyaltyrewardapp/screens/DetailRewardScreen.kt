@@ -45,7 +45,8 @@ fun InfoRewardCard(url: String, name: String, description: String, point: Int){
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
-        ))
+        ),
+        modifier = Modifier.padding(6.dp))
     {
         Column {
             AsyncImage(model = url, contentDescription = null,

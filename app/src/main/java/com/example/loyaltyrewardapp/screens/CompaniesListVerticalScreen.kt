@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.components.CompaniesItem
-import com.example.loyaltyrewardapp.components.CompaniesItemVertical
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.ShopProvider
 
