@@ -29,4 +29,8 @@ class Service extends Model
     public function transactions(){
         return $this->hasMany(Transaction::class);
     }
+
+    public function users(){
+        return $this->belongsToMany(User::class)->withPivot('using_at');
+    }
 }

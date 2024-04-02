@@ -30,7 +30,7 @@ class User extends Model
     }
 
     public function user_point(){
-        return $this->belongsToMany('App\Models\Shop')->withPivot('points');
+        return $this->belongsToMany('App\Models\Shop', 'user_point', 'shop_id', 'user_id')->withPivot('points');
     }
 
     public function transactions(){
@@ -39,5 +39,9 @@ class User extends Model
 
     public function coupon(){
         return $this->belongsToMany('App\Models\Coupon')->withPivot('expired_at');
+    }
+
+    public function services(){
+        return $this->hasMany(Service::class)->withPivot('using_at');
     }
 }
