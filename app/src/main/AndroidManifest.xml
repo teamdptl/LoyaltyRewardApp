@@ -15,7 +15,7 @@
             android:theme="@style/Theme.LoyaltyRewardApp"
             tools:targetApi="31">
         <activity
-                android:name=".screens.MainScreen"
+                android:name=".screens.DetailCompanyActivity"
                 android:exported="true"
                 android:label="@string/title_activity_main"
                 android:theme="@style/Theme.LoyaltyRewardApp">
