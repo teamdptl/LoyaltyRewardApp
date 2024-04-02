@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.CompaniesItem
+import com.example.loyaltyrewardapp.components.RewardItemPreview
 import com.example.loyaltyrewardapp.components.SquareImage
 import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
@@ -277,7 +278,7 @@ fun DetailCompany() {
                         items(
                             items = companies,
                             itemContent = {
-                                DetailRewardPreview(
+                                RewardItemPreview(
 
                                 )
                             }
