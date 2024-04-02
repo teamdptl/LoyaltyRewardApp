@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -46,7 +47,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -75,7 +78,8 @@ class RegisterScreen : ComponentActivity() {
 
 @Composable
 fun registerScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Title()
         ChangeUserRegister()
         getField()
@@ -87,8 +91,7 @@ fun Title() {
     Box(
         modifier = Modifier
             .width(307.dp)
-            .height(66.dp)
-            .offset(x = 28.dp, y = 85.dp)
+            .height(96.dp).padding(top = 30.dp)
     ) {
 
         Text(
@@ -117,8 +120,8 @@ fun ChangeUserRegister() {
     Row(
         modifier = Modifier
             .width(width = 327.dp)
-            .height(height = 60.dp)
-            .offset(x = 28.dp, y = 107.dp)
+            .height(height = 85.dp)
+            .padding(top = 30.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = Color.Gray.copy(alpha = 0.1f)),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -161,7 +164,7 @@ fun getField() {
         modifier = Modifier
             .width(327.dp)
             .fillMaxHeight()
-            .offset(x = 27.dp, y = 121.dp)
+            .padding(top=20.dp)
     ) {
         val userName = remember {
             mutableStateOf("")
@@ -185,7 +188,9 @@ fun getField() {
             numberPhone.value.isNotEmpty() && isValidPhoneNumber(numberPhone.value)
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid && isNameValid
+        val focusManager = LocalFocusManager.current
         Text(
+            modifier = Modifier.padding(top = 10.dp),
             text = "Họ tên",
             style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
             color = Color.Black.copy(alpha = 0.5f)
@@ -199,7 +204,9 @@ fun getField() {
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
+            ), keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Next) }
             ),
             colors = if (isTypingName.value && userName.value.isNotEmpty() && userName.value.length >= 5) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
@@ -209,7 +216,7 @@ fun getField() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
-                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
+                , shape = RoundedCornerShape(10.dp)
 
         )
 
@@ -235,12 +242,14 @@ fun getField() {
                 numberPhone.value
             ),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),textStyle = TextStyle(fontSize = 18.sp),
+                keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+            )
+            , keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(FocusDirection.Next)})
+            ,textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
-                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
+                , shape = RoundedCornerShape(10.dp)
 
         )
 
@@ -261,6 +270,9 @@ fun getField() {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
             ),
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
@@ -420,6 +432,6 @@ fun isValidPhoneNumber(phoneNumber: String): Boolean {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultView() {
+fun RegisterDefaultView() {
     registerScreen()
 }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -47,7 +48,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -140,6 +143,7 @@ fun getField() {
             numberPhone.value.isNotEmpty() && isValidPhoneNumber(numberPhone.value)
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid
+        val focusManager = LocalFocusManager.current
         Text(
             text = "Số điện thoại",
             style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
@@ -161,8 +165,10 @@ fun getField() {
                 numberPhone.value
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),textStyle = TextStyle(fontSize = 18.sp),
+                keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+            )
+            , keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(FocusDirection.Next)})
+             ,textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -193,6 +199,9 @@ fun getField() {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
             ),
             visualTransformation = if (isPasswordVisible.value)
                 VisualTransformation.None
@@ -347,7 +356,7 @@ fun isValidPhoneNumber(phoneNumber: String): Boolean {
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun LoginDefaultPreview() {
     LoginScreen()
 }
 
