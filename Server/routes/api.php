@@ -16,8 +16,6 @@ Route::get('/test-redis', function(){
     return ['name' => $name, 'isExistName' => $isExistName];
 });
 
-Route::post('/show/{title}', [\App\Http\Controllers\PostController::class, 'show']);
-Route::post('/create', [\App\Http\Controllers\PostController::class, 'store']);
 
 Route::get('/user', function (Request $request) {
     return $request->user;
@@ -30,3 +28,22 @@ Route::get('/user', function (Request $request) {
 //        });
 //    });
 //});
+
+
+Route::get('/shop/all', [App\Http\Controllers\ShopController::class, 'index']);
+Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'show']);
+Route::post('/shop/create', [App\Http\Controllers\ShopController::class, 'store']);
+
+Route::get('/service/all', [App\Http\Controllers\ServiceController::class, 'index']);
+Route::get('service/{id}', [App\Http\Controllers\ServiceController::class, 'show']);
+Route::post('service/create', [App\Http\Controllers\ServiceController::class, 'store']);
+
+Route::get('/shop/{shopId}/coupon', [App\Http\Controllers\CouponController::class, 'findCouponsByShopId']);
+Route::get('/shop/{shopId}/coupon/create', [App\Http\Controllers\CouponController::class, 'store']);
+
+Route::get('/user/all', [App\Http\Controllers\UserController::class, 'index']);
+Route::get('user/show', [App\Http\Controllers\UserController::class, 'show']);
+Route::post('/user/create', [App\Http\Controllers\UserController::class, 'store']);
+Route::get('/user/points/{shopId}', [App\Http\Controllers\UserController::class, 'getPointByShopId']);
+
+Route::post('/transaction/create', [App\Http\Controllers\TransactionController::class, 'store']);

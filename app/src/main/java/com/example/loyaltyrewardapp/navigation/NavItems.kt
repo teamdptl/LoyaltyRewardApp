@@ -1,11 +1,13 @@
 package com.example.loyaltyrewardapp.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ConfirmationNumber
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.outlined.ConfirmationNumber
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
@@ -25,36 +27,43 @@ data class NavItems(
 val listOfNavItems: List<NavItems> = listOf(
     NavItems(
         label = "Trang chủ",
-        selectedIcon = Icons.Filled.Home,
+        selectedIcon = Icons.Outlined.Home,
         unselectedIcon = Icons.Outlined.Home,
         hasNews = false,
         route = Screens.HomeScreen.name
     ),
     NavItems(
-        label = "Lịch sử",
-        selectedIcon = Icons.Filled.History,
-        unselectedIcon = Icons.Outlined.History,
-        hasNews = true,
-        route = Screens.HistoryScreen.name
+        label = "Ưu đãi",
+        selectedIcon = Icons.Outlined.ConfirmationNumber,
+        unselectedIcon = Icons.Outlined.ConfirmationNumber,
+        hasNews = false,
+        route = Screens.CouponScreen.name
     ),
     NavItems(
         label = "",
-        selectedIcon = Icons.Filled.QrCodeScanner,
+        selectedIcon = Icons.Outlined.QrCodeScanner,
         unselectedIcon = Icons.Outlined.QrCodeScanner,
         hasNews = false,
         route = Screens.ScanQRScreen.name
     ),
+//    NavItems(
+//        label = "Thông báo",
+//        selectedIcon = Icons.Filled.Notifications,
+//        unselectedIcon = Icons.Outlined.Notifications,
+//        hasNews = false,
+//        badgeCount = 45,
+//        route = Screens.NotificationsScreen.name
+//    ),
     NavItems(
-        label = "Thông báo",
-        selectedIcon = Icons.Filled.Notifications,
-        unselectedIcon = Icons.Outlined.Notifications,
+        label = "Lịch sử",
+        selectedIcon = Icons.Outlined.History,
+        unselectedIcon = Icons.Outlined.History,
         hasNews = false,
-        badgeCount = 45,
-        route = Screens.NotificationsScreen.name
+        route = Screens.HistoryScreen.name
     ),
     NavItems(
         label = "Tài khoản",
-        selectedIcon = Icons.Filled.Person,
+        selectedIcon = Icons.Outlined.Person,
         unselectedIcon = Icons.Outlined.Person,
         hasNews = false,
         route = Screens.ProfileActivity.name

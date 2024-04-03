@@ -10,33 +10,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -47,9 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -69,7 +59,7 @@ class ProfileActivity : ComponentActivity(){
         setContent{
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
+                color = MaterialTheme.colorScheme.background
             ) {
 
             }
@@ -79,7 +69,10 @@ class ProfileActivity : ComponentActivity(){
 
 @Composable
 fun ProfileContent(){
-    Column(Modifier.padding(40.dp, 30.dp)) {
+    Column(Modifier
+        .padding(40.dp, 30.dp)
+        .background(Color.White)
+    ) {
         CircleAvatar()
         Spacer(modifier = Modifier.size(40.dp))
         InfoBox()
@@ -133,9 +126,9 @@ fun InfoBox(){
         Column {
             Button(onClick = { /*TODO*/ },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF3DB1FF),
-                    disabledBackgroundColor = Color(0xC83DB1FF),
-                    contentColor = Color(1f,1f,1f,1f)
+                    containerColor = Color(0xFF0E4AFF),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xB00E4AFF)
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -143,9 +136,9 @@ fun InfoBox(){
             }
             Button(onClick = { /*TODO*/ },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xF0FA233C),
-                    disabledBackgroundColor = Color(0xC5FA233C),
-                    contentColor = Color(1f,1f,1f,1f)
+                    containerColor = Color(0xFFFF0E23),
+                    contentColor = Color.White,
+                    disabledContainerColor = Color(0xB0FF0E23)
                 ),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -174,14 +167,11 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 textStyle = TextStyle(
-                    fontSize=14.sp
+                    fontSize=14.sp,
+                    color = Color.Black,
                 ),
                 shape = RoundedCornerShape(15.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor =  Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    backgroundColor = Color(0.933f, 0.925f, 0.925f, 1.0f)
-                ))
+                )
         }
 
         if(type.equals("date", ignoreCase = true)){
@@ -215,11 +205,6 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
                     .padding(vertical = 4.dp)
                     .clickable { mDatePickerDialog.show() },
                 shape = RoundedCornerShape(15.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor =  Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    backgroundColor = Color(0.933f, 0.925f, 0.925f, 1.0f)
-                ),
                 trailingIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(

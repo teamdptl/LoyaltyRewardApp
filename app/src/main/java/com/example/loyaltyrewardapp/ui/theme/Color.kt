@@ -2,6 +2,16 @@ package com.example.loyaltyrewardapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val Purple80 = Color(0xFFD0BCFF)
+val PurpleGrey80 = Color(0xFFCCC2DC)
+val Pink80 = Color(0xFFEFB8C8)
+val PrimaryColor = Color(0xFF5BBEEE)
+val GrayMap = Color(0xFF7B7D7E)
+
+val Purple40 = Color(0xFF6650a4)
+val PurpleGrey40 = Color(0xFF625b71)
+val Pink40 = Color(0xFF7D5260)
+
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
@@ -21,5 +31,7 @@ val ActiveBorder = Color(0xFF52FC59)
 val Notification = Color(0xFF2196F3)
 val White = Color(0xFFFFFFFF)
 val MainColor = Color(0xFF79C9E5)
+val SelectedColor = Color(0xFFCCEBF5)
 val Yellow = Color(0xFFFFDF37)
 val TextBlackColor = Color(0xFF191D23)
+val OrangeColor = Color(0xFFF0714A)
