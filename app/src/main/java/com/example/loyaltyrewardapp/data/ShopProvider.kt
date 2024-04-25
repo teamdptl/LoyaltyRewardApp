@@ -37,5 +37,12 @@ object ShopProvider {
             address = "Con đường hạnh phúc",
             status = false,
         ),
+        ShopModel(
+            id = 5,
+            title = "Tiệm rửa chén",
+            pictureUrl = R.drawable.promotion,
+            address = "Con đường thành công",
+            status = false,
+        ),
     )
 }

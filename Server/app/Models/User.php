@@ -29,8 +29,15 @@ class User extends Model
         return $this->hasOne('App\Models\Shop', 'user_id');
     }
 
-    public function user_point(){
-        return $this->belongsToMany('App\Models\Shop')->withPivot('points');
+    // public function user_point(){
+    //     return $this->belongsToMany(Shop::class, 'users_shops', 'users_id', 'shops_id');
+    //                 // ->withTimestamps()
+    //                 // ->withPivot(['points'])
+    //                 // ->as('user_points');
+    // }
+
+    public function point(){
+        return $this->hasMany(Point::class);
     }
 
     public function transactions(){
@@ -39,5 +46,9 @@ class User extends Model
 
     public function coupon(){
         return $this->belongsToMany('App\Models\Coupon')->withPivot('expired_at');
+    }
+
+    public function services(){
+        return $this->hasMany(Service::class)->withPivot('using_at');
     }
 }

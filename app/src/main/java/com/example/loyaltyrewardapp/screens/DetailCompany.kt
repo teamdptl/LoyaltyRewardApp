@@ -33,6 +33,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
@@ -61,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.CompaniesItem
+import com.example.loyaltyrewardapp.components.RewardItemPreview
 import com.example.loyaltyrewardapp.components.SquareImage
 import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
@@ -69,6 +71,8 @@ import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
 import com.example.loyaltyrewardapp.ui.theme.Yellow
 import kotlinx.coroutines.launch
+import com.example.loyaltyrewardapp.ui.theme.MainColor
+
 
 class DetailCompanyActivity : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,23 +92,22 @@ class DetailCompanyActivity : ComponentActivity(){
 enum class SelectedItem {
     First, Second, Third
 }
+
+
+
 @Preview
 @Composable
 fun DetailCompany() {
     val company = remember { ShopProvider.shop }
     var selectedItem by remember { mutableStateOf(SelectedItem.First) }
     val companies = remember { ShopProvider.shopList }
+    val isAdmin = true
 
-
-
-
-
-        Column(
+    Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(Color.White),
-
             ) {
             Box(
                 modifier = Modifier
@@ -141,6 +144,7 @@ fun DetailCompany() {
                             tint = Color.Black.copy(alpha = 0.6f)
                         )
                     }
+
                     Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(all = 10.dp)){
                         Text(text = "Điểm 10", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 12.sp, modifier = Modifier
                             .width(100.dp)
@@ -188,8 +192,6 @@ fun DetailCompany() {
                 ) {
                     Text("Ưu đãi",   style = MaterialTheme.typography.bodyMedium,
                         color = OrangeColor, fontWeight = FontWeight.SemiBold)
-
-
                 }
                 TextButton(onClick = {
                     selectedItem = SelectedItem.Second
@@ -230,21 +232,42 @@ fun DetailCompany() {
                         Spacer(modifier = Modifier
                             .weight(1.15f))
                     }
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Fixed(2),
-                        verticalItemSpacing = 3.dp,
-
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
                     ) {
-                        items(
-                            items = companies,
-                            itemContent = {
-                                DetailRewardPreview(
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(2),
+                            verticalItemSpacing = 3.dp,
 
+                            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                        ) {
+                            items(
+                                items = companies,
+                                itemContent = {
+                                    DetailRewardPreview(
+
+                                    )
+                                }
+                            )
+                        }
+                        if (isAdmin) {
+                            // Hiển thị icon cộng khi là admin và selectedItem là First hoặc Second
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 20.dp, end = 16.dp)
+                            ) {
+                                Spacer(modifier = Modifier.weight(1f)) // Spacer bên trái để căn chỉnh
+                                AddIconButton(
+                                    onClick = { /*TODO*/ },
+                                    isAdmin = isAdmin
                                 )
                             }
-                        )
+                        }
                     }
+
+
 
 
                 }
@@ -268,20 +291,39 @@ fun DetailCompany() {
                         Spacer(modifier = Modifier
                             .weight(1f))
                     }
-                    LazyVerticalStaggeredGrid(
-                        columns = StaggeredGridCells.Fixed(1),
-                        verticalItemSpacing = 5.dp,
-
-                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
                     ) {
-                        items(
-                            items = companies,
-                            itemContent = {
-                                DetailRewardPreview(
+                        LazyVerticalStaggeredGrid(
+                            columns = StaggeredGridCells.Fixed(1),
+                            verticalItemSpacing = 5.dp,
 
+                            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                        ) {
+                            items(
+                                items = companies,
+                                itemContent = {
+                                    RewardItemPreview(
+
+                                    )
+                                }
+                            )
+                        }
+                        if (isAdmin) {
+                            // Hiển thị icon cộng khi là admin và selectedItem là First hoặc Second
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(bottom = 20.dp, end = 16.dp)
+                            ) {
+                                Spacer(modifier = Modifier.weight(1f)) // Spacer bên trái để căn chỉnh
+                                AddIconButton(
+                                    onClick = { /*TODO*/ },
+                                    isAdmin = isAdmin
                                 )
                             }
-                        )
+                        }
                     }
 
                 }
@@ -317,3 +359,30 @@ fun DetailCompany() {
 
 }
 
+@Composable
+fun AddIconButton(
+    onClick: () -> Unit,
+    isAdmin: Boolean
+) {
+    if (isAdmin) {
+        IconButton(
+            onClick = onClick,
+            colors = IconButtonColors(
+                containerColor = MainColor,
+                contentColor = Color.White,
+                disabledContainerColor = Color.Gray,
+                disabledContentColor = Color.Black
+            ),
+            modifier = Modifier
+                .clip(shape = CircleShape)
+                .size(50.dp)
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = Color.White
+            )
+        }
+    }
+}

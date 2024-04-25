@@ -23,5 +23,15 @@ class Shop extends Model
         return $this->hasMany(Coupon::class);
     }
 
+    // public function user_point(){
+    //     return $this->belongsToMany(User::class);
+    //                 // ->withPivot(['points'])
+    //                 // ->as('user_points');
+    // }
+
+    public function point(){
+        return $this->hasMany(Point::class);
+    }
+
 
 }
