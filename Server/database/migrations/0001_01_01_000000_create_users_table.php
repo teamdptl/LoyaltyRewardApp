@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->string('auth_id');
-            $table->string('name');
             $table->set('role', ['user', 'manager', 'admin'])->default('user');
             $table->string('fcm_token')->nullable();
             $table->timestamps();

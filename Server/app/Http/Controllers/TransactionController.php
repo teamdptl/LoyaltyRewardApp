@@ -12,6 +12,19 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function scanQRCode(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|string',
+            'reward_id' => 'required|string',
+        ]);
+
+        $user = User::find($request->input('user_id', ''));
+        if (!$user) {
+            return Response('User không tồn tại!', 404);
+        }
+    }
+
     public function index(){
         return Transaction::all();
     }

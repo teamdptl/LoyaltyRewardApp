@@ -12,6 +12,6 @@ use BenSampo\Enum\Enum;
 final class RoleEnum extends Enum
 {
     const User = 'user';
-    const ShopOwner = 'shop-owner';
+    const ShopOwner = 'manager';
     const Admin = 'admin';
 }

@@ -15,8 +15,9 @@ return new class extends Migration
             $collection->string('name');
             $collection->text('description');
             $collection->boolean('should_notification')->default(false);
-            $collection->timestamps('period');
+            $collection->integer('period')->default(1);
             $collection->integer('points_reward')->default(0);
+            $collection->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
             $collection->timestamps();
         });
     }

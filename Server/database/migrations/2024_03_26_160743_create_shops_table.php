@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('shops', function (Blueprint $collection) {
             $collection->string('name');
+            $collection->text('description')->nullable();
             $collection->string('address');
-            $collection->string('phone');
+            $collection->string('phone')->nullable();
             $collection->string('logo')->nullable();
             $collection->string('cover')->nullable();
-            $collection->string('point_trigger');
-            $collection->json('extra_info')->nullable();
+            $collection->string('point_trigger')->nullable();
+            $collection->double('latitude')->nullable();
+            $collection->double('longitude')->nullable();
             $collection->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $collection->timestamps();
         });

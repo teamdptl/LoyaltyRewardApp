@@ -15,13 +15,25 @@ class UserController extends Controller
 {
 
     public function index(){
+        # TODO: Admin only
         return User::all();
     }
 
+    /**
+     * 1. Thông tin người dùng hiện tại
+     *
+     * Hiển thị vai trò, shop sở hữu (đối với manager), mã qr (đối với user)
+     *
+     */
     public function show(Request $request){
-        $token = $request->header('Authorization','');
-        $uid = (new AuthService())->validateIdToken($token);
-        return User::find($uid);
+        // Trả về thông tin của user hiện tại
+        $request->user->load('shop');
+
+        if ($request->user->role == 'user'){
+            $request->user->qr = $request->user->id;
+        }
+
+        return $request->user;
     }
 
     public function store(Request $request){
@@ -29,6 +41,7 @@ class UserController extends Controller
          * Validate các thuôc tính của user từ request
          */
         $validate = $request->validate([
+            'auth_id' => 'required|string', // Firebase Auth
             'name' =>'required|string',
             'role' =>'in:user,manager,admin'
         ]);
@@ -82,12 +95,12 @@ class UserController extends Controller
 
     public function updatePoint(User $user, Service $service = null, Coupon $coupon = null){
         $user_point = $user->point;
-        
+
         //Kiểm tra service và coupon
         if(!$service){
             foreach($user_point as $point){
                 if($point->shop->coupons->contains($coupon)){
-                    $current_point = $point->points; 
+                    $current_point = $point->points;
                     if($current_point >= $coupon->require_point){
                         echo "in khuyến mãi";
                         $point->points = $current_point - $coupon->require_point;

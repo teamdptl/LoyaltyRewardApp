@@ -19,9 +19,16 @@ class User extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'auth_id',
         'role',
         'fcm_token'
+    ];
+
+    protected $hidden = [
+        'password',
+        'email_verified_at',
+        'fcm_token',
+        'remember_token'
     ];
 
 
