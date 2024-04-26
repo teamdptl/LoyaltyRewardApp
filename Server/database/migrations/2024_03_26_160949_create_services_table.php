@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('services', function (Blueprint $collection) {
-            $collection->string('_id');
             $collection->string('name');
             $collection->text('description');
             $collection->boolean('should_notification')->default(false);

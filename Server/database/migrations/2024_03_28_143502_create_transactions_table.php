@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $collection) {
-            $collection->id();
             $collection->string('type');
             $collection->integer('point');
             $collection->text('reason')->nullable();

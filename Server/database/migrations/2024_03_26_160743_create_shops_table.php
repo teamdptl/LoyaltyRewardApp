@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('shops', function (Blueprint $collection) {
-            $collection->string('_id');
             $collection->string('name');
             $collection->string('address');
+            $collection->string('phone');
             $collection->string('logo')->nullable();
+            $collection->string('cover')->nullable();
             $collection->string('point_trigger');
+            $collection->json('extra_info')->nullable();
+            $collection->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $collection->timestamps();
         });
     }

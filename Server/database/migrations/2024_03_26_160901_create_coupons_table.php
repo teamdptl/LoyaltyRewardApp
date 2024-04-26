@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('coupons', function (Blueprint $collection) {
-            $collection->string('_id');
             $collection->string('name');
             $collection->text('description');
             $collection->integer('require_point');

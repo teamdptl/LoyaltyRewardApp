@@ -45,7 +45,7 @@ class User extends Model
     }
 
     public function coupon(){
-        return $this->belongsToMany('App\Models\Coupon')->withPivot('expired_at');
+        return $this->belongsToMany('App\Models\Coupon')->withPivot(['expired_at', 'redeemed_at']);
     }
 
     public function services(){
