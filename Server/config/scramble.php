@@ -72,11 +72,14 @@ return [
      * ],
      * ```
      */
-    'servers' => null,
+    'servers' => [
+        'Live' => 'api',
+        'Prod' => 'https://app.dy.id.vn/api',
+    ],
 
     'middleware' => [
         'web',
-        RestrictedDocsAccess::class,
+//        RestrictedDocsAccess::class,
     ],
 
     'extensions' => [],
