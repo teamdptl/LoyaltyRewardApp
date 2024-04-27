@@ -19,9 +19,16 @@ class User extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'auth_id',
         'role',
         'fcm_token'
+    ];
+
+    protected $hidden = [
+        'password',
+        'email_verified_at',
+        'fcm_token',
+        'remember_token'
     ];
 
 
@@ -29,16 +36,23 @@ class User extends Model
         return $this->hasOne('App\Models\Shop', 'user_id');
     }
 
-    public function user_point(){
-        return $this->belongsToMany('App\Models\Shop', 'user_point', 'shop_id', 'user_id')->withPivot('points');
+    // public function user_point(){
+    //     return $this->belongsToMany(Shop::class, 'users_shops', 'users_id', 'shops_id');
+    //                 // ->withTimestamps()
+    //                 // ->withPivot(['points'])
+    //                 // ->as('user_points');
+    // }
+
+    public function points(){
+        return $this->embedsMany(Point::class);
     }
 
     public function transactions(){
-        return $this->hasMany('App\Models\Transaction');
+        return $this->hasMany(Transaction::class);
     }
 
-    public function coupon(){
-        return $this->belongsToMany('App\Models\Coupon')->withPivot('expired_at');
+    public function coupons(){
+        return $this->embedsMany(Coupon::class);
     }
 
     public function services(){

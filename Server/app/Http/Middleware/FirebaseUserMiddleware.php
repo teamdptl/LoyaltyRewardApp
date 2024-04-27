@@ -19,29 +19,32 @@ class FirebaseUserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $header = $request->header('Authorization');
-        if (!$header)
-            return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
-        $idToken = explode(' ', $header)[1];
-        $auth = new AuthService();
-        $uid = $auth->validateIdToken($idToken);
-        if (!$uid)
-            return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
-
-        // Get data from cache
-        $cache_user = Cache::get($uid);
-        $user = null;
-        if ($cache_user){
-            $user = $cache_user;
-        } else {
-            $user = User::find($uid);
-            if (!$user)
-                return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
-            Cache::put($uid, $user, 60*10);
-        }
-
-        $request->user = $user;
-
+        // TODO: Bỏ phần này, phần này chỉ hỗ trợ test
+        $request->user = User::find('662cae3fdc71109826092712');
         return $next($request);
+
+//        $header = $request->header('Authorization');
+//        if (!$header)
+//            return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
+//        $idToken = explode(' ', $header)[1];
+//        $auth = new AuthService();
+//        $uid = $auth->validateIdToken($idToken);
+//        if (!$uid)
+//            return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
+//
+//        // Get data from cache
+//        $cache_user = Cache::get($uid);
+//
+//        if ($cache_user){
+//            $user = $cache_user;
+//        } else {
+//            $user = User::where('auth_id', $uid)->first();
+//            if (!$user)
+//                return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
+//            Cache::put($uid, $user, 60*10);
+//        }
+//
+//        $request->user = $user;
+//        return $next($request);
     }
 }

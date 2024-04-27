@@ -13,8 +13,14 @@ class Transaction extends Model
     protected $fillable = [
         'type',
         'point',
-        'resson'
+        'reason'
     ];
+
+    protected $casts = [
+        'point' => 'integer'
+    ];
+
+
 
     public function user(){
         return $this->belongsTo(User::class);

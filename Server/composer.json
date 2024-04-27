@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.2",
         "bensampo/laravel-enum": "^6.11",
+        "cloudinary-labs/cloudinary-laravel": "^2.1",
+        "dedoc/scramble": "^0.9.0",
         "kreait/firebase-php": "7.9.1",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",

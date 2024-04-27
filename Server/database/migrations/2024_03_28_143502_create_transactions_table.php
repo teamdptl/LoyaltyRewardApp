@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $collection) {
-            $collection->id();
             $collection->string('type');
             $collection->integer('point');
+            $collection->integer('current_point');
             $collection->text('reason')->nullable();
             $collection->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $collection->foreignId('service_id')->nullable()->constrained('services')->onDelete('cascade');

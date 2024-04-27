@@ -17,7 +17,13 @@ class Service extends Model
         'points_reward'
     ];
 
-    
+    protected $casts = [
+        'should_notification' => 'boolean',
+        'period' => 'integer',
+        'points_reward' => 'integer'
+    ];
+
+
     public function shop(){
         return $this->belongsTo(Shop::class);
     }

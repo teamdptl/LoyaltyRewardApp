@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use MongoDB\Laravel\Eloquent\Model;
+
+class Point extends Model
+{
+    use HasFactory;
+
+    protected $connection ='mongodb';
+
+    protected $fillable = [
+        'points',
+        'shop_id',
+    ];
+
+    protected $casts = [
+        'points' => 'integer',
+    ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
+    }
+}

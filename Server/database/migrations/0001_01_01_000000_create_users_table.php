@@ -12,15 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->string('_id');
-            $table->string('name');
+            $table->string('auth_id');
             $table->set('role', ['user', 'manager', 'admin'])->default('user');
             $table->string('fcm_token')->nullable();
             $table->timestamps();
         });
 
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('_id');
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();

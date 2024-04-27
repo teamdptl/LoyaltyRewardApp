@@ -9,7 +9,7 @@ class Shop extends Model
 {
     use HasFactory;
     protected $connection ='mongodb';
-    protected $fillable = ['name', 'address', 'logo', 'point_trigger'];
+    protected $fillable = ['name', 'address', 'logo', 'cover', 'latitude', 'longitude', 'point_trigger'];
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
@@ -23,8 +23,14 @@ class Shop extends Model
         return $this->hasMany(Coupon::class);
     }
 
-    public function user_point(){
-        return $this->belongsToMany('App\Models\Shop','user_point', 'user_id', 'shop_id')->withPivot('points');
+    // public function user_point(){
+    //     return $this->belongsToMany(User::class);
+    //                 // ->withPivot(['points'])
+    //                 // ->as('user_points');
+    // }
+
+    public function point(){
+        return $this->hasMany(Point::class);
     }
 
 

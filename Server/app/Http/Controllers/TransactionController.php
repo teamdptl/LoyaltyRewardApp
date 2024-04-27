@@ -10,6 +10,9 @@ use App\Models\User;
 use Google\Rpc\Context\AttributeContext\Response;
 use Illuminate\Http\Request;
 
+/**
+ * @tags Lịch sử giao dịch
+ */
 class TransactionController extends Controller
 {
     public function index(){
