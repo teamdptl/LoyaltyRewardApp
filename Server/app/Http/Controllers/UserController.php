@@ -7,10 +7,15 @@ use App\Http\Services\AuthService;
 use App\Models\Coupon;
 use App\Models\Point;
 use App\Models\Service;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * @tags Người dùng
+ */
 class UserController extends Controller
 {
 
@@ -34,6 +39,62 @@ class UserController extends Controller
         }
 
         return $request->user;
+    }
+
+    /**
+     * 10. Đổi điểm thành ưu đãi
+     *
+     * Lấy coupon của shop và tạo coupon mới cho user
+     *
+     */
+    public function exchangeCoupon(Request $request){
+        $request->validate([
+            'coupon_id' => 'required|string'
+        ]);
+
+        $coupon = Coupon::find($request->input('coupon_id'));
+        if(!$coupon){
+            return Response('Không tìm thấy mã ưu đãi!', 404);
+        }
+
+        $shop_point = $request->user->points()->where('shop_id', $coupon->shop_id)->first();
+        if(!$shop_point){
+            return Response('Bạn không có điểm của cửa hàng này!', 404);
+        }
+
+        if($shop_point->points < $coupon->require_point){
+            return Response('Bạn không đủ điểm để đổi mã ưu đãi này!', 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            $shop_point->points -= $coupon->require_point;
+            $shop_point->save();
+
+            // copy coupon
+            $new_coupon = $coupon->replicate();
+            unset($new_coupon->_id);
+            $new_coupon->expired_at = now()->addMonths($coupon->expired_after);
+            $new_coupon->redeemed_at = null;
+
+            // Tạo coupon cho user
+            $request->user->coupons()->create($new_coupon);
+
+            Transaction::create([
+                'user_id' => $request->user->_id,
+                'coupon_id' => $coupon->_id,
+                'type' => 'minus',
+                'point' => $coupon->require_point,
+                'current_point' => $shop_point->points,
+                'reason' => 'Đổi quà '.$coupon->name
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Response('Đổi mã ưu đãi thất bại!', 404);
+        }
+        return Response('Đổi mã ưu đãi thành công!', 200);
     }
 
     public function store(Request $request){
@@ -94,7 +155,7 @@ class UserController extends Controller
     }
 
     public function updatePoint(User $user, Service $service = null, Coupon $coupon = null){
-        $user_point = $user->point;
+        $user_point = $user->points;
 
         //Kiểm tra service và coupon
         if(!$service){

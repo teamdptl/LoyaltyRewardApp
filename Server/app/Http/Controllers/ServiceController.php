@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @tags Dịch vụ
+ */
+
 class ServiceController extends Controller
 {
 

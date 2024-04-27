@@ -9,6 +9,9 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @tags Ưu đãi
+ */
 class CouponController extends Controller
 {
     public function index(){
@@ -53,18 +56,22 @@ class CouponController extends Controller
      *
      * Tạo ưu đãi với các thông tin như tên, mô tả, số điểm cần có, icon, trạng thái kích hoạt
      *
+     * @requestMediaType multipart/form-data
      */
     public function store(Request $request){
         $validated = $request->validate([
             'name' => 'required|string',
             'description' => 'required|string',
-            'require_point' => 'required|numeric|min:0',
+            'require_point' => 'required|integer|min:0',
             'icon' => 'required|file|image|max:20000',
-            'is_active' => 'nullable|boolean',
+            'is_active' => 'required|boolean',
+            'expired_after' => 'required|integer|min:1',
         ]);
 
         $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
         $validated['icon'] = $icon_path;
+        $validated['require_point'] = (int)$validated['require_point'];
+        $validated['expired_after'] = (int)$validated['expired_after'];
 
         $shop = $request->user->shop;
         if(!$shop){
@@ -88,11 +95,14 @@ class CouponController extends Controller
             'description' => 'required|string',
             'require_point' => 'required|integer|min:0',
             'icon' => 'required|file|image|max:20000',
-            'is_active' => 'nullable|boolean',
+            'is_active' => 'require|boolean',
+            'expired_after' => 'required|integer|min:1',
         ]);
 
         $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
         $validated['icon'] = $icon_path;
+        $validated['require_point'] = (int)$validated['require_point'];
+        $validated['expired_after'] = (int)$validated['expired_after'];
 
         $shop = $request->user->shop;
         if(!$shop){

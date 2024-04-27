@@ -10,10 +10,14 @@ class Point extends Model
     use HasFactory;
 
     protected $connection ='mongodb';
-    protected $collection = 'user_point';
 
     protected $fillable = [
         'points',
+        'shop_id',
+    ];
+
+    protected $casts = [
+        'points' => 'integer',
     ];
 
     public function user(){

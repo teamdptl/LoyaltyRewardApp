@@ -43,16 +43,16 @@ class User extends Model
     //                 // ->as('user_points');
     // }
 
-    public function point(){
-        return $this->hasMany(Point::class);
+    public function points(){
+        return $this->embedsMany(Point::class);
     }
 
     public function transactions(){
-        return $this->hasMany('App\Models\Transaction');
+        return $this->hasMany(Transaction::class);
     }
 
-    public function coupon(){
-        return $this->belongsToMany('App\Models\Coupon')->withPivot(['expired_at', 'redeemed_at']);
+    public function coupons(){
+        return $this->embedsMany(Coupon::class);
     }
 
     public function services(){

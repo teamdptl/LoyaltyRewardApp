@@ -26,12 +26,12 @@ Route::get('/user', function (Request $request) {
 //Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'show']);
 //Route::post('/shop/create', [App\Http\Controllers\ShopController::class, 'store']);
 
-Route::get('/service/all', [App\Http\Controllers\ServiceController::class, 'index']);
-Route::get('service/{id}', [App\Http\Controllers\ServiceController::class, 'show']);
+//Route::get('/service/all', [App\Http\Controllers\ServiceController::class, 'index']);
+//Route::get('service/{id}', [App\Http\Controllers\ServiceController::class, 'show']);
 //Route::post('service/create', [App\Http\Controllers\ServiceController::class, 'store']);
 
-Route::get('/shop/{shopId}/coupon', [App\Http\Controllers\CouponController::class, 'findCouponsByShopId']);
-Route::get('/shop/{shopId}/coupon/create', [App\Http\Controllers\CouponController::class, 'store']);
+//Route::get('/shop/{shopId}/coupon', [App\Http\Controllers\CouponController::class, 'findCouponsByShopId']);
+//Route::get('/shop/{shopId}/coupon/create', [App\Http\Controllers\CouponController::class, 'store']);
 
 Route::get('/user/all', [App\Http\Controllers\UserController::class, 'index']);
 //Route::get('user/show', [App\Http\Controllers\UserController::class, 'show']);
@@ -52,6 +52,8 @@ Route::middleware('auth-firebase')->group(function () {
 
     Route::middleware('auth-firebase-user')->group(function () {
         // API dùng riêng cho user
+        // 10. Đổi điểm thành ưu đãi
+        Route::post('/user/exchange', [App\Http\Controllers\UserController::class, 'exchangeCoupon']);
     });
 
     Route::middleware('auth-firebase-shop-owner')->group(function () {
@@ -70,6 +72,9 @@ Route::middleware('auth-firebase')->group(function () {
         Route::post('/shop/service', [App\Http\Controllers\ServiceController::class, 'store']);
         Route::put('/shop/service/{id}', [App\Http\Controllers\ServiceController::class, 'update']);
         Route::delete('/shop/service/{id}', [App\Http\Controllers\ServiceController::class, 'destroy']);
+
+        // 17. Quét mã qr của người dùng để tích điểm hoặc nhận ưu đãi
+        Route::post('/shop/scan', [App\Http\Controllers\ShopController::class, 'scanQR']);
 
 
 //        Route::post('/transaction', [App\Http\Controllers\TransactionController::class, 'store']);

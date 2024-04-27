@@ -20,7 +20,7 @@ class FirebaseUserMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // TODO: Bỏ phần này, phần này chỉ hỗ trợ test
-        $request->user = User::find('662b8c0e9b5c6f8baf0020c2');
+        $request->user = User::find('662cae3fdc71109826092712');
         return $next($request);
 
 //        $header = $request->header('Authorization');
