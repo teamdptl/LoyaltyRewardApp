@@ -17,10 +17,12 @@ class Transaction extends Model
     ];
 
     protected $casts = [
-        'point' => 'integer'
+        'point' => 'integer',
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
     ];
 
-
+    protected $hidden = ['updated_at'];
 
     public function user(){
         return $this->belongsTo(User::class);

@@ -72,10 +72,6 @@ return [
      * ],
      * ```
      */
-    'servers' => [
-        'Live' => 'api',
-        'Prod' => 'https://app.dy.id.vn/api',
-    ],
 
     'middleware' => [
         'web',

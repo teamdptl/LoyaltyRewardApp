@@ -69,6 +69,12 @@ class ShopController extends Controller{
 
         $shop = new Shop($validate);
 
+        if ($request->has('latitude') && $request->has('longitude'))
+            $shop->location = [
+                'type' => 'Point',
+                'coordinates' => [(double)$validate['longitude'], (double)$validate['latitude']]
+            ];
+
         //Có thể dùng 1 trong 2 cách bên dưới để lưu shop có relate to user
         $request->user->shop()->save($shop);
 
@@ -108,6 +114,12 @@ class ShopController extends Controller{
             $cover_path = cloudinary()->upload($request->file('cover')->getRealPath())->getSecurePath();
             $validate['cover'] = $cover_path;
         }
+
+        if ($request->has('latitude') && $request->has('longitude'))
+            $shop->location = [
+                'type' => 'Point',
+                'coordinates' => [(double)$validate['longitude'], (double)$validate['latitude']]
+            ];
 
         $shop->fill($validate);
         $shop->save();
@@ -170,7 +182,7 @@ class ShopController extends Controller{
 
         $customer = User::find($validated['user_id']);
 
-        if ($customer){
+        if (!$customer){
             return Response('Khách hàng không tồn tại!', 404);
         }
 
@@ -216,6 +228,10 @@ class ShopController extends Controller{
                     'current_point' => $current_point,
                     'reason' => 'Cộng điểm cho dịch vụ '.$service->name
                 ]);
+
+                // TODO: Tạo database thông báo cho user bằng FCM
+
+
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();

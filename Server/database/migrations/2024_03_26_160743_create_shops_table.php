@@ -19,8 +19,7 @@ return new class extends Migration
             $collection->string('logo')->nullable();
             $collection->string('cover')->nullable();
             $collection->string('point_trigger')->nullable();
-            $collection->double('latitude')->nullable();
-            $collection->double('longitude')->nullable();
+            $collection->geography('location')->nullable();
             $collection->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $collection->timestamps();
         });

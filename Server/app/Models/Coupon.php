@@ -24,7 +24,13 @@ class Coupon extends Model
         'require_point' => 'integer',
         'is_active' => 'boolean',
         'expired_after' => 'integer',
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m',
+        'expired_at'  => 'datetime:d-m-Y H:m',
+        'redeemed_at'  => 'datetime:d-m-Y H:m'
     ];
+
+    protected $hidden = ['updated_at'];
 
     public function user(){
         return $this->belongsToMany(User::class);

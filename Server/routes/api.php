@@ -33,27 +33,48 @@ Route::get('/user', function (Request $request) {
 //Route::get('/shop/{shopId}/coupon', [App\Http\Controllers\CouponController::class, 'findCouponsByShopId']);
 //Route::get('/shop/{shopId}/coupon/create', [App\Http\Controllers\CouponController::class, 'store']);
 
-Route::get('/user/all', [App\Http\Controllers\UserController::class, 'index']);
+//Route::get('/user/all', [App\Http\Controllers\UserController::class, 'index']);
 //Route::get('user/show', [App\Http\Controllers\UserController::class, 'show']);
-Route::post('/user/create', [App\Http\Controllers\UserController::class, 'store']);
-Route::get('/user/points/{shopId}', [App\Http\Controllers\UserController::class, 'getPointByShopId']);
+//Route::post('/user/create', [App\Http\Controllers\UserController::class, 'store']);
+//Route::get('/user/points/{shopId}', [App\Http\Controllers\UserController::class, 'getPointByShopId']);
 
-Route::post('/transaction/create', [App\Http\Controllers\TransactionController::class, 'store']);
+//Route::post('/transaction/create', [App\Http\Controllers\TransactionController::class, 'store']);
 
 
 // ---------------- API đã hoàn thành -----------------
 Route::middleware('auth-firebase')->group(function () {
 
     // 1. Lấy thông tin của người dùng (bao gồm thông tin cơ bản, mã qr, vai trò, shop) (Dùng chung vs quản lý)
-    Route::get('user/show', [App\Http\Controllers\UserController::class, 'show']);
+    Route::get('/info', [App\Http\Controllers\UserController::class, 'show']);
 
     // 8. API trả về thông tin gồm thông tin chi tiết, danh sách dịch vụ, danh sách khuyến mãi
     Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'getShopById']);
 
+    // 9. Lấy thông tin chi tiết của ưu đãi
+    Route::get('/coupon/{id}', [App\Http\Controllers\CouponController::class, 'show']);
+
+    // 17. Upload file (Dùng chung)
+    Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload']);
+
     Route::middleware('auth-firebase-user')->group(function () {
         // API dùng riêng cho user
+
+        // 2. Lấy danh sách cửa hàng đề xuất (Các cửa hàng gần nhất và mới mở)
+        Route::get('/user/recommended', [App\Http\Controllers\UserController::class, 'getRecommendedShop']);
+        // 3. Lấy danh sách cửa hàng đã ghé thăm của người dùng
+        Route::get('/user/visited', [App\Http\Controllers\UserController::class, 'getVisitedShop']);
+
+        // 4. Lấy danh sách điểm các cửa hàng của người dùng
+        Route::get('/user/points', [App\Http\Controllers\UserController::class, 'getListPoint']);
+
+        // 5. Lấy danh sách coupon có thể đổi được của người dùng với các cửa hàng
+        Route::get('/user/coupons/available', [App\Http\Controllers\UserController::class, 'getAvailableCoupons']);
+
         // 10. Đổi điểm thành ưu đãi
         Route::post('/user/exchange', [App\Http\Controllers\UserController::class, 'exchangeCoupon']);
+
+        // 11. Lấy danh sách ưu đãi của người dùng
+        Route::get('/user/coupons', [App\Http\Controllers\UserController::class, 'getCoupons']);
     });
 
     Route::middleware('auth-firebase-shop-owner')->group(function () {
@@ -61,7 +82,9 @@ Route::middleware('auth-firebase')->group(function () {
         Route::get('/shop', [App\Http\Controllers\ShopController::class, 'show']);
         Route::post('/shop', [App\Http\Controllers\ShopController::class, 'store']);
         Route::put('/shop', [App\Http\Controllers\ShopController::class, 'update']);
-        Route::delete('/shop', [App\Http\Controllers\ShopController::class, 'destroy']);
+
+        // Delete shop sẽ gây ra rất nhiều lỗi :((
+         Route::delete('/shop', [App\Http\Controllers\ShopController::class, 'destroy']);
 
         // Coupon: Ưu đãi
         Route::post('/shop/coupon', [App\Http\Controllers\CouponController::class, 'store']);

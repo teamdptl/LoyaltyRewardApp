@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Services\AuthService;
 use App\Models\Coupon;
 use App\Models\Point;
 use App\Models\Service;
+use App\Models\Shop;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Collection\Collection;
 
 /**
  * @tags Người dùng
@@ -32,13 +35,110 @@ class UserController extends Controller
      */
     public function show(Request $request){
         // Trả về thông tin của user hiện tại
-        $request->user->load('shop');
-
-        if ($request->user->role == 'user'){
+        if ($request->user->role == RoleEnum::User){
             $request->user->qr = $request->user->id;
+            unset($request->user->points);
+            unset($request->user->coupons);
+        }
+        else if ($request->user->role == RoleEnum::ShopOwner){
+            $request->user->load('shop');
         }
 
         return $request->user;
+    }
+
+    /**
+     * 2. Lấy các cửa hàng gợi ý cho người dùng (có thể dựa theo vị trí hoặc cửa hàng mới)
+     *
+     * Hiển thị danh sách cửa hàng ở gần người dùng, nếu không có thì sẽ hiện cửa hàng mới
+     *
+     */
+    public function getRecommendedShop(Request $request){
+        $validate = $request->validate([
+            'limit' => 'nullable|integer|min:0',
+            'lat' => 'nullable|numeric',
+            'long' => 'nullable|numeric',
+        ]);
+
+        if (!$request->has('limit')){
+            $validate['limit'] = 10;
+        }
+
+        if ($request->has('lat') && $request->has('long')) {
+            $shops = Shop::where('location', 'near', [
+                '$geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => [
+                        $validate['long'],
+                        $validate['lat']
+                    ]
+                ],
+                '$maxDistance' => 10000
+            ])->limit($validate['limit'])->get();
+
+            if ($shops->count() < $validate['limit']){
+                $shops = $shops->merge(Shop::orderBy('created_at', 'desc')->limit($validate['limit'] - $shops->count())->get());
+            }
+        }
+        else {
+            $shops = Shop::orderBy('created_at', 'desc')->limit($validate['limit'])->get();
+        }
+        return $shops;
+    }
+
+    /**
+     * 4. Lấy danh sách điểm các cửa hàng của người dùng
+     *
+     * Hiển thị danh sách điểm các cửa hàng mà người dùng đã ghé thăm và đã tích điểm
+     *
+     */
+
+    public function getListPoint(Request $request){
+        $request->user->points->load('shop')->sortByDesc('updated_at');
+        return $request->user->points->all();
+    }
+
+    /**
+     * 3. Lấy danh sách cửa hàng đã ghé thăm của người dùng
+     *
+     * Hiển thị danh sách cửa hàng người dùng đã ghé thăm và tích điểm
+     *
+     */
+    public function getVisitedShop(Request $request){
+        $validate = $request->validate([
+            'limit' => 'nullable|integer|min:0',
+        ]);
+
+        if (!$request->has('limit')){
+            $validate['limit'] = 10;
+        }
+
+        $request->user->load('points.shop');
+        $shops = $request->user->points->sortByDesc('updated_at')->take($validate['limit'])->pluck('shop')->unique('_id');
+        return $shops;
+    }
+
+    /**
+     * 5. Lấy danh sách ưu đãi có thể đổi được của người dùng với các cửa hàng
+     *
+     * Trả về list các ưu đãi nhỏ hơn hoặc bằng điểm hiện tại của user đối với shop đó
+     *
+     */
+    public function getAvailableCoupons(Request $request)
+    {
+        $request->user->points->load(['shop', 'shop.coupons']);
+        $coupons = collect();
+        $points = $request->user->points->sortByDesc('updated_at')->unique('shop_id');
+        foreach ($points as $point) {
+            if (!$point->shop) continue;
+            $result = $point->shop->coupons->where('require_point', $point->points)->map(function($coupon) use ($point){
+                unset($point->shop->coupons);
+                $coupon->shop = $point->shop;
+                return $coupon;
+            });
+            $coupons = $coupons->concat($result->all());
+        }
+        return $coupons;
     }
 
     /**
@@ -72,13 +172,16 @@ class UserController extends Controller
             $shop_point->save();
 
             // copy coupon
-            $new_coupon = $coupon->replicate();
-            unset($new_coupon->_id);
-            $new_coupon->expired_at = now()->addMonths($coupon->expired_after);
-            $new_coupon->redeemed_at = null;
+            $new_coupon = $coupon->replicate()->fill([
+                'expired_at' => now()->addMonths($coupon->expired_after)->toDateTimeString(),
+                'redeemed_at' => null
+            ]);
 
             // Tạo coupon cho user
-            $request->user->coupons()->create($new_coupon);
+            $request->user->coupons()->save($new_coupon);
+
+            // Link coupon to shop
+            $new_coupon->shop()->associate($coupon->shop);
 
             Transaction::create([
                 'user_id' => $request->user->_id,
@@ -95,6 +198,17 @@ class UserController extends Controller
             return Response('Đổi mã ưu đãi thất bại!', 404);
         }
         return Response('Đổi mã ưu đãi thành công!', 200);
+    }
+
+    /**
+     * 11. Lấy danh sách ưu đãi của bản thân
+     *
+     * Trả về list các coupon mà user đã đổi
+     *
+     */
+    public function getCoupons(Request $request){
+        $request->user->coupons->load('shop');
+        return $request->user->coupons;
     }
 
     public function store(Request $request){

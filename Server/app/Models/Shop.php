@@ -9,8 +9,17 @@ class Shop extends Model
 {
     use HasFactory;
     protected $connection ='mongodb';
-    protected $fillable = ['name', 'address', 'logo', 'cover', 'latitude', 'longitude', 'point_trigger'];
+    protected $fillable = ['name', 'address', 'logo', 'cover', 'point_trigger'];
 
+    protected $casts = [
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
+    ];
+
+    protected $hidden = [
+        'updated_at',
+        'user_id',
+    ];
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
