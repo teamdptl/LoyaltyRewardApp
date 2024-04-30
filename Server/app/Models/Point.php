@@ -18,6 +18,8 @@ class Point extends Model
 
     protected $casts = [
         'points' => 'integer',
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
     ];
 
     public function user(){
@@ -25,6 +27,6 @@ class Point extends Model
     }
 
     public function shop(){
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class, 'shop_id', '_id');
     }
 }

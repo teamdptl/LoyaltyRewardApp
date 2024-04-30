@@ -40,14 +40,19 @@ class CouponController extends Controller
 //        return Response('Lỗi!', 404);
 //    }
 
+    /**
+     * 9. Lấy thông tin chi tiết của ưu đãi
+     *
+     * Trả về thông tin chi tiết của ưu đãi cùng với thông tin shop
+     *
+     */
     public function show($id){
         $coupon = Coupon::find($id);
         if($coupon){
+            $coupon->load('shop');
             return $coupon;
-        }else{
-            return Response('Không tìm thấy khuyến mãi này!', 404);
         }
-        return Response('Lỗi!', 404);
+        return Response('Không tìm thấy khuyến mãi này!', 404);
     }
 
 

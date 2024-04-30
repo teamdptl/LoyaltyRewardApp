@@ -11,7 +11,8 @@ use MongoDB\Laravel\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
-    // use Notifiable;
+    use Notifiable;
+
     protected $connection = 'mongodb';
     /**
      * The attributes that are mass assignable.
@@ -24,13 +25,28 @@ class User extends Model
         'fcm_token'
     ];
 
+    protected $casts = [
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
+    ];
+
     protected $hidden = [
         'password',
         'email_verified_at',
         'fcm_token',
-        'remember_token'
+        'remember_token',
+        'updated_at',
     ];
 
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 
     public function shop(){
         return $this->hasOne('App\Models\Shop', 'user_id');
@@ -48,7 +64,7 @@ class User extends Model
     }
 
     public function transactions(){
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class, 'user_id');
     }
 
     public function coupons(){
@@ -57,5 +73,9 @@ class User extends Model
 
     public function services(){
         return $this->hasMany(Service::class)->withPivot('using_at');
+    }
+
+    public function reminders(){
+        return $this->hasMany(Reminder::class);
     }
 }
