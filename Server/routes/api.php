@@ -5,21 +5,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
 
-Route::get('/test-redis', function(){
-    $isExistName = true;
-    $name = Redis::get('name');
-    if (!$name){
-        $isExistName = false;
-        $name = "Duy Huynh";
-        Redis::set('name', $name);
-    }
-    return ['name' => $name, 'isExistName' => $isExistName];
-});
+//Route::get('/test-redis', function(){
+//    $isExistName = true;
+//    $name = Redis::get('name');
+//    if (!$name){
+//        $isExistName = false;
+//        $name = "Duy Huynh";
+//        Redis::set('name', $name);
+//    }
+//    return ['name' => $name, 'isExistName' => $isExistName];
+//});
 
 
-Route::get('/user', function (Request $request) {
-    return $request->user;
-})->middleware('auth-firebase');
+//Route::get('/user', function (Request $request) {
+//    return $request->user;
+//})->middleware('auth-firebase');
 
 
 //Route::get('/shop/all', [App\Http\Controllers\ShopController::class, 'index']);
@@ -42,10 +42,17 @@ Route::get('/user', function (Request $request) {
 
 
 // ---------------- API đã hoàn thành -----------------
+
+// API đăng kí tài khoản
+Route::post('/register', [App\Http\Controllers\UserController::class, 'store']);
+
+// 0. Trả về idToken dùng để xác thực user thông qua API header authorization
+Route::get('/test', [App\Http\Controllers\TestController::class, 'test']);
+
 Route::middleware('auth-firebase')->group(function () {
 
     // 1. Lấy thông tin của người dùng (bao gồm thông tin cơ bản, mã qr, vai trò, shop) (Dùng chung vs quản lý)
-    Route::get('/info', [App\Http\Controllers\UserController::class, 'show']);
+    Route::get('/user', [App\Http\Controllers\UserController::class, 'show']);
 
     // 8. API trả về thông tin gồm thông tin chi tiết, danh sách dịch vụ, danh sách khuyến mãi
     Route::get('/shop/{id}', [App\Http\Controllers\ShopController::class, 'getShopById']);
@@ -56,11 +63,15 @@ Route::middleware('auth-firebase')->group(function () {
     // 17. Upload file (Dùng chung)
     Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload']);
 
+    // 15. Cập nhật FCM Token
+    Route::post('/fcm', [App\Http\Controllers\UserController::class, 'updateFCMToken']);
+
     Route::middleware('auth-firebase-user')->group(function () {
         // API dùng riêng cho user
 
         // 2. Lấy danh sách cửa hàng đề xuất (Các cửa hàng gần nhất và mới mở)
         Route::get('/user/recommended', [App\Http\Controllers\UserController::class, 'getRecommendedShop']);
+
         // 3. Lấy danh sách cửa hàng đã ghé thăm của người dùng
         Route::get('/user/visited', [App\Http\Controllers\UserController::class, 'getVisitedShop']);
 
@@ -69,6 +80,9 @@ Route::middleware('auth-firebase')->group(function () {
 
         // 5. Lấy danh sách coupon có thể đổi được của người dùng với các cửa hàng
         Route::get('/user/coupons/available', [App\Http\Controllers\UserController::class, 'getAvailableCoupons']);
+
+        // 6. Lấy lịch sử giao dịch (transaction)
+        Route::get('/user/transaction', [App\Http\Controllers\UserController::class, 'getTransaction']);
 
         // 10. Đổi điểm thành ưu đãi
         Route::post('/user/exchange', [App\Http\Controllers\UserController::class, 'exchangeCoupon']);
@@ -99,8 +113,8 @@ Route::middleware('auth-firebase')->group(function () {
         // 17. Quét mã qr của người dùng để tích điểm hoặc nhận ưu đãi
         Route::post('/shop/scan', [App\Http\Controllers\ShopController::class, 'scanQR']);
 
-
-//        Route::post('/transaction', [App\Http\Controllers\TransactionController::class, 'store']);
+        // Lấy thông tin của cửa hàng và thống kê trong ngày của cửa hàng (lượt quét, điểm đã cấp, quà đã đổi, danh sách ghé thăm trong ngày đã quét)
+        Route::get('/shop/daily', [App\Http\Controllers\ShopController::class, 'getShopDailyStatistic']);
     });
 
     Route::middleware('auth-firebase-admin')->group(function () {

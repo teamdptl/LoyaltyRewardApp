@@ -52,4 +52,15 @@ class AuthService
         }
         return null;
     }
+
+    public function createCustomToken(string $uid)
+    {
+        try {
+            return $this->auth->createCustomToken($uid);
+        } catch (AuthException|FirebaseException $e) {
+            return 'An error occurred: '.$e->getMessage();
+        }
+    }
+
+
 }

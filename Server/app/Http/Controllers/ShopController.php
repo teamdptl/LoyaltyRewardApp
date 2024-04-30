@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use App\Enums\RoleEnum;
 use App\Http\Services\AuthService;
 use App\Models\Coupon;
+use App\Models\Reminder;
 use App\Models\Shop;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -169,7 +171,8 @@ class ShopController extends Controller{
     /**
      * 17. Quét QR người dùng tích điểm hoặc nhận ưu đãi
      *
-     * Admin thực hiện quét mã tích điểm cho người dùng nếu có mã quà tặng thì sẽ cho đổi quà, nếu không thì tích điểm
+     * Admin thực hiện quét mã tích điểm cho người dùng nếu có mã quà tặng thì sẽ cho đổi quà, nếu không thì tích điểm \n
+     *
      *
      */
     public function scanQR(Request $request)
@@ -226,11 +229,19 @@ class ShopController extends Controller{
                     'type' => 'plus',
                     'point' => $service->points_reward,
                     'current_point' => $current_point,
-                    'reason' => 'Cộng điểm cho dịch vụ '.$service->name
+                    'reason' => 'Cộng điểm cho dịch vụ '.$service->name,
+                    'shop_id' => $request->user->shop->_id,
                 ]);
 
-                // TODO: Tạo database thông báo cho user bằng FCM
-
+                if ($service->should_notification){
+                    $customer->reminders()->create([
+                        'title' => 'Nhắc nhở ' . $service->name . ' định kì!',
+                        'description' => 'Hãy đến cửa hàng '.  $request->user->shop->name .' để sử dụng dịch vụ '.$service->name.' định kì nhé!',
+                        'image' => $request->user->shop->logo,
+                        'time' => now()->addDays($service->period),
+                        'shop_id' => $request->user->shop->_id
+                    ]);
+                }
 
                 DB::commit();
             } catch (\Exception $e) {
@@ -260,8 +271,25 @@ class ShopController extends Controller{
                 return Response('Mã ưu đãi đã hết hạn!', 404);
             }
 
-            $coupon->redeemed_at = now();
-            $coupon->save();
+            DB::beginTransaction();
+            try{
+                $coupon->redeemed_at = now();
+                $coupon->save();
+
+                Transaction::create([
+                    'user_id' => $customer->_id,
+                    'coupon_id' => $coupon->_id,
+                    'type' => 'receive',
+                    'point' => 0,
+                    'current_point' => $customer->points()->where('shop_id', $request->user->shop->_id)->first()->points,
+                    'reason' => 'Đã đổi quà '.$coupon->name .' thành công!',
+                    'shop_id' => $request->user->shop->_id,
+                ]);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return Response('Đổi quà thất bại!', 404);
+            }
 
             return Response([
                 'message' => 'Đổi quà thành công!',
@@ -272,4 +300,29 @@ class ShopController extends Controller{
         return Response('Dữ liệu không hợp lệ', 404);
     }
 
+    /**
+     * 20. Lấy thông tin của cửa hàng và thống kê trong ngày của cửa hàng (lượt quét, điểm đã cấp, quà đã đổi, danh sách ghé thăm trong ngày đã quét)
+     *
+     * Trả về thông tin thống kê như lượt tích điểm, lượt đổi quà, điểm đã cấp, danh sách người dùng đã đến cửa hàng trong ngày
+     *
+     */
+    public function getShopDailyStatistic(Request $request){
+        $today = Carbon::today();
+        $tomorrow = Carbon::tomorrow();
+        $transaction = $request->user->shop->transactions()
+            ->whereDate('created_at', '>=' , $today)
+            ->whereDate('created_at', '<', $tomorrow)->get();
+        $luotTichDiem = $transaction->where('type', 'plus')->count();
+        $luotDoiQua = $transaction->where('type', 'minus')->count();
+        $luotDoiQuaTaiCuaHang = $transaction->where('type', 'receive')->count();
+        $diemDaCap = $transaction->where('type', 'plus')->sum('point');
+
+        return Response([
+            'luotTichDiem' => $luotTichDiem,
+            'luotDoiQua' => $luotDoiQua,
+            'luotDoiQuaTaiCuaHang' => $luotDoiQuaTaiCuaHang,
+            'diemDaCap' => $diemDaCap,
+            'visited' => $transaction
+        ], 200);
+    }
 }

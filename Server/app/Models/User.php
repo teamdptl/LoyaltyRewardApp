@@ -64,7 +64,7 @@ class User extends Model
     }
 
     public function transactions(){
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class, 'user_id');
     }
 
     public function coupons(){
@@ -73,5 +73,9 @@ class User extends Model
 
     public function services(){
         return $this->hasMany(Service::class)->withPivot('using_at');
+    }
+
+    public function reminders(){
+        return $this->hasMany(Reminder::class);
     }
 }

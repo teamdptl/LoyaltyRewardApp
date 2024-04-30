@@ -142,9 +142,21 @@ class UserController extends Controller
     }
 
     /**
-     * 10. Đổi điểm thành ưu đãi
+     * 6. Lấy lịch sử (transaction) điểm đã ghé thăm
      *
-     * Lấy coupon của shop và tạo coupon mới cho user
+     * Trả về list transaction của user
+     *
+     */
+    public function getTransaction(Request $request)
+    {
+        $request->user->transactions->load('shop');
+        return $request->user->transactions;
+    }
+
+    /**
+     * 10. Đổi điểm thành ưu đãi cửa hàng
+     *
+     * Gửi lên coupon muốn đổi, kết quả trả về là bad request hoặc 200
      *
      */
     public function exchangeCoupon(Request $request){
@@ -189,7 +201,8 @@ class UserController extends Controller
                 'type' => 'minus',
                 'point' => $coupon->require_point,
                 'current_point' => $shop_point->points,
-                'reason' => 'Đổi quà '.$coupon->name
+                'reason' => 'Đổi quà '.$coupon->name,
+                'shop_id' => $coupon->shop_id
             ]);
 
             DB::commit();
@@ -211,14 +224,21 @@ class UserController extends Controller
         return $request->user->coupons;
     }
 
+
+    /**
+     * 14_2. Tạo user từ info firebase
+     *
+     * Khi mới tạo tài khoản xong thì sẽ truyền idToken của firebase vào header để tạo user
+     *
+     */
     public function store(Request $request){
         /**
          * Validate các thuôc tính của user từ request
          */
         $validate = $request->validate([
             'auth_id' => 'required|string', // Firebase Auth
-            'name' =>'required|string',
-            'role' =>'in:user,manager,admin'
+            'role' =>'required|in:user,manager,admin',
+            'fcm_token' => 'nullable|string'
         ]);
 
         /**
@@ -235,37 +255,29 @@ class UserController extends Controller
         /**
          * Nếu nhận đc uid sau khi tạo thì dùng nó để bắt đầu tạo user
         */
-        // $uid = $request->input('uid');
 
-        $user = new User($validate);
-        $user->_id = $uid;
-        return $user->save();
-
+        User::create($validate);
+        return Response("Tạo user thành công!", 200);
     }
 
-    public function update(Request $request){
+    /**
+     * 14_1. Cập nhật FCM token
+     *
+     * Cập nhật fcm token của firebase
+     *
+     */
+    public function updateFCMToken(Request $request){
 
         /**
          * Validate các thuôc tính của user từ request
          */
-        $request->validate([
-            'name' =>'required|string',
-            'role' =>'in:user,manager,admin'
+        $validate = $request->validate([
+            'fcm_token' => 'required|string'
         ]);
 
-        $auth = new AuthService();
-        $uid = $auth->validateIdToken($request->header('Authorization', ''));
-        if(!$uid){
-            return Response("Token không hợp lệ!", 404);
-        }
-
-        $user = User::find($uid);
-        if(!$user){
-            return Response("User không tồn tại!", 404);
-        }
-        $user->name = $request->input('name');
-        $user->role = $request->input('role');
-        return $user->save();
+        return $request->user->update([
+            'fcm_token' => $validate['fcm_token']
+        ]);
     }
 
     public function updatePoint(User $user, Service $service = null, Coupon $coupon = null){

@@ -41,7 +41,7 @@ class CouponController extends Controller
 //    }
 
     /**
-     * 8. Lấy thông tin chi tiết của ưu đãi
+     * 9. Lấy thông tin chi tiết của ưu đãi
      *
      * Trả về thông tin chi tiết của ưu đãi cùng với thông tin shop
      *

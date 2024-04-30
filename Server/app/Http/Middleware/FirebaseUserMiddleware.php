@@ -21,7 +21,7 @@ class FirebaseUserMiddleware
     {
         // TODO: Bỏ phần này, phần này chỉ hỗ trợ test
 //        $request->user = User::find('662fb7178a9bdf8c710d42f3');
-//        $request->user = User::find('662fc03229cf8e79fe0b3882'); // 662ce3e32526ae19d102e0c4
+//        $request->user = User::find('662fc03229cf8e79fe0b3882'); // 6630590cf6659302fe0fe302
 //        return $next($request);
 
         $header = $request->header('Authorization');
@@ -32,7 +32,6 @@ class FirebaseUserMiddleware
         $uid = $auth->validateIdToken($idToken);
         if (!$uid)
             return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
-
         // Get data from cache
         $cache_user = Cache::get($uid);
 

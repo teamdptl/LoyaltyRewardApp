@@ -38,9 +38,11 @@ class Shop extends Model
     //                 // ->as('user_points');
     // }
 
-    public function point(){
-        return $this->hasMany(Point::class);
+//    public function points(){
+//        return $this->hasMany(Point::class);
+//    }
+
+    public function transactions(){
+        return $this->hasMany(Transaction::class, 'shop_id');
     }
-
-
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Services\DeleteExpiredNotificationTokens;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Event::listen(
+            \Illuminate\Notifications\Events\NotificationFailed::class,
+            DeleteExpiredNotificationTokens::class,
+        );
     }
 
     /**

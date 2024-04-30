@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class FileController extends Controller
 {
     /**
-     * Upload file ảnh lên cloudinary
+     * 14_3. Upload file ảnh lên cloudinary
      *
      * Trả về url sau khi upload
      */
