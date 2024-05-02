@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.screens
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,10 +39,8 @@ import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -61,9 +59,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
-import com.example.loyaltyrewardapp.ui.isValidPhoneNumber
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
+import kotlin.time.ExperimentalTime
+import android.view.View
+
 
 class RegisterScreen : ComponentActivity() {
+    private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -299,7 +309,9 @@ fun getField() {
                 .padding(top = 5.dp), shape = RoundedCornerShape(10.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                sendOTP(numberPhone.value)
+                      /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
@@ -424,11 +436,84 @@ fun getField() {
     }
 }
 
+
 fun isValidPhoneNumber(phoneNumber: String): Boolean {
     if (phoneNumber.isBlank()) return false
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
+
+@OptIn(ExperimentalTime::class)
+fun sendOTP( phoneNumber: String) {
+    val auth = FirebaseAuth.getInstance()
+    val options = PhoneAuthOptions.newBuilder(auth)
+        .setPhoneNumber(phoneNumber) // Phone number to verify
+        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+        .setActivity(this) // Activity (for callback binding)
+        .setCallbacks( object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                // This callback will be invoked in two situations:
+                // 1 - Instant verification. In some cases the phone number can be instantly
+                //     verified without needing to send or enter a verification code.
+                // 2 - Auto-retrieval. On some devices Google Play services can automatically
+                //     detect the incoming verification SMS and perform verification without
+                //     user action.
+                signInWithPhoneAuthCredential(credential)
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                // This callback is invoked in an invalid request for verification is made,
+                // for instance if the the phone number format is not valid.
+
+                if (e is FirebaseAuthInvalidCredentialsException) {
+                    // Invalid request
+                } else if (e is FirebaseTooManyRequestsException) {
+                    // The SMS quota for the project has been exceeded
+                } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
+                    // reCAPTCHA verification attempted with null Activity
+                }
+
+                // Show a message and update the UI
+            }
+
+            override fun onCodeSent(
+                verificationId: String,
+                token: PhoneAuthProvider.ForceResendingToken,
+            ) {
+                // The SMS verification code has been sent to the provided phone number, we
+                // now need to ask the user to enter the code and then construct a credential
+                // by combining the code with a verification ID.
+
+                // Save verification ID and resending token so we can use them later
+                var storedVerificationId = verificationId
+                var resendToken = token
+            }
+        }) // OnVerificationStateChangedCallbacks
+        .build()
+    PhoneAuthProvider.verifyPhoneNumber(options)
+
+
+}
+
+ fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+     val auth = FirebaseAuth.getInstance()
+     auth.signInWithCredential(credential)
+        .addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+
+                val user = task.result?.user
+            } else {
+                // Sign in failed, display a message and update the UI
+                if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                    // The verification code entered was invalid
+                }
+                // Update UI
+            }
+        }
+}
+
 
 @Preview(showBackground = true)
 @Composable
