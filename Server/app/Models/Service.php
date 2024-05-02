@@ -17,7 +17,17 @@ class Service extends Model
         'points_reward'
     ];
 
-    
+    protected $casts = [
+        'should_notification' => 'boolean',
+        'period' => 'integer',
+        'points_reward' => 'integer',
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
+    ];
+
+    protected $hidden = ['created_at'];
+
+
     public function shop(){
         return $this->belongsTo(Shop::class);
     }

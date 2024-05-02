@@ -14,11 +14,26 @@ class Coupon extends Model
         'description',
         'require_point',
         'icon',
-        'is_active'
+        'is_active',
+        'expired_after',
+        'expired_at',
+        'redeemed_at',
     ];
 
-    public function users(){
-        return $this->belongsToMany(User::class)->withPivot('expired_at');
+    protected $casts = [
+        'require_point' => 'integer',
+        'is_active' => 'boolean',
+        'expired_after' => 'integer',
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m',
+        'expired_at'  => 'datetime:d-m-Y H:m',
+        'redeemed_at'  => 'datetime:d-m-Y H:m'
+    ];
+
+    protected $hidden = ['updated_at'];
+
+    public function user(){
+        return $this->belongsToMany(User::class);
     }
 
     public function shop(){

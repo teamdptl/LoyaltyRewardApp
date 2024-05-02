@@ -8,6 +8,11 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Kreait\Firebase\Contract\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @tags Dịch vụ
+ */
 
 class ServiceController extends Controller
 {
@@ -21,37 +26,85 @@ class ServiceController extends Controller
     }
 
 
+    /**
+     * 19 - Tạo. Tạo dịch vụ cho shop
+     *
+     * Tạo dịch vụ với các thông tin như tên, mô tả, nhắc thông báo, số điểm cần có, icon, trạng thái kích hoạt
+     *
+     */
     public function store(Request $request){
 
         $validated = $request->validate(
             [
                 'name' =>'required|string|max:255',
-                'description' =>'required|string|max:255',
+                'description' =>'required|string|max:1000',
                 'should_notification' =>'required|boolean',
-                'period' => 'required|string',
-                'points_reward' => 'required|digits_between:1,2',
+                'period' => 'required|integer|min:1',
+                'points_reward' => 'required|integer|min:0',
             ]
         );
-        // printf($tokenID);
-        $auth = new AuthService();
-        $uid = $auth->validateIdToken($request->header('Authorization', ''));
-        
-        if(!$uid){
-            return Response("Token không hợp lệ!", 404);
-        }
 
-        $user = User::find($uid);
-        if(!$user){
-            return Response("User không tồn tại!", 404);
-        }
-
-        $shop = $user->shop()->get()->first();
+        $shop = $request->user->shop;
         if(!$shop){
-            return Response("User không đủ quyền truy cập trang này!", 404);
+            return Response("Bạn chưa có shop, vui lòng tạo mới", 404);
         }
 
         $service = new Service($validated);
-        $service->shop()->associate($shop);
-        return $service->save();
+        $shop->services()->save($service);
+        return Response('Tạo dịch vụ thành công!', 200);
     }
+
+    /**
+     * 19 - Sửa. Sửa dịch vụ cho shop
+     *
+     * Sửa dịch vụ với các thông tin như tên, mô tả, nhắc thông báo, số điểm cần có, icon, trạng thái kích hoạt
+     *
+     */
+    public function update(Request $request, string $id)
+    {
+        $validated = $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'description' => 'required|string|max:1000',
+                'should_notification' => 'required|boolean',
+                'period' => 'required|integer|min:1',
+                'points_reward' => 'required|integer|min:0',
+            ]
+        );
+
+        $shop = $request->user->shop;
+        if (!$shop) {
+            return Response("Bạn chưa có shop, vui lòng tạo mới", 404);
+        }
+
+        $service = Service::find($id);
+        if (!$service || $service->shop_id != $shop->id) {
+            return Response("Dịch vụ không tồn tại", 404);
+        }
+
+        $service->update($validated);
+        return Response('Cập nhật dịch vụ thành công!', 200);
+    }
+
+    /**
+     * 19 - Xóa. Xóa dịch vụ cho shop
+     *
+     * Xóa dịch vụ với id
+     *
+     */
+    public function destroy(Request $request, string $id){
+        $shop = $request->user->shop;
+        if(!$shop){
+            return Response('Không tìm thấy cửa hàng!', 404);
+        }
+
+        $service = Service::find($id);
+        if(!$service || $service->shop_id != $shop->id){
+            return Response('Không tìm thấy dịch vụ!', 404);
+        }
+
+        $service->delete();
+        return Response('Xóa dịch vụ thành công!', 200);
+    }
+
 }

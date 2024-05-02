@@ -2,9 +2,11 @@ package com.example.loyaltyrewardapp.screens.manager
 
 import android.graphics.drawable.Drawable
 import android.util.Log
+import android.util.Rational
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.COORDINATE_SYSTEM_ORIGINAL
@@ -18,6 +20,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -46,12 +49,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
+import com.example.loyaltyrewardapp.ui.theme.White
+import com.google.mlkit.vision.barcode.BarcodeScanner
 import java.util.concurrent.Executors
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.barcode.common.Barcode.BarcodeFormat
 
 @Composable
 fun QRCodePreview() {
@@ -66,7 +73,7 @@ fun QRCodePreview() {
 
         // Màn hình camera review
         val previewView = PreviewView(context).also {
-            it.scaleType = PreviewView.ScaleType.FIT_CENTER // Hoặc FILL_CENTER
+            it.scaleType = PreviewView.ScaleType.FILL_CENTER // Hoặc FILL_CENTER
         }
         previewView.setBackgroundColor(Color.White.hashCode())
 
@@ -75,13 +82,14 @@ fun QRCodePreview() {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder()
+                .setTargetAspectRatio(Rational(1, 1))
+                .setTargetResolution(Size(640, 640))
                 .build()
                 .also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
                 }
 
             val imageCapture = ImageCapture.Builder().build()
-
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
@@ -137,7 +145,7 @@ fun ScanScreen(){
                 .padding(top = 20.dp)
                 .width(300.dp)
                 .height(300.dp)
-//                .border(2.dp, Color.Black.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
+                .border(2.dp, Color.Black.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
             ){
                 QRCodePreview()
             }

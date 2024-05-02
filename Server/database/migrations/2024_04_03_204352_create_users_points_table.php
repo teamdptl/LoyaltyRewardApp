@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_point', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('users_id')->constrained();
-            $table->foreignId('shops_id')->constrained();
-            $table->integer('points', false, true);
+            $table->foreignId('shop_id')->constrained();
+            $table->integer('points', false, true)->default(0);
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users_shops_');
+        Schema::dropIfExists('user_point');
     }
 };

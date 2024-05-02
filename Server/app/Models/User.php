@@ -11,7 +11,8 @@ use MongoDB\Laravel\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
-    // use Notifiable;
+    use Notifiable;
+
     protected $connection = 'mongodb';
     /**
      * The attributes that are mass assignable.
@@ -19,11 +20,33 @@ class User extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'auth_id',
         'role',
         'fcm_token'
     ];
 
+    protected $casts = [
+        'created_at'  => 'datetime:d-m-Y H:m',
+        'updated_at'  => 'datetime:d-m-Y H:m'
+    ];
+
+    protected $hidden = [
+        'password',
+        'email_verified_at',
+        'fcm_token',
+        'remember_token',
+        'updated_at',
+    ];
+
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return $this->fcm_token;
+    }
 
     public function shop(){
         return $this->hasOne('App\Models\Shop', 'user_id');
@@ -36,19 +59,23 @@ class User extends Model
     //                 // ->as('user_points');
     // }
 
-    public function point(){
-        return $this->hasMany(Point::class);
+    public function points(){
+        return $this->embedsMany(Point::class);
     }
 
     public function transactions(){
-        return $this->hasMany('App\Models\Transaction');
+        return $this->hasMany(Transaction::class, 'user_id');
     }
 
-    public function coupon(){
-        return $this->belongsToMany('App\Models\Coupon')->withPivot('expired_at');
+    public function coupons(){
+        return $this->embedsMany(Coupon::class);
     }
 
     public function services(){
         return $this->hasMany(Service::class)->withPivot('using_at');
+    }
+
+    public function reminders(){
+        return $this->hasMany(Reminder::class);
     }
 }
