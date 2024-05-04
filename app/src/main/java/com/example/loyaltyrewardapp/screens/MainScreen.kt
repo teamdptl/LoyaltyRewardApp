@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import coil.imageLoader
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.example.loyaltyrewardapp.navigation.GuestNavigation
+import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -36,7 +38,15 @@ class MainScreen : AppCompatActivity() {
                 val isLogin = true;
                 setContent {
                     MaterialTheme {
-                        GuestNavigation(isLogin)
+//                        GuestNavigation(isLogin)
+                        CURCouponScreen(
+                            couponName = "",
+                            description = "",
+                            point = 0,
+                            timeExpire = 0,
+                            imageUri = "https://scontent.fsgn5-8.fna.fbcdn.net/v/t39.30808-6/438302247_1914065639045213_9194821425874351450_n.jpg?stp=dst-jpg_p526x296&_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeFGT_vgxZipnHfqHKTHruIm-0AAdDVnUMH7QAB0NWdQwTq5VfV1_OFu-eEyl4kj_SN8fwUPxABoOpQlVGPn_Vms&_nc_ohc=fEp6aHTMyJYQ7kNvgFf2QFg&_nc_ht=scontent.fsgn5-8.fna&oh=00_AfCmRbXY4iJ8Ov9TLAQtUPTvD4pb43sZE2mZlSjpmoPAPw&oe=663C34DF",
+                            screenState = "R",
+                        )
                     }
                 }
 
