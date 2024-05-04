@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.example.loyaltyrewardapp.navigation.GuestNavigation
+import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -19,52 +20,47 @@ class MainScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            LoyaltyRewardAppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
-                ) {
+//        setContent {
+//            LoyaltyRewardAppTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+//                ) {
 //                    BottomNavigation {
 //                        AppNavigation()
 //                    }
 //                    OTPPreview()
-                }
+//                }
                 // Bật cái này lên khi nào muốn login
 //        val isLogin = auth.currentUser != null ;
+//            }
+//        }
 
-                val isLogin = true;
-                setContent {
-                    MaterialTheme {
-                        GuestNavigation(isLogin)
-                    }
-                }
-
-                auth.signInWithEmailAndPassword("duy@gmail.com", "duy@gmail.com")
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("User", "signInWithEmail:success")
-                            val user = auth.currentUser;
-                            user?.getIdToken(false)?.addOnCompleteListener(this) {
-                                if (it.isSuccessful) {
-                                    val idToken = it.result?.token
-                                    Log.d("User", "idToken: $idToken")
-                                }
-                            }
-
-//                    user?.getIdToken(false)?.addOnCompleteListener(this){
-//                        if(it.isSuccessful){
-//                            val idToken = it.result?.token
-//                            Log.d("User", "idToken: $idToken")
-//                        }
-//                    }
-                        } else {
-                            Log.d("User", "signInWithEmail:fail")
+        val isLogin = true;
+        auth = FirebaseAuth.getInstance()
+        auth.signInWithEmailAndPassword("+84312345678@app.vn", "123456")
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("User", "signInWithEmail:success")
+                    val user = auth.currentUser;
+                    user?.getIdToken(false)?.addOnCompleteListener(this) {
+                        if (it.isSuccessful) {
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
                         }
                     }
-
+                } else {
+                    Log.d("User", "signInWithEmail:fail")
+                }
+            }
+        setContent {
+            MaterialTheme {
+//                GuestNavigation(isLogin)
+                LoginScreen()
             }
         }
+
+
     }
 }
