@@ -47,7 +47,9 @@ use Illuminate\Support\Facades\Redis;
 Route::post('/register', [App\Http\Controllers\UserController::class, 'store']);
 
 // 0. Trả về idToken dùng để xác thực user thông qua API header authorization
-Route::get('/test', [App\Http\Controllers\TestController::class, 'test']);
+Route::get('/token', [App\Http\Controllers\TestController::class, 'getToken']);
+
+Route::post('/create-user', [App\Http\Controllers\AuthController::class, 'createUsers']);
 
 Route::middleware('auth-firebase')->group(function () {
 

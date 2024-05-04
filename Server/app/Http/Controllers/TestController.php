@@ -21,7 +21,7 @@ class TestController extends Controller
      *
      * Có thể tùy chọn pass_login hoặc phone_login để đăng nhập bằng mật khẩu hoặc số điện thoại
      */
-    public function test(Request $request){
+    public function getToken(Request $request){
         $validate = $request->validate([
             'role' => 'required|string|in:default_user,default_manager,pass_login,phone_login',
             'username' => 'nullable|string',
@@ -38,7 +38,7 @@ class TestController extends Controller
                 $signInResult = $auth->signInWithEmailAndPassword($validate['username'], $validate['password']);
             } else if($validate['role'] == 'phone_login'){
                 // SDT: 0123456789@app.vn
-                $signInResult = $auth->signInWithEmailAndPassword($validate['username']."@app.vn", $validate['password']);
+                $signInResult = $auth->signInWithEmailAndPassword('+84'.substr($validate['username'], 1)."@app.vn", $validate['password']);
             }
             return $signInResult->data();
         } catch (\Kreait\Firebase\Auth\SignIn\FailedToSignIn $e) {
