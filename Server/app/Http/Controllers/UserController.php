@@ -44,6 +44,13 @@ class UserController extends Controller
             $request->user->load('shop');
         }
 
+//        $auth = app('firebase.auth');
+//        if ($request->user->auth_id){
+//            $data = $auth->getUser($request->user->auth_id);
+//        }
+//
+//        $request->user->data = $data;
+
         return $request->user;
     }
 

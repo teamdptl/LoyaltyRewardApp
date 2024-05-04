@@ -82,8 +82,6 @@ fun QRCodePreview() {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
             val preview = Preview.Builder()
-                .setTargetAspectRatio(Rational(1, 1))
-                .setTargetResolution(Size(640, 640))
                 .build()
                 .also {
                     it.setSurfaceProvider(previewView.surfaceProvider)
