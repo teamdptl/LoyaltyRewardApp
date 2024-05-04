@@ -56,8 +56,8 @@ class MainScreen : AppCompatActivity() {
             }
         setContent {
             MaterialTheme {
-//                GuestNavigation(isLogin)
-                LoginScreen()
+                GuestNavigation(isLogin)
+//                LoginScreen()
             }
         }
 

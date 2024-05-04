@@ -23,9 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,14 +58,18 @@ class HomeScreenActivity : ComponentActivity(){
 @Composable
 fun HomeScreen(viewModel: UserHomeViewModel = UserHomeViewModel()) {
     val isAdmin = false
+    val isLoading by remember {
+        viewModel.isLoading
+    }
 
     LaunchedEffect(Unit) {
+        Log.d("Loading", "LaunchedEffect")
         viewModel.fetchCurrentUser()
     }
 
-    if (viewModel.loading.value == true) {
+    if (isLoading == true) {
         Log.d("Loading", "Dang load du lieu")
-    } else {
+    } else if (isLoading == false) {
         Log.d("Loading", "Da load xong du lieu")
         if (!isAdmin) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
