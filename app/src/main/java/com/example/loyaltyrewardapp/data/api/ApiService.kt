@@ -14,6 +14,5 @@ interface ApiService {
     @GET("user/recommended")
     suspend fun getRecommendedShops(@Query("lat") lat: Double, @Query("long") long: Double, @Query("limit") limit: Int): List<Shop>
 
-    
 
 }

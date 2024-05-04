@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,10 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -140,7 +137,7 @@ fun ApplyRewardButton(removable: Boolean = false){
 }
 
 @Composable
-fun MainHeader(){
+fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : String = "", phoneNumber: String = "", dateJoined: String = ""){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(350.dp)){
@@ -155,7 +152,7 @@ fun MainHeader(){
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Image(painterResource(id = R.drawable.user), contentDescription = null, modifier = Modifier.size(40.dp))
                     Column (modifier = Modifier.padding(start = 8.dp)) {
-                        Text(text = "Huỳnh Khánh Duy", color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
+                        Text(text = fullName, color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
                         Text(text = "Khách hàng", color = Color.Gray)
                     }
                 }
@@ -190,5 +187,5 @@ fun MainHeader(){
 @Preview(showBackground = true)
 @Composable
 fun HeaderPreview(){
-    MainHeader()
+    MainUserHeader()
 }
