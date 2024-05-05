@@ -56,8 +56,9 @@ class MainScreen : AppCompatActivity() {
             }
         setContent {
             MaterialTheme {
-//                GuestNavigation(isLogin)
-                LoginScreen()
+                GuestNavigation(isLogin)
+//                LoginScreen()
+                Log.d("Tag", "onCreate: $isLogin")
             }
         }
 

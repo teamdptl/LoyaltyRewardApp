@@ -8,7 +8,7 @@ enum class Screens {
     ProfileActivity,
     CouponScreen,
     LoginScreen,
-    SignUpScreen,
+    registerScreen,
     OTPVerificationScreen,
     AppNavigationScreen
 }

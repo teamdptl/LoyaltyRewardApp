@@ -1,27 +1,25 @@
 package com.example.loyaltyrewardapp.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -33,7 +31,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
@@ -50,6 +47,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -61,7 +59,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.navigation.Screens
+import com.example.loyaltyrewardapp.screens.registerScreen
 import com.google.firebase.auth.FirebaseAuth
 
 class Login : ComponentActivity() {
@@ -73,7 +77,7 @@ class Login : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colors.background
             ) {
-                LoginScreen()
+                ToScreen()
             }
         }
     }
@@ -89,8 +93,9 @@ fun LoginScreen() {
         getField()
     }
 }
-
-
+object ScreenState {
+    var isToScreen by mutableStateOf(false)
+}
 @Composable
 fun Title() {
     Column(
@@ -101,24 +106,42 @@ fun Title() {
         Image(
             painter = painterResource(id = R.drawable.login_background),
             contentDescription = null,
-            modifier = Modifier.padding(top = 20.dp).size(width = 300.dp, height = 200.dp)
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .size(width = 300.dp, height = 200.dp)
         )
         Text(
             text = "Đăng nhập",
-            style = androidx.compose.ui.text.TextStyle(fontSize = 32.sp),
+            style = TextStyle(fontSize = 32.sp),
             modifier = Modifier.padding(bottom = 10.dp),
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "Hệ thống tích điểm tiện ích cho cửa hàng",
-            style = androidx.compose.ui.text.TextStyle(
+            style = TextStyle(
                 fontSize = 16.sp,
                 color = Color.Black.copy(alpha = 0.5f)
             )
         )
     }
 }
-
+@Composable
+fun ToScreen() {
+    val navController = rememberNavController()
+    var startDestination = Screens.LoginScreen.name
+    Log.d("hog", "ToScreen: ${ScreenState.isToScreen}")
+    if (ScreenState.isToScreen){
+        startDestination = Screens.registerScreen.name
+    }
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable(route = Screens.LoginScreen.name) {
+            LoginScreen()
+        }
+        composable(route = Screens.registerScreen.name) {
+            registerScreen()
+        }
+    }
+}
 @Composable
 fun getField() {
     Column(
@@ -146,9 +169,13 @@ fun getField() {
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid
         val focusManager = LocalFocusManager.current
+        var isUserLoggedIn by remember { mutableStateOf(false) }
+        val context = LocalContext.current
+        val navController = rememberNavController()
+
         Text(
             text = "Số điện thoại",
-            style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+            style = TextStyle(fontSize = 16.sp),
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
@@ -225,7 +252,9 @@ fun getField() {
             shape = RoundedCornerShape(10.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                LoginUsersByEmail(navController,numberPhone.value,password.value)
+                      /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
@@ -308,7 +337,8 @@ fun getField() {
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse("https://www.facebook.com")/*TODO*/
+                    intent.data = Uri.parse("https://www.facebook.com")
+//                    context.startActivity(intent)/*TODO*/
                 },
                 modifier = Modifier
                     .alpha(0.9f)
@@ -340,12 +370,13 @@ fun getField() {
             Text(
                 text = "Đăng ký", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
-                        Unit
+                        ScreenState.isToScreen = true
                     })
                     .padding(start = 3.dp), color = Color(0xFF37A1ED)
             )
 
         }
+
 
     }
 }
@@ -355,6 +386,33 @@ fun isValidPhoneNumber(phoneNumber: String): Boolean {
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
+fun LoginUsersByEmail(navController: NavController,phoneNumber: String, password: String) {
+    val auth = FirebaseAuth.getInstance()
+    val phoneChangeEmail = "+84" +phoneNumber.substring(1) +"@app.vn"
+    println("phone thanh email: $phoneChangeEmail")
+    auth.signInWithEmailAndPassword(phoneChangeEmail, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("User", "signInWithEmail:success")
+                    val user = auth.currentUser;
+                    user?.getIdToken(false)?.addOnCompleteListener(Activity()) {
+                        if (it.isSuccessful) {
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
+//                            toScreenHome(navController)
+                        }
+                    }
+                } else {
+                    Log.d("User", "signInWithEmail:fail")
+                }
+            }
+}
+//Cần điều chỉnh vị hàm này.
+//fun toScreenHome(navController: NavController){
+////    navController.navigate(Screens.AppNavigationScreen.name)
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable
