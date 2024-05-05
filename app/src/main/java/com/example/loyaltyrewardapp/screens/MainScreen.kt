@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.imageLoader
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.example.loyaltyrewardapp.navigation.GuestNavigation
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
+import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -59,7 +62,8 @@ class MainScreen : AppCompatActivity() {
         setContent {
             MaterialTheme {
 //                GuestNavigation(isLogin)
-                LoginScreen()
+//                LoginScreen()
+                CURCouponScreen()
             }
         }
 

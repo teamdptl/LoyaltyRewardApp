@@ -53,24 +53,23 @@ fun ButtonImagePicker(
     text: String,
     selectedImage: String,
     onClickImage: () -> Unit){
-        if (selectedImage != "") {
-            println("Uri: $selectedImage")
-            AsyncImage(
-                model = selectedImage,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .clickable { onClickImage() }
-                    .size(20.dp)
-            )
-        }
-        else{
+//        if (selectedImage != "") {
+//            AsyncImage(
+//                model = selectedImage,
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .clickable { onClickImage() }
+//                    .size(20.dp)
+//            )
+//        }
+//        else{
             OutlinedButton(onClick = onClickImage) {
                 Icon(Icons.Rounded.AddAPhoto, contentDescription = "")
                 Spacer(modifier = Modifier.size(10.dp))
                 Text(text = text)
             }
-        }
+//        }
 }
 
 @Preview
