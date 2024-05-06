@@ -101,6 +101,7 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
@@ -115,5 +116,12 @@ dependencies {
     // RealmDB local key-value database
     implementation("io.realm.kotlin:library-base:1.11.0")
     implementation("io.realm.kotlin:library-sync:1.11.0") // If using Device Sync
+
+    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // If using coroutines with the SDK
+    // https://mvnrepository.com/artifact/androidx.compose.runtime/runtime-livedata
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.6")
+
+    // Data store
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
