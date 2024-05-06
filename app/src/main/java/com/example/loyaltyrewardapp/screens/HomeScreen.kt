@@ -23,10 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -34,10 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.HeaderAdmin
-import com.example.loyaltyrewardapp.components.MainHeader
+import com.example.loyaltyrewardapp.components.MainUserHeader
 import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.example.loyaltyrewardapp.ui.theme.MainColor
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.withContext
 
 
 class HomeScreenActivity : ComponentActivity(){
@@ -58,19 +58,21 @@ class HomeScreenActivity : ComponentActivity(){
 
 @Composable
 fun HomeScreen(viewModel: UserHomeViewModel = UserHomeViewModel()) {
-    val isAdmin = false
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
 
     LaunchedEffect(Unit) {
         viewModel.fetchCurrentUser()
     }
 
-    if (viewModel.loading.value == true) {
+    if (viewModel.user.value == null) {
         Log.d("Loading", "Dang load du lieu")
-    } else {
+    } else if (viewModel.user.value != null && currentUser != null) {
         Log.d("Loading", "Da load xong du lieu")
-        if (!isAdmin) {
+        val user = viewModel.user.value!!
+        if (viewModel.user.value?.role == "user") {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                MainHeader()
+                MainUserHeader(fullName = currentUser.displayName!!)
                 // Bỏ đoạn này làm cái composable để tái sử dụng
                 Row(
                     modifier = Modifier.padding(start = 22.dp, top = 10.dp),

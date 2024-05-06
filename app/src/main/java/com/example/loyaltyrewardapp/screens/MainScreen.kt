@@ -22,8 +22,10 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainScreen : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ApiSingleton.initialize(applicationContext)
 
 //        setContent {
 //            LoyaltyRewardAppTheme {
