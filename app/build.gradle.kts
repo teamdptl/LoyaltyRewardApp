@@ -126,7 +126,7 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3") // If using coroutines with the SDK
     // https://mvnrepository.com/artifact/androidx.compose.runtime/runtime-livedata
-    runtimeOnly("androidx.compose.runtime:runtime-livedata:1.6.6")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.6")
 
     // Data store
     implementation("androidx.datastore:datastore-preferences:1.1.1")

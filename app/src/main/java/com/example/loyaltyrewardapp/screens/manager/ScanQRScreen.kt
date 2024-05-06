@@ -127,24 +127,31 @@ fun QRCodePreview() {
 
 @androidx.compose.ui.tooling.preview.Preview(showBackground = true)
 @Composable
-fun ScanScreen(){
+fun ScanScreen() {
     var numberPhone by remember {
         mutableStateOf("")
     }
 
-    MainBackgroundScreen(title = "Quét mã QR"){
-        Column(modifier = Modifier.padding(top=20.dp), horizontalAlignment = Alignment.CenterHorizontally){
-            Text(text = "Hãy đảm bảo rằng có đủ ánh sáng, mã QR nằm trong khung bên dưới", textAlign = TextAlign.Center,
+    MainBackgroundScreen(title = "Quét mã QR") {
+        Column(
+            modifier = Modifier.padding(top = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Hãy đảm bảo rằng có đủ ánh sáng, mã QR nằm trong khung bên dưới",
+                textAlign = TextAlign.Center,
                 color = Color.Black.copy(alpha = 0.7f),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 40.dp))
-            Box(modifier = Modifier
-                .padding(top = 20.dp)
-                .width(300.dp)
-                .height(300.dp)
-                .border(2.dp, Color.Black.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
-            ){
+                    .padding(vertical = 20.dp, horizontal = 40.dp)
+            )
+            Box(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .width(300.dp)
+                    .height(300.dp)
+                    .border(2.dp, Color.Black.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
+            ) {
                 QRCodePreview()
             }
 
@@ -166,13 +173,9 @@ fun ScanScreen(){
             Button(
                 onClick = { /*TODO*/ },
                 modifier = Modifier.padding(vertical = 10.dp)
-            ){
+            ) {
                 Text(text = "Xác nhận")
             }
-
-//
         }
-
     }
 }
-
