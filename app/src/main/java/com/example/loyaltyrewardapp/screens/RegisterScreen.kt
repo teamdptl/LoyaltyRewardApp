@@ -1,6 +1,5 @@
 package com.example.loyaltyrewardapp.screens
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -59,42 +58,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
-import java.util.concurrent.TimeUnit
-import kotlin.time.ExperimentalTime
-import android.view.View
-import com.example.loyaltyrewardapp.ui.Login
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.ScreenState
 
 
-class RegisterScreen : ComponentActivity() {
-    private lateinit var auth : FirebaseAuth
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                registerScreen()
-            }
-        }
-    }
-}
-
 @Composable
-fun registerScreen() {
+fun registerScreen(navController: NavHostController = rememberNavController()) {
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Title()
         ChangeUserRegister()
-        getField()
+        getField(navController)
     }
 }
 
@@ -103,7 +80,8 @@ fun Title() {
     Box(
         modifier = Modifier
             .width(307.dp)
-            .height(96.dp).padding(top = 30.dp)
+            .height(96.dp)
+            .padding(top = 30.dp)
     ) {
 
         Text(
@@ -171,12 +149,12 @@ fun ChangeUserRegister() {
 }
 
 @Composable
-fun getField() {
+fun getField(navController: NavHostController) {
     Column(
         modifier = Modifier
             .width(327.dp)
             .fillMaxHeight()
-            .padding(top=20.dp)
+            .padding(top = 20.dp)
     ) {
         val userName = remember {
             mutableStateOf("")
@@ -428,7 +406,7 @@ fun getField() {
             Text(
                 text = "Đăng nhập", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
-                        ScreenState.isToScreen = false
+                        navController.navigate(Screens.LoginScreen.name)
                     })
                     .padding(start = 3.dp), color = Color(0xFF37A1ED)
             )

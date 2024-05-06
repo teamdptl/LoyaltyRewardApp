@@ -1,12 +1,11 @@
 package com.example.loyaltyrewardapp.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,9 +26,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -60,37 +57,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.navigation.Screens
-import com.example.loyaltyrewardapp.screens.registerScreen
 import com.google.firebase.auth.FirebaseAuth
 
-class Login : ComponentActivity() {
-    private lateinit var auth: FirebaseAuth
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-                ToScreen()
-            }
-        }
-    }
-}
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController = rememberNavController()) {
     Column(
         Modifier
             .fillMaxSize()
             .background(Color.White)) {
         Title()
-        getField()
+        getField(navController)
     }
 }
 object ScreenState {
@@ -126,24 +107,7 @@ fun Title() {
     }
 }
 @Composable
-fun ToScreen() {
-    val navController = rememberNavController()
-    var startDestination = Screens.LoginScreen.name
-    Log.d("hog", "ToScreen: ${ScreenState.isToScreen}")
-    if (ScreenState.isToScreen){
-        startDestination = Screens.registerScreen.name
-    }
-    NavHost(navController = navController, startDestination = startDestination) {
-        composable(route = Screens.LoginScreen.name) {
-            LoginScreen()
-        }
-        composable(route = Screens.registerScreen.name) {
-            registerScreen()
-        }
-    }
-}
-@Composable
-fun getField() {
+fun getField(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,7 +135,6 @@ fun getField() {
         val focusManager = LocalFocusManager.current
         var isUserLoggedIn by remember { mutableStateOf(false) }
         val context = LocalContext.current
-        val navController = rememberNavController()
 
         Text(
             text = "Số điện thoại",
@@ -253,7 +216,7 @@ fun getField() {
         )
         Button(
             onClick = {
-                LoginUsersByEmail(navController,numberPhone.value,password.value)
+                LoginUsersByEmail(context,navController,numberPhone.value,password.value)
                       /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
@@ -370,7 +333,7 @@ fun getField() {
             Text(
                 text = "Đăng ký", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
-                        ScreenState.isToScreen = true
+                        navController.navigate(Screens.registerScreen.name)
                     })
                     .padding(start = 3.dp), color = Color(0xFF37A1ED)
             )
@@ -386,7 +349,12 @@ fun isValidPhoneNumber(phoneNumber: String): Boolean {
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
-fun LoginUsersByEmail(navController: NavController,phoneNumber: String, password: String) {
+fun LoginUsersByEmail(
+    context: Context,
+    navController: NavController,
+    phoneNumber: String,
+    password: String
+) {
     val auth = FirebaseAuth.getInstance()
     val phoneChangeEmail = "+84" +phoneNumber.substring(1) +"@app.vn"
     println("phone thanh email: $phoneChangeEmail")
@@ -396,15 +364,18 @@ fun LoginUsersByEmail(navController: NavController,phoneNumber: String, password
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("User", "signInWithEmail:success")
                     val user = auth.currentUser;
+                    navController.navigate(Screens.AppNavigationScreen.name)
+                    Toast.makeText(context,"Đăng nhập thành công",Toast.LENGTH_SHORT).show()
                     user?.getIdToken(false)?.addOnCompleteListener(Activity()) {
                         if (it.isSuccessful) {
                             val idToken = it.result?.token
                             Log.d("User", "idToken: $idToken")
-//                            toScreenHome(navController)
+
                         }
                     }
                 } else {
                     Log.d("User", "signInWithEmail:fail")
+                    Toast.makeText(context,"Số điện thoại hoặc mật khẩu đã sai",Toast.LENGTH_SHORT).show()
                 }
             }
 }

@@ -1,13 +1,11 @@
 package com.example.loyaltyrewardapp.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.loyaltyrewardapp.screens.RegisterScreen
+import com.example.loyaltyrewardapp.screens.registerScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
-import com.example.loyaltyrewardapp.ui.ToScreen
 
 @Composable
 fun GuestNavigation(isLogin: Boolean = false) {
@@ -18,7 +16,10 @@ fun GuestNavigation(isLogin: Boolean = false) {
     }
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screens.LoginScreen.name) {
-            ToScreen()
+            LoginScreen(navController)
+        }
+        composable(route = Screens.registerScreen.name) {
+            registerScreen(navController)
         }
         composable(route = Screens.AppNavigationScreen.name) {
             AppNavigation()

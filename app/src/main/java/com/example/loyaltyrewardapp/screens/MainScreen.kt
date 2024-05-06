@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.imageLoader
+import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
 import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.ui.OTPPreview
@@ -63,9 +64,9 @@ class MainScreen : AppCompatActivity() {
             }
         setContent {
             MaterialTheme {
-//                GuestNavigation(isLogin)
+                GuestNavigation(isLogin)
 //                LoginScreen()
-                CURCouponScreen()
+//                CURCouponScreen()
             }
         }
 
