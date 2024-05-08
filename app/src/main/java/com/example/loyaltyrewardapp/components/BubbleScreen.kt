@@ -28,6 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 /**
  * An composable layout template will help to render an screen like profile, list items and notification list,...
@@ -35,7 +37,7 @@ import androidx.compose.ui.unit.sp
  * https://www.figma.com/file/ePgTPBhDsomJAj92Ha9C3D/Android-n%C3%A2ng-cao?type=design&node-id=18-2016&mode=design&t=WB9wX1GIO6hKoYi7-4
  */
 @Composable
-fun MainBackgroundScreen(title : String, content: @Composable () -> Unit){
+fun MainBackgroundScreen(title : String, navController: NavController? = rememberNavController(), content: @Composable () -> Unit){
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Color(0xFF46BEF8))
@@ -50,7 +52,9 @@ fun MainBackgroundScreen(title : String, content: @Composable () -> Unit){
             contentAlignment = Alignment.CenterStart
         ) {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navController?.popBackStack()
+                },
                 colors = IconButtonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black,

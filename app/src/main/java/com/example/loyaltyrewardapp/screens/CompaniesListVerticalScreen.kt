@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.ShopProvider
@@ -18,9 +20,9 @@ import com.example.loyaltyrewardapp.data.ShopProvider
 
 @Preview
 @Composable
-fun CompaniesListVerticalScreen(){
+fun CompaniesListVerticalScreen(navController: NavController = rememberNavController()){
     val companies = remember { ShopProvider.shopList }
-    MainBackgroundScreen("Danh sách các công ty") {
+    MainBackgroundScreen("Danh sách các cửa hàng", navController = navController) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),
 

@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -38,15 +38,15 @@ import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -58,27 +58,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
-import com.example.loyaltyrewardapp.ui.isValidPhoneNumber
+import com.google.firebase.auth.FirebaseAuth
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.loyaltyrewardapp.navigation.Screens
+import com.example.loyaltyrewardapp.ui.ScreenState
 
-class RegisterScreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize()
-            ) {
-
-            }
-        }
-    }
-}
 
 @Composable
-fun registerScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
+fun registerScreen(navController: NavHostController = rememberNavController()) {
+    Column(modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Title()
         ChangeUserRegister()
-        getField()
+        getField(navController)
     }
 }
 
@@ -87,8 +80,8 @@ fun Title() {
     Box(
         modifier = Modifier
             .width(307.dp)
-            .height(66.dp)
-            .offset(x = 28.dp, y = 85.dp)
+            .height(96.dp)
+            .padding(top = 30.dp)
     ) {
 
         Text(
@@ -117,8 +110,8 @@ fun ChangeUserRegister() {
     Row(
         modifier = Modifier
             .width(width = 327.dp)
-            .height(height = 60.dp)
-            .offset(x = 28.dp, y = 107.dp)
+            .height(height = 85.dp)
+            .padding(top = 30.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = Color.Gray.copy(alpha = 0.1f)),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -156,12 +149,12 @@ fun ChangeUserRegister() {
 }
 
 @Composable
-fun getField() {
+fun getField(navController: NavHostController) {
     Column(
         modifier = Modifier
             .width(327.dp)
             .fillMaxHeight()
-            .offset(x = 27.dp, y = 121.dp)
+            .padding(top = 20.dp)
     ) {
         val userName = remember {
             mutableStateOf("")
@@ -185,7 +178,9 @@ fun getField() {
             numberPhone.value.isNotEmpty() && isValidPhoneNumber(numberPhone.value)
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid && isNameValid
+        val focusManager = LocalFocusManager.current
         Text(
+            modifier = Modifier.padding(top = 10.dp),
             text = "Họ tên",
             style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
             color = Color.Black.copy(alpha = 0.5f)
@@ -199,7 +194,9 @@ fun getField() {
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Next
+            ), keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Next) }
             ),
             colors = if (isTypingName.value && userName.value.isNotEmpty() && userName.value.length >= 5) {
                 TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = Color.Green)
@@ -209,7 +206,7 @@ fun getField() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
-                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
+                , shape = RoundedCornerShape(10.dp)
 
         )
 
@@ -235,12 +232,14 @@ fun getField() {
                 numberPhone.value
             ),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),textStyle = TextStyle(fontSize = 18.sp),
+                keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+            )
+            , keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(FocusDirection.Next)})
+            ,textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
-                .background(Color.Transparent), shape = RoundedCornerShape(10.dp)
+                , shape = RoundedCornerShape(10.dp)
 
         )
 
@@ -261,6 +260,9 @@ fun getField() {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
             ),
             isError = isTypingPassword.value && password.value.isNotEmpty() && password.value.length < 6,
             colors = if (isTypingPassword.value && password.value.length >= 6) {
@@ -287,7 +289,9 @@ fun getField() {
                 .padding(top = 5.dp), shape = RoundedCornerShape(10.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+//                sendOTP(numberPhone.value)
+                      /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
@@ -402,7 +406,7 @@ fun getField() {
             Text(
                 text = "Đăng nhập", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
-                        Unit
+                        navController.navigate(Screens.LoginScreen.name)
                     })
                     .padding(start = 3.dp), color = Color(0xFF37A1ED)
             )
@@ -412,14 +416,87 @@ fun getField() {
     }
 }
 
+
 fun isValidPhoneNumber(phoneNumber: String): Boolean {
     if (phoneNumber.isBlank()) return false
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
 
+//@OptIn(ExperimentalTime::class)
+//fun sendOTP( phoneNumber: String) {
+//    val auth = FirebaseAuth.getInstance()
+//    val options = PhoneAuthOptions.newBuilder(auth)
+//        .setPhoneNumber(phoneNumber) // Phone number to verify
+//        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//        .setActivity(this) // Activity (for callback binding)
+//        .setCallbacks( object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//
+//            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+//                // This callback will be invoked in two situations:
+//                // 1 - Instant verification. In some cases the phone number can be instantly
+//                //     verified without needing to send or enter a verification code.
+//                // 2 - Auto-retrieval. On some devices Google Play services can automatically
+//                //     detect the incoming verification SMS and perform verification without
+//                //     user action.
+//                signInWithPhoneAuthCredential(credential)
+//            }
+//
+//            override fun onVerificationFailed(e: FirebaseException) {
+//                // This callback is invoked in an invalid request for verification is made,
+//                // for instance if the the phone number format is not valid.
+//
+//                if (e is FirebaseAuthInvalidCredentialsException) {
+//                    // Invalid request
+//                } else if (e is FirebaseTooManyRequestsException) {
+//                    // The SMS quota for the project has been exceeded
+//                } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
+//                    // reCAPTCHA verification attempted with null Activity
+//                }
+//
+//                // Show a message and update the UI
+//            }
+//
+//            override fun onCodeSent(
+//                verificationId: String,
+//                token: PhoneAuthProvider.ForceResendingToken,
+//            ) {
+//                // The SMS verification code has been sent to the provided phone number, we
+//                // now need to ask the user to enter the code and then construct a credential
+//                // by combining the code with a verification ID.
+//
+//                // Save verification ID and resending token so we can use them later
+//                var storedVerificationId = verificationId
+//                var resendToken = token
+//            }
+//        }) // OnVerificationStateChangedCallbacks
+//        .build()
+//    PhoneAuthProvider.verifyPhoneNumber(options)
+//
+//
+//}
+//
+// fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+//     val auth = FirebaseAuth.getInstance()
+//     auth.signInWithCredential(credential)
+//        .addOnCompleteListener(this) { task ->
+//            if (task.isSuccessful) {
+//                // Sign in success, update UI with the signed-in user's information
+//
+//                val user = task.result?.user
+//            } else {
+//                // Sign in failed, display a message and update the UI
+//                if (task.exception is FirebaseAuthInvalidCredentialsException) {
+//                    // The verification code entered was invalid
+//                }
+//                // Update UI
+//            }
+//        }
+//}
+
+
 @Preview(showBackground = true)
 @Composable
-fun DefaultView() {
+fun RegisterDefaultView() {
     registerScreen()
 }

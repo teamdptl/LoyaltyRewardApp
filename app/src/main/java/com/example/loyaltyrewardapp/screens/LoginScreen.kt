@@ -1,38 +1,33 @@
 package com.example.loyaltyrewardapp.ui
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Facebook
@@ -47,7 +42,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -58,34 +56,27 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.navigation.Screens
+import com.google.firebase.auth.FirebaseAuth
 
-class Login : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-                LoginScreen()
-            }
-        }
-    }
-}
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController = rememberNavController()) {
     Column(
         Modifier
             .fillMaxSize()
             .background(Color.White)) {
         Title()
-        getField()
+        getField(navController)
     }
 }
-
-
+object ScreenState {
+    var isToScreen by mutableStateOf(false)
+}
 @Composable
 fun Title() {
     Column(
@@ -96,26 +87,27 @@ fun Title() {
         Image(
             painter = painterResource(id = R.drawable.login_background),
             contentDescription = null,
-            modifier = Modifier.padding(top = 20.dp).size(width = 300.dp, height = 200.dp)
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .size(width = 300.dp, height = 200.dp)
         )
         Text(
             text = "Đăng nhập",
-            style = androidx.compose.ui.text.TextStyle(fontSize = 32.sp),
+            style = TextStyle(fontSize = 32.sp),
             modifier = Modifier.padding(bottom = 10.dp),
             fontWeight = FontWeight.Bold
         )
         Text(
             text = "Hệ thống tích điểm tiện ích cho cửa hàng",
-            style = androidx.compose.ui.text.TextStyle(
+            style = TextStyle(
                 fontSize = 16.sp,
                 color = Color.Black.copy(alpha = 0.5f)
             )
         )
     }
 }
-
 @Composable
-fun getField() {
+fun getField(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,9 +132,13 @@ fun getField() {
             numberPhone.value.isNotEmpty() && isValidPhoneNumber(numberPhone.value)
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid
+        val focusManager = LocalFocusManager.current
+        var isUserLoggedIn by remember { mutableStateOf(false) }
+        val context = LocalContext.current
+
         Text(
             text = "Số điện thoại",
-            style = androidx.compose.ui.text.TextStyle(fontSize = 16.sp),
+            style = TextStyle(fontSize = 16.sp),
             color = Color.Black.copy(alpha = 0.5f)
         )
         OutlinedTextField(
@@ -161,8 +157,10 @@ fun getField() {
                 numberPhone.value
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-            ),textStyle = TextStyle(fontSize = 18.sp),
+                keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+            )
+            , keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(FocusDirection.Next)})
+             ,textStyle = TextStyle(fontSize = 18.sp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 5.dp)
@@ -194,6 +192,9 @@ fun getField() {
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
+            keyboardActions = KeyboardActions(
+                onDone = {focusManager.clearFocus()}
+            ),
             visualTransformation = if (isPasswordVisible.value)
                 VisualTransformation.None
             else PasswordVisualTransformation(),
@@ -214,7 +215,9 @@ fun getField() {
             shape = RoundedCornerShape(10.dp)
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                LoginUsersByEmail(context,navController,numberPhone.value,password.value)
+                      /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
@@ -297,7 +300,8 @@ fun getField() {
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse("https://www.facebook.com")/*TODO*/
+                    intent.data = Uri.parse("https://www.facebook.com")
+//                    context.startActivity(intent)/*TODO*/
                 },
                 modifier = Modifier
                     .alpha(0.9f)
@@ -329,12 +333,13 @@ fun getField() {
             Text(
                 text = "Đăng ký", fontWeight = FontWeight.Bold, modifier = Modifier
                     .clickable(onClick = {
-                        Unit
+                        navController.navigate(Screens.registerScreen.name)
                     })
                     .padding(start = 3.dp), color = Color(0xFF37A1ED)
             )
 
         }
+
 
     }
 }
@@ -344,10 +349,46 @@ fun isValidPhoneNumber(phoneNumber: String): Boolean {
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
+fun LoginUsersByEmail(
+    context: Context,
+    navController: NavController,
+    phoneNumber: String,
+    password: String
+) {
+    val auth = FirebaseAuth.getInstance()
+    val phoneChangeEmail = "+84" +phoneNumber.substring(1) +"@app.vn"
+    println("phone thanh email: $phoneChangeEmail")
+    auth.signInWithEmailAndPassword(phoneChangeEmail, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("User", "signInWithEmail:success")
+                    val user = auth.currentUser;
+                    // TODO: Fix this to navigate to the correct screen manager or user
+                    navController.navigate(Screens.UserNavigationScreen.name)
+                    Toast.makeText(context,"Đăng nhập thành công",Toast.LENGTH_SHORT).show()
+                    user?.getIdToken(false)?.addOnCompleteListener(Activity()) {
+                        if (it.isSuccessful) {
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
+
+                        }
+                    }
+                } else {
+                    Log.d("User", "signInWithEmail:fail")
+                    Toast.makeText(context,"Số điện thoại hoặc mật khẩu đã sai",Toast.LENGTH_SHORT).show()
+                }
+            }
+}
+//Cần điều chỉnh vị hàm này.
+//fun toScreenHome(navController: NavController){
+////    navController.navigate(Screens.AppNavigationScreen.name)
+//    }
+//}
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun LoginDefaultPreview() {
     LoginScreen()
 }
 
