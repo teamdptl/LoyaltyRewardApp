@@ -136,8 +136,8 @@ fun ManagerNavigation(){
             composable(route = Screens.HomeManagerScreen.name){
                 HomeManagerScreen()
             }
-            composable(route = Screens.ShopManagerScreen.name){
-                DetailCompany()
+            composable(route = Screens.ShopManagerScreen.name){ backStackEntry ->
+                DetailCompany(navController, backStackEntry.arguments?.getString("shopId"))
             }
             composable(route = Screens.ScanManagerScreen.name){
                 ScanScreen()

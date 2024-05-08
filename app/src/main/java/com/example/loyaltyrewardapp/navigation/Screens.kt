@@ -6,8 +6,10 @@ enum class Screens {
     OTPVerificationScreen,
     HomeScreen,
     ShopVerticalScreen,
-
+    DetailShopScreen,
     HistoryScreen,
+    MyPointScreen,
+    DetailCouponScreen,
     ScanQRScreen,
     NotificationsScreen,
     ProfileActivity,
