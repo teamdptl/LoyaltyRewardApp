@@ -130,4 +130,10 @@ dependencies {
 
     // Data store
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // State
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation ("androidx.activity:activity-ktx:1.9.0")
 }
