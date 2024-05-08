@@ -1,5 +1,8 @@
 package com.example.loyaltyrewardapp.data.api
 
+
+import com.example.loyaltyrewardapp.data.model.Coupon
+import com.example.loyaltyrewardapp.data.model.CouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.DetailShopCoupon
 import com.example.loyaltyrewardapp.data.model.Shop
@@ -40,6 +43,11 @@ interface ApiService {
 //    8. Lấy thông tin cửa hàng theo id
     @GET("shop/{id}")
     suspend fun getShopById(@Path("id") id: String): DetailShop
+
+    
+    @GET("user/coupons")
+    suspend fun getCounpons(): List<CouponResponse>
+
 
 //    9. Lấy thông tin chi tiết của ưu đãi
     @GET("coupon/{id}")
