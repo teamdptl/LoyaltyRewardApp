@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,8 +20,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.wait
 
 class UserHomeViewModel: ViewModel() {
-
-    val user: MutableState<User?> = mutableStateOf(null)
+    val text : MutableState<String> = mutableStateOf("c")
+    val user: MutableState<User> = mutableStateOf(UserEmptyState)
 
     fun fetchCurrentUser() {
         viewModelScope.launch {
@@ -27,5 +29,4 @@ class UserHomeViewModel: ViewModel() {
             user.value = currentUser
         }
     }
-
 }

@@ -38,16 +38,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.SelectedColor
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
 import com.example.loyaltyrewardapp.ui.theme.Yellow
 import com.lightspark.composeqr.QrCodeView
 import com.example.loyaltyrewardapp.ui.theme.Typography
+import com.google.firebase.auth.FirebaseUser
 
 
 @Composable
-fun UserCard() {
+fun UserCard(firebaseData: FirebaseUser, user: User) {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -62,7 +64,7 @@ fun UserCard() {
             .fillMaxWidth()
             .padding(top = 8.dp)){
             QrCodeView(
-                data = "2500323123123123|321312",
+                data = user.qr?:"Error",
                 modifier = Modifier.size(140.dp)
             )
             Column(modifier = Modifier.padding(start = 12.dp), verticalArrangement = Arrangement.Center) {
@@ -70,20 +72,20 @@ fun UserCard() {
                     color = MainColor,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth())
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Mã thành viên: ", style = Typography.displaySmall)
-                    Text(text = "3123122452", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+//                Column(modifier = Modifier.padding(top = 4.dp)){
+//                    Text(text = "Mã thành viên: ", style = Typography.displaySmall)
+//                    Text(text = user.qr?:"Error", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+//                }
+                Column(modifier = Modifier.padding(top = 8.dp)){
+                    Text(text = "Họ tên:", style = Typography.displaySmall, modifier = Modifier.padding(bottom = 5.dp))
+                    Text(text = firebaseData.displayName?:"Không có tên", style = Typography.bodyMedium, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Họ tên:", style = Typography.displaySmall)
-                    Text(text = "Huỳnh Khánh Duy", style = Typography.bodySmall, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Column(modifier = Modifier.padding(top = 8.dp)){
+                    Text(text = "Điện thoại: ", style = Typography.displaySmall, modifier = Modifier.padding(bottom = 5.dp))
+                    Text(text = firebaseData.phoneNumber?:"Không có số", style = Typography.bodyMedium, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Điện thoại: ", style = Typography.displaySmall)
-                    Text(text = "01234567", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-                Text(text = "Ngày tham gia: 24/12/2023", style = Typography.bodySmall, fontSize = 11.sp,
-                    modifier = Modifier.padding(top = 3.dp))
+                Text(text = "Ngày tham gia: ${user.created_at.split(" ")[0]}", style = Typography.displaySmall, fontSize = 11.sp, fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(top = 8.dp))
             }
         }
 
@@ -137,7 +139,7 @@ fun ApplyRewardButton(removable: Boolean = false){
 }
 
 @Composable
-fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : String = "", phoneNumber: String = "", dateJoined: String = ""){
+fun MainUserHeader(firebaseData: FirebaseUser, user: User){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(350.dp)){
@@ -152,7 +154,7 @@ fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : Stri
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Image(painterResource(id = R.drawable.user), contentDescription = null, modifier = Modifier.size(40.dp))
                     Column (modifier = Modifier.padding(start = 8.dp)) {
-                        Text(text = fullName, color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
+                        Text(text = firebaseData.displayName!!, color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
                         Text(text = "Khách hàng", color = Color.Gray)
                     }
                 }
@@ -178,14 +180,14 @@ fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : Stri
                     }
                 }
             }
-            UserCard()
+            UserCard(firebaseData, user)
             ApplyRewardButton()
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HeaderPreview(){
-    MainUserHeader()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HeaderPreview(){
+//    MainUserHeader()
+//}

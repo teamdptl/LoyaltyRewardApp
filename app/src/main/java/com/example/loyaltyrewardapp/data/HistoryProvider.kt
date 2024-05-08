@@ -21,57 +21,57 @@ object HistoryProvider {
             point = 10
         )
 
-//    val historyList = listOf(
-//        history,
-//        HistoryModel(
-//            id = 2,
-//            title = "Tiệm sửa xe",
-//            pictureUrl = R.drawable.background,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "khong duoc",
-//            point = 50
-//        ),
-//        HistoryModel(
-//            id = 3,
-//            title = "Tiệm giặt ủi",
-//            pictureUrl = R.drawable.user,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "tuyet voi",
-//            point = 20
-//        ),
-//        HistoryModel(
-//            id = 4,
-//            title = "Tiệm rửa",
-//            pictureUrl = R.drawable.user,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "mệt ghê",
-//            point = 20
-//        ),
-//        HistoryModel(
-//            id = 5,
-//            title = "Tiệm rửa",
-//            pictureUrl = R.drawable.user,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "mệt ghê",
-//            point = 20
-//        ),
-//        HistoryModel(
-//            id = 6,
-//            title = "Tiệm rửa",
-//            pictureUrl = R.drawable.user,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "mệt ghê",
-//            point = 20
-//        ),
-//        HistoryModel(
-//            id = 7,
-//            title = "Tiệm rửa chén",
-//            pictureUrl = R.drawable.user,
-//            time = dateFormat.format(currentTimeMillis),
-//            des = "mệt ghê",
-//            point = 20
-//        ),
-//    )
+    val historyList = listOf(
+        history,
+        HistoryModel(
+            id = 2,
+            title = "Tiệm sửa xe",
+            pictureUrl = R.drawable.background,
+            time = dateFormat.format(currentTimeMillis),
+            des = "khong duoc",
+            point = 50
+        ),
+        HistoryModel(
+            id = 3,
+            title = "Tiệm giặt ủi",
+            pictureUrl = R.drawable.user,
+            time = dateFormat.format(currentTimeMillis),
+            des = "tuyet voi",
+            point = 20
+        ),
+        HistoryModel(
+            id = 4,
+            title = "Tiệm rửa",
+            pictureUrl = R.drawable.user,
+            time = dateFormat.format(currentTimeMillis),
+            des = "mệt ghê",
+            point = 20
+        ),
+        HistoryModel(
+            id = 5,
+            title = "Tiệm rửa",
+            pictureUrl = R.drawable.user,
+            time = dateFormat.format(currentTimeMillis),
+            des = "mệt ghê",
+            point = 20
+        ),
+        HistoryModel(
+            id = 6,
+            title = "Tiệm rửa",
+            pictureUrl = R.drawable.user,
+            time = dateFormat.format(currentTimeMillis),
+            des = "mệt ghê",
+            point = 20
+        ),
+        HistoryModel(
+            id = 7,
+            title = "Tiệm rửa chén",
+            pictureUrl = R.drawable.user,
+            time = dateFormat.format(currentTimeMillis),
+            des = "mệt ghê",
+            point = 20
+        ),
+    )
 
 
 }

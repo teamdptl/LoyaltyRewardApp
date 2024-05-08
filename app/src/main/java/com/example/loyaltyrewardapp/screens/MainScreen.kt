@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.imageLoader
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
-import com.example.loyaltyrewardapp.navigation.AppNavigation
 import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.example.loyaltyrewardapp.navigation.GuestNavigation
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
