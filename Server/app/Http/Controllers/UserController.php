@@ -193,7 +193,6 @@ class UserController extends Controller
             // copy coupon
             $new_coupon = $coupon->replicate()->fill([
                 'expired_at' => now()->addMonths($coupon->expired_after)->toDateTimeString(),
-                'redeemed_at' => null
             ]);
 
             // Tạo coupon cho user
@@ -227,7 +226,7 @@ class UserController extends Controller
      *
      */
     public function getCoupons(Request $request){
-        $request->user->coupons->load('shop');
+//        $request->user->coupons->load('shop');
         return $request->user->coupons;
     }
 

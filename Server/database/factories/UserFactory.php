@@ -23,12 +23,24 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        // Create user in firebase
+        $auth = app('firebase.auth');
+        // create a string with 9 number with faker
+        $phone = '+84'.$this->faker->randomNumber(9, true);
+        $email = $phone.'@app.vn';
+        $password = "1234567";
+        $name = $this->faker->name();
+        $user = $auth->createUser([
+                'email' => $email,
+                'phoneNumber' => $phone,
+                'password' =>$password,
+                'displayName' => $name,
+        ]);
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'auth_id' => $user->uid,
+            'role' => 'manager',
+            'fcm_token' => "",
         ];
     }
 
