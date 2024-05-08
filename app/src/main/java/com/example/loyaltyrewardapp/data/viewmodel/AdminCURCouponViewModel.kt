@@ -20,7 +20,7 @@ class AdminCURCouponViewModel : ViewModel() {
         _screenState.value = typeAction
         //Lấy dữ liệu từ api
         //Tạm thời tạo data giả
-        _coupon.value = Coupon("haha", "Miễn phí thay nhớt", "nsovqhovn avijqjvn oonjjqn onnk vq", 20, 6, "")
+        _coupon.value = Coupon("haha", "Miễn phí thay nhớt", "nsovqhovn avijqjvn oonjjqn onnk vq", 20, 6, "", true)
     }
 
     fun updateCoupon(coupon: Coupon) {
@@ -45,6 +45,10 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun updateImageUri(uri: String) {
         _coupon.value = _coupon.value?.copy(imageUri = uri)
+    }
+
+    fun updateIsActive(isActive: Boolean) {
+        _coupon.value = _coupon.value?.copy(isActive = isActive)
     }
 
     fun updateScreenState(state: String) {

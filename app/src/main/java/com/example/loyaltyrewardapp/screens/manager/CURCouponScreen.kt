@@ -53,32 +53,32 @@ class DetailCouponActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
-            ProvideViewModel(viewModel = AdminCURCouponViewModel()) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    val couponViewModel: AdminCURCouponViewModel = viewModel()
-                    CURCouponScreen(couponViewModel)
-                }
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colors.background
+            ) {
+                CURCouponScreen()
             }
         }
     }
 }
 
 @Composable
-fun ProvideViewModel(viewModel: AdminCURCouponViewModel, content: @Composable () -> Unit) {
-    val localViewModel = compositionLocalOf<AdminCURCouponViewModel> { error("No ViewModel found!") }
-    CompositionLocalProvider(localViewModel provides viewModel) {
-        content()
-    }
-}
-
-@Composable
-fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
+fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
     val coupon by couponViewModel.coupon
     val screenState by couponViewModel.screenState
-    MainBackgroundScreen(title = "Thêm ưu đãi") {
+    var title by remember{mutableStateOf("")}
+
+    title = if (screenState == "R") {
+        "Thông tin ưu đãi"
+    }else{
+        if (screenState == "C") {
+            "Thêm ưu đãi"
+        }else{
+            "Cập nhật ưu đãi"
+        }
+    }
+    MainBackgroundScreen(title = title) {
         Column(
             Modifier
                 .padding(40.dp, 30.dp)
@@ -138,7 +138,7 @@ fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
-                GroupButtonAction(screenState = "R",
+                GroupButtonAction(screenState = screenState,
                     "Thêm khuyến mãi",
                     "Lưu thay đổi",
                     "Cập nhật")
@@ -201,7 +201,7 @@ fun GroupButtonAction(screenState: String, textCreate: String, textUpdate: Strin
                     Icon(
                         Icons.Filled.Check,
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = Color.White
                     )
                     Text(text = textCreate,
@@ -230,7 +230,7 @@ fun GroupButtonAction(screenState: String, textCreate: String, textUpdate: Strin
                     Icon(
                         Icons.Filled.Save,
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = Color.White
                     )
                     Text(text = textUpdate,

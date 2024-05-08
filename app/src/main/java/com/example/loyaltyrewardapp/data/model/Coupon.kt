@@ -8,5 +8,6 @@ data class Coupon (
     val description: String,
     val point: Int,
     val timeExpire: Int,
-    val imageUri: String
+    val imageUri: String,
+    val isActive: Boolean
 )
