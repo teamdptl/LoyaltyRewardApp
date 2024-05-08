@@ -1,8 +1,5 @@
 package com.example.loyaltyrewardapp.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +22,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.IconButton
@@ -33,10 +29,9 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,36 +39,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.model.DetailShopCoupon
+import com.example.loyaltyrewardapp.data.viewmodel.CouponDetailViewModel
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
-import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
-import com.example.loyaltyrewardapp.ui.theme.Yellow
 
-class DetailCouponActivity : ComponentActivity(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-                DetailCompany()
-            }
-        }
+@Composable
+fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
+    val coupon by remember {
+        viewModel.coupon
     }
 
-}
-
-@Preview
-@Composable
-fun DetailCoupon() {
-
-//    var selectedItem by remember { mutableStateOf(SelectedItem.First) }
-
+    LaunchedEffect(null) {
+        couponId?.let {
+            viewModel.getCoupon(it)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -90,17 +75,16 @@ fun DetailCoupon() {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.background),
+                AsyncImage(
+                    model = coupon?.icon,
                     contentDescription = null,
                     modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
-                )
+                    contentScale = ContentScale.Crop)
                 Row() {
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.popBackStack() },
                         colors = IconButtonColors(
                             containerColor = Color.White,
                             contentColor = Color.Black,
@@ -133,29 +117,30 @@ fun DetailCoupon() {
                     .padding(horizontal = 20.dp, vertical = 10.dp)
             ) {
                 Text(
-                    text = "Thay nhớt miễn phí",
+                    text = coupon?.name?: "Tên coupon",
                     fontWeight = FontWeight.SemiBold,
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
-                    fontSize = 20.sp,
-
+                    fontSize = 16.sp,
+                    modifier = Modifier.weight(0.7f)
                     )
                 Spacer(
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(0.1f)
                 )
                 Text(
-                    text = "10đ",
+                    text = "${coupon?.require_point?: 0} điểm",
                     fontWeight = FontWeight.SemiBold,
                     style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
-                    fontSize = 20.sp,
-                    color = OrangeColor
+                    fontSize = 16.sp,
+                    color = OrangeColor,
+                    modifier = Modifier.weight(0.2f)
                 )
 
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 50.dp),
+                    .padding(horizontal = 15.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
@@ -174,7 +159,7 @@ fun DetailCoupon() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 50.dp),
+                    .padding(horizontal = 10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
@@ -190,12 +175,9 @@ fun DetailCoupon() {
                 Spacer(modifier = Modifier
                     .weight(1.15f))
             }
-            Text("Nội dung cho Chi tiết",
+            Text(coupon?.description?:"Mô tả",
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                 )
-
-
-
         }
         Row(
             modifier = Modifier
@@ -227,7 +209,9 @@ fun RoundedOrangeButton(
     buttonText: String
 ) {
     Button(
-        modifier = Modifier.fillMaxWidth().height(40.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(backgroundColor = OrangeColor),
         shape = RoundedCornerShape(10.dp)

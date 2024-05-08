@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,9 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
 
 
@@ -33,13 +38,15 @@ fun <T : Any> CompaniesItem(
     item: T,
     nameProvider: (T) -> String,
     addressProvider: (T) -> String,
-    pictureUrlProvider: (T) -> Int // Provider for picture URL
+    pictureUrlProvider: (T) -> String,
+    navController: NavController,
+    onClick: () -> Unit
 ) {
-    Column(modifier = Modifier.padding(6.dp)) {
-        SquareImage(
-            item = item,
-            pictureUrlProperty = pictureUrlProvider,
-            size = 160.dp
+    Column(modifier = Modifier.padding(6.dp).width(150.dp).clickable {
+        onClick()
+    }) {
+        SquareOnlineImage(
+            url = pictureUrlProvider(item),
         )
         Column(
         ) {
@@ -47,7 +54,8 @@ fun <T : Any> CompaniesItem(
                 text = nameProvider(item),
                 style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(top = 10.dp),
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             Row(verticalAlignment = Alignment.CenterVertically,   modifier = Modifier.padding(top = 5.dp)) {
 //                Icon(
@@ -60,7 +68,8 @@ fun <T : Any> CompaniesItem(
                     text = addressProvider(item),
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
-                    color = GrayMap
+                    color = GrayMap,
+                    overflow = TextOverflow.Ellipsis,
                 )
 
             }
