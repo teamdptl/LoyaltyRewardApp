@@ -3,6 +3,7 @@ package com.example.loyaltyrewardapp.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -59,9 +60,16 @@ import com.example.loyaltyrewardapp.data.model.CouponResponse
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun GiftCardItem(
-    item: CouponResponse
+    item: CouponResponse,
+    onClick: () -> Unit
+
 ){
-    BoxWithConstraints {
+    BoxWithConstraints(
+        modifier = Modifier.padding(6.dp)
+            .clickable {
+                onClick()
+            }
+    ) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
@@ -159,12 +167,9 @@ fun GiftCardItem(
                         .weight(3.0f)
                         .padding(10.dp, 5.dp, 5.dp, 5.dp)
                 ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(model = item.icon),
-                        contentDescription = "Lego logo",
-                        Modifier.fillMaxSize()
-                            .clip(RoundedCornerShape(10.dp)),
-                        contentScale = ContentScale.Fit,)
+                    SquareOnlineImage(
+                        url = "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+                    )
                 }
             }
         }
