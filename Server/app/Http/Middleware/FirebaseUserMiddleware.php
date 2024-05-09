@@ -33,7 +33,8 @@ class FirebaseUserMiddleware
         if (!$uid)
             return response()->json(['message' => 'Bạn không có quyền truy cập trang này'], 401);
         // Get data from cache
-        $cache_user = Cache::get($uid);
+//        $cache_user = Cache::get($uid);
+        $cache_user = null;
 
         if ($cache_user){
             $user = $cache_user;

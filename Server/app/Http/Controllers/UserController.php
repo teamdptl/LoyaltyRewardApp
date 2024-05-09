@@ -138,7 +138,7 @@ class UserController extends Controller
         $points = $request->user->points->sortByDesc('updated_at')->unique('shop_id');
         foreach ($points as $point) {
             if (!$point->shop) continue;
-            $result = $point->shop->coupons->where('require_point', $point->points)->map(function($coupon) use ($point){
+            $result = $point->shop->coupons->where('require_point', '<=', $point->points)->map(function($coupon) use ($point){
                 unset($point->shop->coupons);
                 $coupon->shop = $point->shop;
                 return $coupon;
