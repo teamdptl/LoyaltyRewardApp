@@ -21,6 +21,6 @@ data class DetailShop(
     val cover: String?,
     val location: Location?,
     val your_points: Int? = 0,
-    val coupons: List<DetailShopCoupon> = emptyList(),
+    val coupons: List<Coupon> = emptyList(),
     val services: List<DetailShopService> = emptyList(),
 )
