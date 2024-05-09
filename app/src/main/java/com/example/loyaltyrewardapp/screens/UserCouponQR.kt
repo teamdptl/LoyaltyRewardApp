@@ -38,143 +38,149 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.loyaltyrewardapp.data.viewmodel.CouponDetailViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.CouponUserQRViewModel
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 
 
 @Composable
-fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
+fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel: CouponUserQRViewModel = CouponUserQRViewModel()) {
     val coupon by remember {
-        viewModel.coupon
+        viewModel.couponUserQR
     }
 
     LaunchedEffect(null) {
         couponId?.let {
-            viewModel.getCoupon(it)
+            viewModel.getCouponUserQR(couponId)
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ){
-        Column(
+    if(coupon == null){
+
+    }else{
+        coupon!!
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Color.White)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Box(
+                .fillMaxSize()
+        ){
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(Color.White)
+                    .verticalScroll(rememberScrollState())
             ) {
-                AsyncImage(
-                    model = coupon?.icon,
-                    contentDescription = null,
+                Box(
                     modifier = Modifier
-                        .height(250.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.Crop)
-                Row() {
-                    IconButton(
-                        onClick = { navController.popBackStack() },
-                        colors = IconButtonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black,
-                            disabledContainerColor = Color.Gray,
-                            disabledContentColor = Color.Black
-                        ),
+                        .fillMaxWidth()
+                ) {
+                    AsyncImage(
+                        model = coupon?.icon,
+                        contentDescription = null,
                         modifier = Modifier
-                            .clip(shape = CircleShape)
-                            .size(50.dp)
-                            .padding(all = 10.dp)
-                    ) {
-                        Icon(
-                            Icons.Filled.ArrowBackIosNew,
-                            contentDescription = null,
+                            .height(250.dp)
+                            .fillMaxWidth(),
+                        contentScale = ContentScale.Crop)
+                    Row() {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            colors = IconButtonColors(
+                                containerColor = Color.White,
+                                contentColor = Color.Black,
+                                disabledContainerColor = Color.Gray,
+                                disabledContentColor = Color.Black
+                            ),
                             modifier = Modifier
-                                .clip(RoundedCornerShape(50))
-                                .size(20.dp),
-                            tint = Color.Black.copy(alpha = 0.6f)
-                        )
+                                .clip(shape = CircleShape)
+                                .size(50.dp)
+                                .padding(all = 10.dp)
+                        ) {
+                            Icon(
+                                Icons.Filled.ArrowBackIosNew,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .size(20.dp),
+                                tint = Color.Black.copy(alpha = 0.6f)
+                            )
+                        }
+
+
                     }
 
 
                 }
-
-
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 10.dp)
-            ) {
-                Text(
-                    text = coupon?.name?: "Tên coupon",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(0.7f)
-                )
-                Spacer(
+                Row(
                     modifier = Modifier
-                        .weight(0.1f)
-                )
-                Text(
-                    text = "${coupon?.require_point?: 0} điểm",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontSize = 16.sp,
-                    color = OrangeColor,
-                    modifier = Modifier.weight(0.2f)
-                )
-
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-                TextButton(onClick = {
-                }
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 10.dp)
                 ) {
                     Text(
-                        "Mô tả",
+                        text = coupon?.name?: "Tên coupon",
+                        fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = OrangeColor,
-                        fontWeight = FontWeight.SemiBold
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(0.7f)
                     )
+                    Spacer(
+                        modifier = Modifier
+                            .weight(0.1f)
+                    )
+                    Text(
+                        text = "${coupon?.require_point?: 0} điểm",
+                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 16.sp,
+                        color = OrangeColor,
+                        modifier = Modifier.weight(0.2f)
+                    )
+
                 }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-
-
-                Spacer(
+                Row(
                     modifier = Modifier
-                        .weight(0.7f)
-                        .height(1.dp)
-                        .background(color = OrangeColor)
-                )
-                Spacer(modifier = Modifier
-                    .weight(1.15f))
-                Spacer(modifier = Modifier
-                    .weight(1.15f))
-            }
-            Text(coupon?.description?:"Mô tả",
-                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
-            )
-        }
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
 
+                    TextButton(onClick = {
+                    }
+                    ) {
+                        Text(
+                            "Mô tả",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = OrangeColor,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+
+
+                    Spacer(
+                        modifier = Modifier
+                            .weight(0.7f)
+                            .height(1.dp)
+                            .background(color = OrangeColor)
+                    )
+                    Spacer(modifier = Modifier
+                        .weight(1.15f))
+                    Spacer(modifier = Modifier
+                        .weight(1.15f))
+                }
+                Text(coupon?.description?:"Mô tả",
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
+                )
+            }
+
+        }
     }
+
 
 
 }
