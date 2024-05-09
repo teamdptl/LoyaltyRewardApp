@@ -16,20 +16,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.loyaltyrewardapp.data.model.Transaction
 
 @Composable
-fun <T : Any> NotificationsItem(
-    item: T,
-    titleProvider: (T) -> String,
-    timeProvider: (T) -> String,
-    descriptionProvider: (T) -> String,
-    pictureUrlProvider: (T) -> Int // Provider for picture URL
+fun NotificationsItem(
+    item: Transaction,
+//    titleProvider: (T) -> String,
+//    timeProvider: (T) -> String,
+//    descriptionProvider: (T) -> String,
+//    pictureUrlProvider: (T) -> Int // Provider for picture URL
 ) {
     CardList() {
         Row(Modifier.clickable { }) {
             SquareImage(
                 item = item,
-                pictureUrlProperty = pictureUrlProvider,
+                pictureUrlProperty = item.shop.logo,
                 modifier = Modifier.padding(8.dp)
             )
             Column(
@@ -41,14 +42,14 @@ fun <T : Any> NotificationsItem(
             ) {
                 Row {
                     Text(
-                        text = titleProvider(item),
+                        text = item.shop.name,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
                         maxLines = 1,
                         modifier = Modifier.fillMaxWidth(0.5f)
                     )
                     Text(
-                        text = timeProvider(item),
+                        text =item.created_at,
                         maxLines = 1,
                         fontSize = 8.sp,
                         textAlign = TextAlign.End,
@@ -56,7 +57,7 @@ fun <T : Any> NotificationsItem(
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(text = descriptionProvider(item), maxLines = 2, fontSize = 12.sp,)
+                Text(text = item.reason, maxLines = 2, fontSize = 12.sp,)
             }
         }
     }

@@ -16,21 +16,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.example.loyaltyrewardapp.data.model.Transaction
 @Composable
-fun <T : Any> HistoryItem(
-    item: T,
-    titleProvider: (T) -> String,
-    timeProvider: (T) -> String,
-    descriptionProvider: (T) -> String,
-    pointProvider: (T) -> String,
-    pictureUrlProvider: (T) -> Int
+fun HistoryItem(
+    item: Transaction,
 ) {
     CardList() {
         Row(Modifier.clickable { }) {
             SquareImage(
                 item = item,
-                pictureUrlProperty = pictureUrlProvider,
+                pictureUrlProperty = item.shop.logo,
                 modifier = Modifier
                     .padding(8.dp)
             )
@@ -44,26 +39,26 @@ fun <T : Any> HistoryItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = titleProvider(item),
+                    text = item.shop.name,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     maxLines = 1,
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
                     Text(
-                        text = timeProvider(item),
+                        text = item.created_at,
                         maxLines = 1,
                         fontSize = 12.sp,
                     )
 
                 Text(
-                    text = descriptionProvider(item),
+                    text = item.reason,
                     maxLines = 2,
                     fontSize = 12.sp,
                 )
             }
             Text(
-                text = "+ ${pointProvider(item)}đ",
+                text = "+ ${item.point}đ",
                 color = Color(0xFF11942C),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 8.dp) .weight(0.3f)  .fillMaxWidth()   .offset(y=30.dp),
