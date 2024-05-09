@@ -10,3 +10,17 @@ data class Shop(
     val cover: String?,
     val location: Location?,
 )
+
+data class DetailShop(
+    val _id: String,
+    val name: String,
+    val description: String,
+    val address: String,
+    val phone: String,
+    val logo: String,
+    val cover: String?,
+    val location: Location?,
+    val your_points: Int? = 0,
+    val coupons: List<DetailShopCoupon> = emptyList(),
+    val services: List<DetailShopService> = emptyList(),
+)

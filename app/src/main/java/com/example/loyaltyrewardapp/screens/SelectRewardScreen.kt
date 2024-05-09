@@ -26,7 +26,7 @@ fun SelectRewardScreen(){
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ){
             items(10){
-                    index -> GiftCardItem()
+//                    index -> GiftCardItem()
             }
         }
     }

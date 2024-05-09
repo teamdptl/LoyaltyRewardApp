@@ -1,6 +1,10 @@
 package com.example.loyaltyrewardapp.data.api
 
+
 import com.example.loyaltyrewardapp.data.model.Coupon
+import com.example.loyaltyrewardapp.data.model.CouponResponse
+import com.example.loyaltyrewardapp.data.model.DetailShop
+import com.example.loyaltyrewardapp.data.model.DetailShopCoupon
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
@@ -18,7 +22,7 @@ interface ApiService {
 
     // 2. Lấy các cửa hàng gợi ý cho người dùng (có thể dựa theo vị trí hoặc cửa hàng mới)
     @GET("user/recommended")
-    suspend fun getRecommendedShops(@Query("lat") lat: Double, @Query("long") long: Double, @Query("limit") limit: Int): List<Shop>
+    suspend fun getRecommendedShops(@Query("limit") limit: Int, @Query("lat") lat: Double? = null, @Query("long") long: Double? = null): List<Shop>
 
     // 3. Lấy các cửa hàng đã ghé thăm của người dùng (limit dùng để hạn chế số lượng)
     @GET("user/visited")
@@ -36,9 +40,16 @@ interface ApiService {
     @GET("user/transaction")
     suspend fun getUserTransactions(): List<Transaction>
 
+//    8. Lấy thông tin cửa hàng theo id
     @GET("shop/{id}")
-    suspend fun getShopById(@Path("id") id: String): Shop
+    suspend fun getShopById(@Path("id") id: String): DetailShop
 
+    
+    @GET("user/coupons")
+    suspend fun getCoupons(): List<CouponResponse>
+
+
+//    9. Lấy thông tin chi tiết của ưu đãi
     @GET("coupon/{id}")
-    suspend fun getCouponById(@Path("id") id: String): Coupon
+    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
 }

@@ -28,13 +28,13 @@ val listOfUserNavItems: List<NavItems> = listOf(
         hasNews = false,
         route = Screens.CouponScreen.name
     ),
-    NavItems(
-        label = "",
-        selectedIcon = Icons.Outlined.QrCodeScanner,
-        unselectedIcon = Icons.Outlined.QrCodeScanner,
-        hasNews = false,
-        route = Screens.ScanQRScreen.name
-    ),
+//    NavItems(
+//        label = "",
+//        selectedIcon = Icons.Outlined.QrCodeScanner,
+//        unselectedIcon = Icons.Outlined.QrCodeScanner,
+//        hasNews = false,
+//        route = Screens.ScanQRScreen.name
+//    ),
     NavItems(
         label = "Lịch sử",
         selectedIcon = Icons.Outlined.History,
