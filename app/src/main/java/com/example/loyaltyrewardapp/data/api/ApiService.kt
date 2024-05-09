@@ -33,8 +33,8 @@ interface ApiService {
     suspend fun getUserPoints(): List<UserPoint>
 
     // 5.  Lấy danh sách coupon có thể đổi được của người dùng với các cửa hàng
-//    @GET("user/coupons/available")
-//    suspend fun getAvailableCoupons(): List<Coupon>
+    @GET("user/coupons/available")
+    suspend fun getAvailableCoupons(): List<Coupon>
 
     // 6. Lấy lịch sử điểm đã ghé thăm của người dùng
     @GET("user/transaction")
