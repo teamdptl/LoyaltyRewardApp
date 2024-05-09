@@ -114,6 +114,8 @@ dependencies {
 
     // Coil load image
     implementation("io.coil-kt:coil-compose:2.6.0")
+//    implementation("com.google.accompanist:accompanist-glide:0.17.0")
+
 
     // QrCode display
     implementation("com.lightspark:compose-qr-code:1.0.1")

@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.data.api
 
+import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
@@ -38,5 +39,6 @@ interface ApiService {
     @GET("shop/{id}")
     suspend fun getShopById(@Path("id") id: String): Shop
 
-
+    @GET("coupon/{id}")
+    suspend fun getCouponById(@Path("id") id: String): Coupon
 }
