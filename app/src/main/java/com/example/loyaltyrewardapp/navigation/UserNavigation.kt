@@ -142,7 +142,7 @@ fun UserNavigation(){
                 HomeScreen(navController)
             }
             composable(route = Screens.CouponScreen.name){
-                RenderListCoupon()
+                ListDiscountCoupon(navController)
             }
             composable(route = Screens.HistoryScreen.name){
                 HistoryPreview()

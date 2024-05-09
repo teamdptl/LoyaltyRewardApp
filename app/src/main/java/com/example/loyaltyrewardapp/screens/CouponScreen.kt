@@ -32,11 +32,11 @@ import com.example.loyaltyrewardapp.navigation.Screens
 @Composable
 fun ListDiscountCoupon(navController: NavController = rememberNavController(), viewModel: CouponUserViewModel = CouponUserViewModel()){
 
-    val couponList = viewModel.couponListResponse
+    val couponList by remember { viewModel.couponListResponse }
 
     LaunchedEffect(null) {
         viewModel.fetchCouponList()
-        Log.d("Loading", "Dang load du lieu")
+        Log.d("Loading", "Dang load du lieu coupon")
     }
 
     MainBackgroundScreen(title = "Khuyến mãi",  navController = navController) {
@@ -53,7 +53,7 @@ fun ListDiscountCoupon(navController: NavController = rememberNavController(), v
                     GiftCardItem(
                         item = it,
                         onClick = {
-                            navController.navigate(Screens.DetailCouponScreen.name  + "/${it._id}")
+                            navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
                         }
                     )
                 }

@@ -46,7 +46,7 @@ interface ApiService {
 
     
     @GET("user/coupons")
-    suspend fun getCounpons(): List<CouponResponse>
+    suspend fun getCoupons(): List<CouponResponse>
 
 
 //    9. Lấy thông tin chi tiết của ưu đãi
