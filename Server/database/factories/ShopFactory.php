@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PointMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,21 @@ class ShopFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'description' => $this->faker->text,
+            'phone' => $this->faker->phoneNumber,
+            'address' => $this->faker->address,
+            'logo' => $this->faker->imageUrl(),
+            'cover' => $this->faker->imageUrl(),
+            'point_trigger' => PointMethod::ByVisit,
+            'location' => [
+                'type' => 'Point',
+                'coordinates' => [
+                    $this->faker->longitude,
+                    $this->faker->latitude
+                ]
+            ]
         ];
     }
 }
+

@@ -3,6 +3,7 @@ package com.example.loyaltyrewardapp.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -51,12 +52,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.model.CouponResponse
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun GiftCardItem(){
-    BoxWithConstraints {
+fun GiftCardItem(
+    item: CouponResponse,
+    onClick: () -> Unit
+
+){
+    BoxWithConstraints(
+        modifier = Modifier.padding(6.dp)
+            .clickable {
+                onClick()
+            }
+    ) {
         Box(modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
@@ -80,27 +93,27 @@ fun GiftCardItem(){
                     Modifier
                         .fillMaxHeight()
                         .weight(6.5f)
-                        .padding(5.dp, 5.dp, 10.dp, 5.dp)
+                        .padding(5.dp, 15.dp, 10.dp, 5.dp)
                 ) {
 
-                    Text(
-                        buildAnnotatedString {
-                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 12.sp, fontWeight = FontWeight.Bold)){
-                                append("Cửa hàng sửa xe Thanh Phúc")
-                            }
-                        },
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        fontFamily = FontFamily.Serif
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
+//                    Text(
+//                        buildAnnotatedString {
+//                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 12.sp, fontWeight = FontWeight.Bold)){
+//                                append(item.name)
+//                            }
+//                        },
+//                        maxLines = 1,
+//                        overflow = TextOverflow.Ellipsis,
+//                        modifier = Modifier.fillMaxWidth(),
+//                        textAlign = TextAlign.Center,
+//                        fontFamily = FontFamily.Serif
+//                    )
+//                    Spacer(modifier = Modifier.size(8.dp))
 
                     Text(
                         buildAnnotatedString {
                             withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 20.sp, fontWeight = FontWeight.W900)){
-                                append("Miễn phí thay nhớt")
+                                append(item.name)
                             }
 //                            withStyle(SpanStyle(brush = Brush.linearGradient(listOf(Color(0xFFFD883B), Color.Red)), fontSize = 28.sp, fontWeight = FontWeight.Light, fontFamily = FontFamily.Serif)){
 //                                append("Off")
@@ -119,10 +132,10 @@ fun GiftCardItem(){
 //                        overflow = TextOverflow.Ellipsis,
 //                        maxLines = 2)
 
-                    Spacer(modifier = Modifier.size(6.dp))
+                    Spacer(modifier = Modifier.size(18.dp))
 
                     Text(
-                        text = "Miễn phí 1 chai nhớt castol power khi đổi 5 điểm tiêu dùng",
+                        text = item.description,
                         fontSize = 10.sp,
                         color = Color.Black.copy(alpha = 0.7f),
                         maxLines = 2,
@@ -133,7 +146,7 @@ fun GiftCardItem(){
                     Text(
                         buildAnnotatedString {
                             withStyle(SpanStyle(fontStyle = FontStyle.Italic, color = Color.Black)){
-                                append("Hạn dùng: 20/2/2024")
+                                append("Hết hạn vào " + item.expired_at)
                             }
                         },
                         fontSize = 10.sp,
@@ -154,11 +167,9 @@ fun GiftCardItem(){
                         .weight(3.0f)
                         .padding(10.dp, 5.dp, 5.dp, 5.dp)
                 ) {
-                    Image(painter = painterResource(id = R.drawable.background),
-                        contentDescription = "Lego logo",
-                        Modifier.fillMaxSize()
-                            .clip(RoundedCornerShape(10.dp)),
-                        contentScale = ContentScale.Fit,)
+                    SquareOnlineImage(
+                        url = "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+                    )
                 }
             }
         }
@@ -172,5 +183,5 @@ fun GiftCardItem(){
 @Preview
 @Composable
 fun TestCouponDiscount(){
-    GiftCardItem()
+//    GiftCardItem()
 }

@@ -2,6 +2,7 @@ package com.example.loyaltyrewardapp.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Badge
 import androidx.compose.material.DropdownMenu
@@ -53,7 +56,7 @@ import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
 
 @Composable
-fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false){
+fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false, onClick: () -> Unit){
     var expandedMenu by remember { mutableStateOf(false) }
 //    val anchorPosition = remember { mutableStateOf<Offset?>(null) }
 
@@ -65,6 +68,9 @@ fun InfoRewardCard(url: String, name: String, description: String, point: Int, i
             defaultElevation = 2.dp
         ),
         modifier = Modifier.padding(6.dp)
+            .clickable {
+                onClick()
+            }.widthIn(max = 200.dp)
     ) {
         Column {
             Box {
@@ -138,8 +144,8 @@ fun DetailReward() {
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DetailRewardPreview() {
-    InfoRewardCard("URL","Tên sản phẩm", "Mô tả sản phẩm", 3, isAdmin = true)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DetailRewardPreview() {
+//    InfoRewardCard("URL","Tên sản phẩm", "Mô tả sản phẩm", 3, isAdmin = true)
+//}

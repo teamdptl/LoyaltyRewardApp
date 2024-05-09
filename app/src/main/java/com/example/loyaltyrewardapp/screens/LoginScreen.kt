@@ -364,7 +364,8 @@ fun LoginUsersByEmail(
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("User", "signInWithEmail:success")
                     val user = auth.currentUser;
-                    navController.navigate(Screens.AppNavigationScreen.name)
+                    // TODO: Fix this to navigate to the correct screen manager or user
+                    navController.navigate(Screens.UserNavigationScreen.name)
                     Toast.makeText(context,"Đăng nhập thành công",Toast.LENGTH_SHORT).show()
                     user?.getIdToken(false)?.addOnCompleteListener(Activity()) {
                         if (it.isSuccessful) {

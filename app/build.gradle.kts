@@ -74,6 +74,7 @@ dependencies {
     implementation("io.coil-kt:coil:2.6.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation("androidx.camera:camera-mlkit-vision:1.4.0-alpha05")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -114,6 +115,8 @@ dependencies {
 
     // Coil load image
     implementation("io.coil-kt:coil-compose:2.6.0")
+//    implementation("com.google.accompanist:accompanist-glide:0.17.0")
+
 
     // QrCode display
     implementation("com.lightspark:compose-qr-code:1.0.1")
@@ -130,4 +133,10 @@ dependencies {
 
     // Data store
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // State
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation ("androidx.activity:activity-ktx:1.9.0")
 }

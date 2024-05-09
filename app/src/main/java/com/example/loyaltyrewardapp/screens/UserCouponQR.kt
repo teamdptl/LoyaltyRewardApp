@@ -16,14 +16,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -43,8 +41,9 @@ import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.data.viewmodel.CouponDetailViewModel
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 
+
 @Composable
-fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
+fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
     val coupon by remember {
         viewModel.coupon
     }
@@ -114,10 +113,10 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                 Text(
                     text = coupon?.name?: "Tên coupon",
                     fontWeight = FontWeight.SemiBold,
-                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontSize = 16.sp,
                     modifier = Modifier.weight(0.7f)
-                    )
+                )
                 Spacer(
                     modifier = Modifier
                         .weight(0.1f)
@@ -125,7 +124,7 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                 Text(
                     text = "${coupon?.require_point?: 0} điểm",
                     fontWeight = FontWeight.SemiBold,
-                    style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     fontSize = 16.sp,
                     color = OrangeColor,
                     modifier = Modifier.weight(0.2f)
@@ -144,7 +143,7 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                 ) {
                     Text(
                         "Mô tả",
-                        style = androidx.compose.material3.MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = OrangeColor,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -171,50 +170,11 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                     .weight(1.15f))
             }
             Text(coupon?.description?:"Mô tả",
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
-                )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 50.dp, vertical = 16.dp)
-                .align(Alignment.BottomCenter), // Điều chỉnh khoảng cách của button
-            horizontalArrangement = Arrangement.Center,
-
-        ) {
-            // Các Spacer và nội dung khác
-
-            // Button ở đây
-            RoundedOrangeButton(
-                onClick = {
-                    // Xử lý khi button được nhấn
-                },
-                buttonText = "Đổi ưu đãi"
+                modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
             )
-
         }
+
     }
 
 
-}
-
-@Composable
-fun RoundedOrangeButton(
-    onClick: () -> Unit,
-    buttonText: String
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp),
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = OrangeColor),
-        shape = RoundedCornerShape(10.dp)
-    ) {
-        Text(
-            text = buttonText,
-            style = MaterialTheme.typography.button,
-            color = Color.White
-        )
-    }
 }

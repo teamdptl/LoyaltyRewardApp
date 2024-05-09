@@ -138,7 +138,7 @@ class UserController extends Controller
         $points = $request->user->points->sortByDesc('updated_at')->unique('shop_id');
         foreach ($points as $point) {
             if (!$point->shop) continue;
-            $result = $point->shop->coupons->where('require_point', $point->points)->map(function($coupon) use ($point){
+            $result = $point->shop->coupons->where('require_point', '<=', $point->points)->map(function($coupon) use ($point){
                 unset($point->shop->coupons);
                 $coupon->shop = $point->shop;
                 return $coupon;
@@ -193,7 +193,6 @@ class UserController extends Controller
             // copy coupon
             $new_coupon = $coupon->replicate()->fill([
                 'expired_at' => now()->addMonths($coupon->expired_after)->toDateTimeString(),
-                'redeemed_at' => null
             ]);
 
             // Tạo coupon cho user
@@ -229,6 +228,16 @@ class UserController extends Controller
     public function getCoupons(Request $request){
         $request->user->coupons->load('shop');
         return $request->user->coupons;
+    }
+
+    /**
+     * 30. Lấy chi tiết coupon
+     *
+     * Trả về chi tiết coupon
+     *
+     */
+    public function getCouponById(Request $request, $couponId){
+        return $request->user->coupons()->where('_id', $couponId)->first();
     }
 
 

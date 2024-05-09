@@ -9,11 +9,13 @@ class Shop extends Model
 {
     use HasFactory;
     protected $connection ='mongodb';
-    protected $fillable = ['name', 'address', 'logo', 'cover', 'point_trigger'];
+    protected $fillable = ['name', 'description', 'address', 'phone', 'logo', 'cover', 'point_trigger'];
 
     protected $casts = [
         'created_at'  => 'datetime:d-m-Y H:m',
-        'updated_at'  => 'datetime:d-m-Y H:m'
+        'updated_at'  => 'datetime:d-m-Y H:m',
+        'latitude' => 'double',
+        'longitude' => 'double',
     ];
 
     protected $hidden = [

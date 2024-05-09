@@ -12,7 +12,7 @@ fun GuestNavigation(isLogin: Boolean = false) {
     val navController = rememberNavController()
     var startDestination = Screens.LoginScreen.name
     if (isLogin) {
-        startDestination = Screens.AppNavigationScreen.name
+        startDestination = Screens.UserNavigationScreen.name
     }
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screens.LoginScreen.name) {
@@ -21,8 +21,14 @@ fun GuestNavigation(isLogin: Boolean = false) {
         composable(route = Screens.registerScreen.name) {
             registerScreen(navController)
         }
-        composable(route = Screens.AppNavigationScreen.name) {
-            AppNavigation()
+        composable(route = Screens.OTPVerificationScreen.name) {
+//            OTPVerificationScreen(navController)
+        }
+        composable(route = Screens.UserNavigationScreen.name) {
+            UserNavigation()
+        }
+        composable(route = Screens.ManagerNavigationScreen.name) {
+            ManagerNavigation()
         }
     }
 }

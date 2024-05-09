@@ -1,7 +1,7 @@
 package com.example.loyaltyrewardapp.screens.manager
 
-import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
@@ -29,8 +28,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.loyaltyrewardapp.components.ImagePicker
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
@@ -53,32 +50,43 @@ class DetailCouponActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
-            ProvideViewModel(viewModel = AdminCURCouponViewModel()) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    val couponViewModel: AdminCURCouponViewModel = viewModel()
-                    CURCouponScreen(couponViewModel)
-                }
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colors.background
+            ) {
+                CURCouponScreen()
             }
         }
     }
 }
 
 @Composable
-fun ProvideViewModel(viewModel: AdminCURCouponViewModel, content: @Composable () -> Unit) {
-    val localViewModel = compositionLocalOf<AdminCURCouponViewModel> { error("No ViewModel found!") }
-    CompositionLocalProvider(localViewModel provides viewModel) {
-        content()
-    }
-}
+fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
+    val coupon by remember {couponViewModel.coupon}
+    val screenState by remember {couponViewModel.screenState}
+    var title by remember{mutableStateOf("")}
 
-@Composable
-fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
-    val coupon by couponViewModel.coupon
-    val screenState by couponViewModel.screenState
-    MainBackgroundScreen(title = "Thêm ưu đãi") {
+    LaunchedEffect(key1 = null){
+        couponViewModel.getDetailCoupon("R", "663a4e93d3b422b0fe0e235b")
+        Log.d("Loading", "Dang load du lieu")
+    }
+
+    if(coupon == null){
+        Log.d("Loading", "Chua co du lieu")
+    }else{
+        title = if (screenState == "R") {
+            "Thông tin ưu đãi"
+        }else{
+            if (screenState == "C") {
+                "Thêm ưu đãi"
+            }else{
+                "Cập nhật ưu đãi"
+            }
+        }
+    }
+
+
+    MainBackgroundScreen(title = title) {
         Column(
             Modifier
                 .padding(40.dp, 30.dp)
@@ -86,7 +94,7 @@ fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
         ) {
             coupon?.let { co ->
                 LabelTextField(label = "Tên ưu đãi",
-                    fieldValue = co.couponName,
+                    fieldValue = co.name,
                     numOfRow = 1, {couponViewModel.updateCouponName(it)},
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -98,13 +106,13 @@ fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Điểm sử dụng",
-                    fieldValue = co.point.toString(),
+                    fieldValue = co.require_point.toString(),
                     onValueChange = {couponViewModel.updatePoint(it.toInt())},
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Hết hạn sau (tháng)",
-                    fieldValue = co.timeExpire.toString(),
+                    fieldValue = co.expired_after.toString(),
                     onValueChange = {couponViewModel.updateTimeExpire(it.toInt())},
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -118,7 +126,7 @@ fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(text = "Choose Image", co.imageUri)
+                    ImagePicker(text = "Choose Image", co.icon)
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
@@ -138,7 +146,7 @@ fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = viewModel()){
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
-                GroupButtonAction(screenState = "R",
+                GroupButtonAction(screenState = screenState,
                     "Thêm khuyến mãi",
                     "Lưu thay đổi",
                     "Cập nhật")
@@ -201,7 +209,7 @@ fun GroupButtonAction(screenState: String, textCreate: String, textUpdate: Strin
                     Icon(
                         Icons.Filled.Check,
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = Color.White
                     )
                     Text(text = textCreate,
@@ -230,7 +238,7 @@ fun GroupButtonAction(screenState: String, textCreate: String, textUpdate: Strin
                     Icon(
                         Icons.Filled.Save,
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = Color.White
                     )
                     Text(text = textUpdate,

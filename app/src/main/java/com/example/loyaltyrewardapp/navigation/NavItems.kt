@@ -1,18 +1,7 @@
 package com.example.loyaltyrewardapp.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ConfirmationNumber
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.QrCodeScanner
-import androidx.compose.material.icons.outlined.ConfirmationNumber
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.QrCodeScanner
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavItems(
@@ -24,7 +13,7 @@ data class NavItems(
     val route: String
 )
 
-val listOfNavItems: List<NavItems> = listOf(
+val listOfUserNavItems: List<NavItems> = listOf(
     NavItems(
         label = "Trang chủ",
         selectedIcon = Icons.Outlined.Home,
@@ -39,20 +28,12 @@ val listOfNavItems: List<NavItems> = listOf(
         hasNews = false,
         route = Screens.CouponScreen.name
     ),
-    NavItems(
-        label = "",
-        selectedIcon = Icons.Outlined.QrCodeScanner,
-        unselectedIcon = Icons.Outlined.QrCodeScanner,
-        hasNews = false,
-        route = Screens.ScanQRScreen.name
-    ),
 //    NavItems(
-//        label = "Thông báo",
-//        selectedIcon = Icons.Filled.Notifications,
-//        unselectedIcon = Icons.Outlined.Notifications,
+//        label = "",
+//        selectedIcon = Icons.Outlined.QrCodeScanner,
+//        unselectedIcon = Icons.Outlined.QrCodeScanner,
 //        hasNews = false,
-//        badgeCount = 45,
-//        route = Screens.NotificationsScreen.name
+//        route = Screens.ScanQRScreen.name
 //    ),
     NavItems(
         label = "Lịch sử",
@@ -60,6 +41,44 @@ val listOfNavItems: List<NavItems> = listOf(
         unselectedIcon = Icons.Outlined.History,
         hasNews = false,
         route = Screens.HistoryScreen.name
+    ),
+    NavItems(
+        label = "Tài khoản",
+        selectedIcon = Icons.Outlined.Person,
+        unselectedIcon = Icons.Outlined.Person,
+        hasNews = false,
+        route = Screens.ProfileActivity.name
+    ),
+)
+
+val listOfManagerNavItems: List<NavItems> = listOf(
+    NavItems(
+        label = "Trang chủ",
+        selectedIcon = Icons.Outlined.Home,
+        unselectedIcon = Icons.Outlined.Home,
+        hasNews = false,
+        route = Screens.HomeManagerScreen.name
+    ),
+    NavItems(
+        label = "Cửa hàng",
+        selectedIcon = Icons.Outlined.Shop,
+        unselectedIcon = Icons.Outlined.Shop,
+        hasNews = false,
+        route = Screens.ShopManagerScreen.name
+    ),
+    NavItems(
+        label = "",
+        selectedIcon = Icons.Outlined.QrCodeScanner,
+        unselectedIcon = Icons.Outlined.QrCodeScanner,
+        hasNews = false,
+        route = Screens.ScanManagerScreen.name
+    ),
+    NavItems(
+        label = "Thông báo",
+        selectedIcon = Icons.Outlined.Notifications,
+        unselectedIcon = Icons.Outlined.Notifications,
+        hasNews = false,
+        route = Screens.NotificationManagerScreen.name
     ),
     NavItems(
         label = "Tài khoản",

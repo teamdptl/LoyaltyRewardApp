@@ -2,9 +2,11 @@ package com.example.loyaltyrewardapp.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +27,7 @@ import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,20 +37,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.SelectedColor
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
 import com.example.loyaltyrewardapp.ui.theme.Yellow
 import com.lightspark.composeqr.QrCodeView
 import com.example.loyaltyrewardapp.ui.theme.Typography
+import com.google.firebase.auth.FirebaseUser
 
 
 @Composable
-fun UserCard() {
+fun UserCard(firebaseData: FirebaseUser, user: User) {
     Column(horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -62,7 +68,7 @@ fun UserCard() {
             .fillMaxWidth()
             .padding(top = 8.dp)){
             QrCodeView(
-                data = "2500323123123123|321312",
+                data = user.qr?:"Error",
                 modifier = Modifier.size(140.dp)
             )
             Column(modifier = Modifier.padding(start = 12.dp), verticalArrangement = Arrangement.Center) {
@@ -70,20 +76,20 @@ fun UserCard() {
                     color = MainColor,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth())
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Mã thành viên: ", style = Typography.displaySmall)
-                    Text(text = "3123122452", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+//                Column(modifier = Modifier.padding(top = 4.dp)){
+//                    Text(text = "Mã thành viên: ", style = Typography.displaySmall)
+//                    Text(text = user.qr?:"Error", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+//                }
+                Column(modifier = Modifier.padding(top = 8.dp)){
+                    Text(text = "Họ tên:", style = Typography.displaySmall, modifier = Modifier.padding(bottom = 5.dp))
+                    Text(text = firebaseData.displayName?:"Không có tên", style = Typography.bodyMedium, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Họ tên:", style = Typography.displaySmall)
-                    Text(text = "Huỳnh Khánh Duy", style = Typography.bodySmall, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Column(modifier = Modifier.padding(top = 8.dp)){
+                    Text(text = "Điện thoại: ", style = Typography.displaySmall, modifier = Modifier.padding(bottom = 5.dp))
+                    Text(text = firebaseData.phoneNumber?:"Không có số", style = Typography.bodyMedium, color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Column(modifier = Modifier.padding(top = 4.dp)){
-                    Text(text = "Điện thoại: ", style = Typography.displaySmall)
-                    Text(text = "01234567", style = Typography.bodySmall,  color=Color.Gray, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                }
-                Text(text = "Ngày tham gia: 24/12/2023", style = Typography.bodySmall, fontSize = 11.sp,
-                    modifier = Modifier.padding(top = 3.dp))
+                Text(text = "Ngày tham gia: ${user.created_at.split(" ")[0]}", style = Typography.displaySmall, fontSize = 11.sp, fontWeight = FontWeight.Normal,
+                    modifier = Modifier.padding(top = 8.dp))
             }
         }
 
@@ -91,56 +97,59 @@ fun UserCard() {
 }
 
 @Composable
-fun ApplyRewardButton(removable: Boolean = false){
+fun ApplyRewardButton(navController: NavController){
     Row(horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
             .padding(top = 6.dp)) {
-        if (!removable){
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.White)) {
-                Icon(
-                    painter = painterResource(id = R.drawable.discount_icon),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = Color.Black
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "Sử dụng khuyến mãi",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
+
+        Button(onClick = { navController.navigate(Screens.CouponScreen.name) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.White)) {
+            Icon(
+                painter = painterResource(id = R.drawable.discount_icon),
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+                tint = Color.Black
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = "Sử dụng khuyến mãi",
+                color = Color.Black,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
-        else {
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = SelectedColor, contentColor = SelectedColor)) {
-                Icon(
-                    painter = painterResource(id = R.drawable.discount_icon),
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = Color.Black
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "Đã chọn 1 khuyến mãi",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Icon(Icons.Outlined.Cancel, contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = Color.Red)
-            }
-        }
+//        if (!removable){
+//
+//        }
+//        else {
+//            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = SelectedColor, contentColor = SelectedColor)) {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.discount_icon),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(16.dp),
+//                    tint = Color.Black
+//                )
+//                Spacer(modifier = Modifier.width(6.dp))
+//                Text(
+//                    text = "Đã chọn 1 khuyến mãi",
+//                    color = Color.Black,
+//                    style = MaterialTheme.typography.bodySmall
+//                )
+//                Spacer(modifier = Modifier.width(6.dp))
+//                Icon(Icons.Outlined.Cancel, contentDescription = null,
+//                    modifier = Modifier.size(16.dp),
+//                    tint = Color.Red)
+//            }
+//        }
 
     }
 
 }
 
 @Composable
-fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : String = "", phoneNumber: String = "", dateJoined: String = ""){
+fun MainUserHeader(navController: NavController, firebaseData: FirebaseUser, user: User){
     Box(modifier = Modifier
         .fillMaxWidth()
-        .height(350.dp)){
+        .height(330.dp)){
         Image(painter = painterResource(id = R.drawable.background), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
         Column{
             Row(modifier = Modifier
@@ -152,16 +161,19 @@ fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : Stri
                 Row(verticalAlignment = Alignment.CenterVertically){
                     Image(painterResource(id = R.drawable.user), contentDescription = null, modifier = Modifier.size(40.dp))
                     Column (modifier = Modifier.padding(start = 8.dp)) {
-                        Text(text = fullName, color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
+                        Text(text = firebaseData.displayName!!, color = TextBlackColor, fontWeight = FontWeight.Medium, modifier = Modifier.padding(bottom = 4.dp))
                         Text(text = "Khách hàng", color = Color.Gray)
                     }
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically){
-                    Text(text = "Xem điểm", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 12.sp, modifier = Modifier
-                        .width(80.dp)
+                    Text(text = "Xem điểm", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 13.sp, modifier = Modifier
+                        .width(100.dp)
                         .background(color = Yellow, shape = RoundedCornerShape(10.dp))
-                        .padding(10.dp))
+                        .padding(vertical = 10.dp, horizontal = 6.dp)
+                        .clickable{
+                            navController.navigate(Screens.MyPointScreen.name)
+                        })
                     Spacer(modifier = Modifier.width(8.dp))
                     BadgedBox(
                         badge = {
@@ -178,14 +190,13 @@ fun MainUserHeader(fullName: String = "Name", avatar: String = "", qrCode : Stri
                     }
                 }
             }
-            UserCard()
-            ApplyRewardButton()
+            UserCard(firebaseData, user)
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HeaderPreview(){
-    MainUserHeader()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HeaderPreview(){
+//    MainUserHeader()
+//}

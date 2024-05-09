@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Services\DeleteExpiredNotificationTokens;
+use http\Url;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 

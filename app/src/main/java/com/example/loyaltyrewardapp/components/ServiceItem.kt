@@ -15,10 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.loyaltyrewardapp.screens.InfoRewardCard
 
 @Composable
-fun RewardItem(name: String, description: String){
+fun ServiceItem(name: String, description: String){
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White,
@@ -26,11 +25,11 @@ fun RewardItem(name: String, description: String){
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         ),
-        modifier = Modifier.padding(6.dp).height(90.dp)
+        modifier = Modifier.padding(6.dp)
     )
     {
         Column(
-            modifier = Modifier.padding(6.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             Row() {
                 Text(
@@ -58,5 +57,5 @@ fun RewardItem(name: String, description: String){
 @Preview(showBackground = true)
 @Composable
 fun RewardItemPreview() {
-    RewardItem("Tên dịch vụ", "Mô tả dịch vụ")
+    ServiceItem("Tên dịch vụ", "Mô tả dịch vụ")
 }

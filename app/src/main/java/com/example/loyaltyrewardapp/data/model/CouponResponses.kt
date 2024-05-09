@@ -1,12 +1,15 @@
 package com.example.loyaltyrewardapp.data.model
 
-data class Coupon(
+data class CouponResponse (
     val _id: String = "",
     val name: String = "",
     val description: String = "",
     val require_point: Int = 0,
     val icon: String = "",
-    val is_active: Boolean = true,
+    val id_active: Boolean = true,
     val expired_after: Int = 0,
-    val shop: Shop? = null,
+    val shop_id: String = "",
+    val expired_at: String = "",
+    val create_at: String = "",
 )
+

@@ -1,8 +1,6 @@
 package com.example.loyaltyrewardapp.screens
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,26 +9,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absoluteOffset
-import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -40,90 +30,80 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.times
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
-import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.RewardItemPreview
+import com.example.loyaltyrewardapp.components.ServiceItem
 import com.example.loyaltyrewardapp.components.SquareImage
 import com.example.loyaltyrewardapp.data.ShopProvider
+import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.theme.GrayMap
 import com.example.loyaltyrewardapp.ui.theme.MainColor
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
 import com.example.loyaltyrewardapp.ui.theme.Yellow
-import kotlinx.coroutines.launch
-import com.example.loyaltyrewardapp.ui.theme.MainColor
 
 
-class DetailCompanyActivity : ComponentActivity(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = androidx.compose.material.MaterialTheme.colors.background
-            ) {
-                DetailCompany()
-            }
-        }
-    }
-
-}
 
 enum class SelectedItem {
     First, Second, Third
 }
 
 
-
-@Preview
 @Composable
-fun DetailCompany() {
-    val company = remember { ShopProvider.shop }
+fun DetailCompany(navController: NavHostController = rememberNavController(), shopId: String?, viewModel: ShopDetailViewModel = ShopDetailViewModel()) {
     var selectedItem by remember { mutableStateOf(SelectedItem.First) }
     val companies = remember { ShopProvider.shopList }
-    val isAdmin = true
+    val isAdmin = false
+    val shop by remember {
+        viewModel.shop
+    }
 
-    Column(
+    LaunchedEffect(null) {
+        viewModel.getShopDetail(shopId!!)
+    }
+
+    if (shop == null) {
+
+    } else {
+        shop!!
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(Color.White),
-            ) {
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.background),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(250.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
-                )
+                AsyncImage(model = shop?.logo, contentDescription = null, modifier = Modifier
+                    .height(250.dp)
+                    .fillMaxWidth(),
+                    contentScale = ContentScale.Crop )
                 Row(){
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { navController.popBackStack() },
                         colors = IconButtonColors(
                             containerColor = Color.White,
                             contentColor = Color.Black,
@@ -132,7 +112,7 @@ fun DetailCompany() {
                         ),
                         modifier = Modifier
                             .clip(shape = CircleShape)
-                            .size(50.dp)
+                            .size(60.dp)
                             .padding(all = 10.dp)
                     ) {
                         Icon(
@@ -145,8 +125,10 @@ fun DetailCompany() {
                         )
                     }
 
-                    Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(all = 10.dp)){
-                        Text(text = "Điểm 10", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 12.sp, modifier = Modifier
+                    Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 10.dp)){
+                        Text(text = "Điểm: ${shop?.your_points?:"0"}", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 13.sp, fontWeight = FontWeight.Medium, modifier = Modifier
                             .width(100.dp)
                             .background(color = Yellow, shape = RoundedCornerShape(10.dp))
                             .padding(10.dp))
@@ -155,24 +137,28 @@ fun DetailCompany() {
                 }
 
 //            SquareImage(
-//                item = company,
+//                item = companies,
 //                pictureUrlProperty = { it.pictureUrl },
 //                size = 160.dp
 //            )
 
             }
             Text(
-                text = "Cửa hàng của Duy",
+                text = shop?.name ?: "Tên cửa hàng",
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.bodyMedium,
                 fontSize = 20.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 20.dp)
             )
             Text(
-                text = "130 Nguyễn Văn Cừ",
-                maxLines = 1,
+                text = shop?.address?:"Địa chỉ",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2,
                 color = GrayMap,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,10 +173,9 @@ fun DetailCompany() {
 
                 TextButton(onClick = {
                     selectedItem = SelectedItem.First
-
                 }
                 ) {
-                    Text("Ưu đãi",   style = MaterialTheme.typography.bodyMedium,
+                    Text("Ưu đãi", style = MaterialTheme.typography.bodyMedium,
                         color = OrangeColor, fontWeight = FontWeight.SemiBold)
                 }
                 TextButton(onClick = {
@@ -198,7 +183,7 @@ fun DetailCompany() {
 
                 }
                 ) {
-                    Text("Dịch vụ",  style = MaterialTheme.typography.bodyMedium,
+                    Text("Dịch vụ", style = MaterialTheme.typography.bodyMedium,
                         color = OrangeColor, fontWeight = FontWeight.SemiBold)
                 }
                 TextButton(onClick = {
@@ -243,10 +228,16 @@ fun DetailCompany() {
                             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
                         ) {
                             items(
-                                items = companies,
+                                items = shop?.coupons?: listOf(),
                                 itemContent = {
-                                    DetailRewardPreview(
-
+                                    InfoRewardCard(
+                                        name = it.name,
+                                        url = it.icon,
+                                        point = it.require_point,
+                                        description = it.description,
+                                        onClick = {
+                                            navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                                        }
                                     )
                                 }
                             )
@@ -302,10 +293,11 @@ fun DetailCompany() {
                             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
                         ) {
                             items(
-                                items = companies,
+                                items = shop?.services?: listOf(),
                                 itemContent = {
-                                    RewardItemPreview(
-
+                                    ServiceItem(
+                                        name = it.name,
+                                        description = it.description
                                     )
                                 }
                             )
@@ -349,13 +341,12 @@ fun DetailCompany() {
                                 .background(color = OrangeColor)
                         )
                     }
-                    Text("Nội dung cho Chi tiết")
+                    Text(shop?.description?:"Mô tả")
                 }
 
             }
         }
-
-
+    }
 
 }
 

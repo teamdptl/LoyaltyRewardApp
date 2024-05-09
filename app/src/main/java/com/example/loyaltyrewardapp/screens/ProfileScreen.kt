@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -53,25 +55,13 @@ import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import java.util.Calendar
 import java.util.Date
 
-class ProfileActivity : ComponentActivity(){
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-
-            }
-        }
-    }
-}
 
 @Composable
 fun ProfileContent(){
     Column(Modifier
         .padding(40.dp, 30.dp)
         .background(Color.White)
+        .verticalScroll(rememberScrollState())
     ) {
         CircleAvatar()
         Spacer(modifier = Modifier.size(40.dp))
@@ -114,7 +104,7 @@ fun CircleAvatar() {
 
 @Composable
 fun InfoBox(){
-    Column {
+    Column() {
         fieldInfo(title = "Họ tên", fieldValue = "Võ Minh Tuấn")
         Spacer(modifier = Modifier.size(10.dp))
         fieldInfo(title = "Số điện thoại", fieldValue = "0819107257")
