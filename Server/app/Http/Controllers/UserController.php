@@ -226,8 +226,18 @@ class UserController extends Controller
      *
      */
     public function getCoupons(Request $request){
-//        $request->user->coupons->load('shop');
+        $request->user->coupons->load('shop');
         return $request->user->coupons;
+    }
+
+    /**
+     * 30. Lấy chi tiết coupon
+     *
+     * Trả về chi tiết coupon
+     *
+     */
+    public function getCouponById(Request $request, $couponId){
+        return $request->user->coupons()->where('_id', $couponId)->first();
     }
 
 

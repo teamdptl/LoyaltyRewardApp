@@ -91,6 +91,9 @@ Route::middleware('auth-firebase')->group(function () {
 
         // 11. Lấy danh sách ưu đãi của người dùng
         Route::get('/user/coupons', [App\Http\Controllers\UserController::class, 'getCoupons']);
+
+        // 30. Lấy chi tiết coupon
+        Route::get('/user/coupon/{id}', [App\Http\Controllers\UserController::class, 'getCouponById']);
     });
 
     Route::middleware('auth-firebase-shop-owner')->group(function () {
