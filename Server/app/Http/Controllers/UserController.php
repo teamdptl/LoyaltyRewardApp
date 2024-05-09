@@ -216,7 +216,9 @@ class UserController extends Controller
             DB::rollBack();
             return Response('Đổi mã ưu đãi thất bại!', 404);
         }
-        return Response('Đổi mã ưu đãi thành công!', 200);
+        return Response([
+                "message" => 'Đổi mã ưu đãi thành công!'
+            ], 200);
     }
 
     /**
