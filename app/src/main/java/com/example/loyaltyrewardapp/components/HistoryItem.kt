@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.data.model.Transaction
@@ -53,13 +54,14 @@ fun HistoryItem(
 
                 Text(
                     text = item.reason,
-                    maxLines = 2,
+                    maxLines = 1,
                     fontSize = 12.sp,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             Text(
-                text = "+ ${item.point}đ",
-                color = Color(0xFF11942C),
+                text = if (item.type == "minus")"- ${item.point}đ" else "+ ${item.point}đ" ,
+                color = if (item.type == "minus") Color.Red else Color(0xFF11942C),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(start = 8.dp) .weight(0.3f)  .fillMaxWidth()   .offset(y=30.dp),
             )

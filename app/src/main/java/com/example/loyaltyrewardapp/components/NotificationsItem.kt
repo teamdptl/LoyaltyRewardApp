@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.data.model.Transaction
@@ -57,7 +58,7 @@ fun NotificationsItem(
                     )
                 }
                 Spacer(modifier = Modifier.height(12.dp))
-                Text(text = item.reason, maxLines = 2, fontSize = 12.sp,)
+                Text(text = item.reason, maxLines = 1, fontSize = 12.sp, overflow = TextOverflow.Ellipsis)
             }
         }
     }
