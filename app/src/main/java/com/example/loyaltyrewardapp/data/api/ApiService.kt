@@ -55,4 +55,10 @@ interface ApiService {
     // 10. Đổi điểm thành ưu đãi cửa hàng
     @POST("user/exchange")
     suspend fun exchangeCoupon(@Query("coupon_id") couponId: String): ResponseMessage
+    
+//    @GET("coupon/{id}")
+//    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
+
+//    @GET("")
+//    suspend fun  getCouponUser(@Path("id") id: String): CouponResponse
 }
