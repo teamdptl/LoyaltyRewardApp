@@ -21,7 +21,6 @@ import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
-import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 
 class MainScreen : AppCompatActivity() {

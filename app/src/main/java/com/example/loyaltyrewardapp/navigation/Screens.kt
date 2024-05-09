@@ -20,4 +20,5 @@ enum class Screens {
     ShopManagerScreen,
     ScanManagerScreen,
     NotificationManagerScreen,
+    UserCouponQR
 }

@@ -49,4 +49,9 @@ interface ApiService {
 //    9. Lấy thông tin chi tiết của ưu đãi
     @GET("coupon/{id}")
     suspend fun getCouponById(@Path("id") id: String): Coupon
+//    @GET("coupon/{id}")
+//    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
+
+//    @GET("")
+//    suspend fun  getCouponUser(@Path("id") id: String): CouponResponse
 }

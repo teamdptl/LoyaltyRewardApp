@@ -16,4 +16,6 @@ class CouponDetailViewModel : ViewModel(){
             coupon.value = data
         }
     }
+
+
 }
