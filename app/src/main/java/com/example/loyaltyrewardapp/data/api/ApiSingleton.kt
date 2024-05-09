@@ -49,7 +49,7 @@ object ApiSingleton {
         val storedToken = sharedPreferences.getString("idToken", null)
         val expiredTokenTime = sharedPreferences.getLong("expiredTime", 0)
         val currentTime = System.currentTimeMillis()
-        if (storedToken != null && expiredTokenTime > currentTime){
+        if (storedToken != null && expiredTokenTime*1000 > currentTime){
             return storedToken
         }
 
@@ -57,8 +57,8 @@ object ApiSingleton {
         val tokenData = firebaseUser?.getIdToken(false)?.await()
         val idToken = tokenData?.token
         val expiredTime = tokenData?.expirationTimestamp
-        Log.d("Expired", expiredTime.toString())
-        Log.d("Current", currentTime.toString())
+        Log.d("Expired","Expired"+ expiredTime.toString())
+        Log.d("Expired", "Current $currentTime")
 
 
         if (idToken != null) {

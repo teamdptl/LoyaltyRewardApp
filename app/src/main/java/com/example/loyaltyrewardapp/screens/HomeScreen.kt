@@ -1,11 +1,7 @@
 package com.example.loyaltyrewardapp.screens
 
 //import androidx.compose.material.icons.Icons
-import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,11 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.components.CompaniesItem
-import com.example.loyaltyrewardapp.components.HeaderAdmin
 import com.example.loyaltyrewardapp.components.MainUserHeader
-import com.example.loyaltyrewardapp.data.ShopProvider
+import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
@@ -42,7 +36,6 @@ import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.theme.MainColor
 //import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 //import androidx.hilt.navigation.compose.hiltViewModel
 
@@ -64,12 +57,16 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
         homeViewModel.visitedShops
     }
 
+    val availableCoupons by remember {
+        homeViewModel.availableCoupons
+    }
+
     LaunchedEffect(null) {
         if (user == UserEmptyState){
             homeViewModel.fetchCurrentUser()
             homeViewModel.fetchRecommendShops()
             homeViewModel.fetchVisitedShops()
-//            homeViewModel.fetchAvaiableVoucher()
+            homeViewModel.fetchAvailableVoucher()
         }
     }
 
@@ -194,47 +191,57 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
                 }
             }
 
-            Row(
-                modifier = Modifier.padding(start = 22.dp, top = 10.dp, bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "Ưu đãi có thể đổi",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f)
-                )
-                TextButton(
-                    onClick = {
-                        // TDOO
-                    }
+            if (availableCoupons != emptyList<Coupon>()){
+                Row(
+                    modifier = Modifier.padding(start = 22.dp, top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(
-                        text = "Xem thêm",
+                        text = "Ưu đãi có thể đổi",
+                        fontWeight = FontWeight.SemiBold,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MainColor
+                        modifier = Modifier.weight(1f)
                     )
-                    Icon(
-                        Icons.Filled.MoreVert,
-                        contentDescription = "",
-                        modifier = Modifier.size(20.dp),
-                        tint = MainColor
+                    TextButton(
+                        onClick = {
+                            // TDOO
+                        }
+                    ) {
+                        Text(
+                            text = "Xem thêm",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MainColor
+                        )
+                        Icon(
+                            Icons.Filled.MoreVert,
+                            contentDescription = "",
+                            modifier = Modifier.size(20.dp),
+                            tint = MainColor
+                        )
+                    }
+                }
+
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    items(
+                        items = availableCoupons,
+                        itemContent = {
+                            InfoRewardCard(
+                                name = it.name,
+                                description = it.description,
+                                point = it.require_point,
+                                url = it.icon,
+                                onClick = {
+                                    navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                                }
+                            )
+                        }
                     )
                 }
             }
-
-//            LazyRow(
-//                contentPadding = PaddingValues(horizontal = 16.dp)
-//            ) {
-//                items(
-//                    items = ShopProvider.shopList,
-//
-//                )
-//            }
-
-
         }
     }
 }
