@@ -23,10 +23,14 @@ import com.example.loyaltyrewardapp.data.viewmodel.CouponUserViewModel
 import androidx.activity.viewModels
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.CompaniesItem
+import com.example.loyaltyrewardapp.navigation.Screens
+
 
 @Composable
-fun ListDiscountCoupon(viewModel: CouponUserViewModel = CouponUserViewModel()){
+fun ListDiscountCoupon(navController: NavController = rememberNavController(), viewModel: CouponUserViewModel = CouponUserViewModel()){
 
     val couponList = viewModel.couponListResponse
 
@@ -35,7 +39,7 @@ fun ListDiscountCoupon(viewModel: CouponUserViewModel = CouponUserViewModel()){
         Log.d("Loading", "Dang load du lieu")
     }
 
-    MainBackgroundScreen(title = "Khuyến mãi") {
+    MainBackgroundScreen(title = "Khuyến mãi",  navController = navController) {
         LazyColumn(
             modifier = Modifier
                 .background(Color(0xC6E6E3E3))
@@ -48,6 +52,9 @@ fun ListDiscountCoupon(viewModel: CouponUserViewModel = CouponUserViewModel()){
                 itemContent = {
                     GiftCardItem(
                         item = it,
+                        onClick = {
+                            navController.navigate(Screens.DetailCouponScreen.name  + "/${it._id}")
+                        }
                     )
                 }
             )

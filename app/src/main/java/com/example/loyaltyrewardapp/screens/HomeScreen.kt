@@ -40,7 +40,7 @@ import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.theme.MainColor
-import com.google.android.gms.location.LocationServices
+//import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
