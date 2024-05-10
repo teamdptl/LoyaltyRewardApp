@@ -20,6 +20,8 @@ enum class Screens {
     HomeManagerScreen,
     ShopManagerScreen,
     ScanManagerScreen,
+    RewardScanScreen,
+    ConfirmScanScreen,
     NotificationManagerScreen,
     UserCouponQR,
     CURCouponScreen,

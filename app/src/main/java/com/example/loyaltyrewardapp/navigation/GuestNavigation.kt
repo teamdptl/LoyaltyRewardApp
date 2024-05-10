@@ -7,8 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.User
@@ -74,3 +76,4 @@ fun GuestNavigation(viewModel : GuestViewModel = GuestViewModel()) {
         }
     }
 }
+

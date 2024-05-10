@@ -63,4 +63,8 @@ interface ApiService {
     suspend fun getCouponUser(@Path("id") id: String): UserCouponResponse
 
 
+//    17. Quét QR người dùng tích điểm hoặc nhận ưu đãi
+    @POST("shop/scan")
+    suspend fun scanQR(@Query("user_id") user_id: String, @Query("reward_id") reward_id: String?, @Query("service_id") service_id: String?): ResponseMessage
+
 }

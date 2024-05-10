@@ -36,7 +36,7 @@ class MainScreen : AppCompatActivity() {
         ApiSingleton.initialize(applicationContext)
 
         auth = FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword("+84312345678@app.vn", "123456")
+        auth.signInWithEmailAndPassword("+84890516934@app.vn", "1234567")
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
