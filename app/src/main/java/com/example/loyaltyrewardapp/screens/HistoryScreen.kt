@@ -21,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.HistoryItem
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.viewmodel.HistoryViewModel
@@ -51,7 +53,7 @@ fun HistoryContent(){
 
 @Preview
 @Composable
-fun HistoryPreview(viewModel:HistoryViewModel = HistoryViewModel()){
+fun HistoryPreview(navController: NavController = rememberNavController(),viewModel:HistoryViewModel = HistoryViewModel()){
     val listHistory by remember { viewModel.histories }
     
     LaunchedEffect(null) {
@@ -59,7 +61,7 @@ fun HistoryPreview(viewModel:HistoryViewModel = HistoryViewModel()){
         Log.d("Loading", "Dang load du lieu lịch sử")
     }
     
-    MainBackgroundScreen("Lịch sử điểm"){
+    MainBackgroundScreen("Lịch sử điểm",navController = navController){
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
