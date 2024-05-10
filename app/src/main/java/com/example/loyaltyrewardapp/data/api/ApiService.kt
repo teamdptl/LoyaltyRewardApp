@@ -2,7 +2,7 @@ package com.example.loyaltyrewardapp.data.api
 
 
 import com.example.loyaltyrewardapp.data.model.Coupon
-import com.example.loyaltyrewardapp.data.model.CouponResponse
+import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.Shop
@@ -45,7 +45,7 @@ interface ApiService {
 
     // 11. Lấy các ưu đãi có sẵn của bản thân
     @GET("user/coupons")
-    suspend fun getCoupons(): List<CouponResponse>
+    suspend fun getCoupons(): List<UserCouponResponse>
 
 
 //    9. Lấy thông tin chi tiết của ưu đãi
@@ -60,7 +60,7 @@ interface ApiService {
 //    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
 
     @GET("user/coupon/{id}")
-    suspend fun getCouponUser(@Path("id") id: String): CouponResponse
+    suspend fun getCouponUser(@Path("id") id: String): UserCouponResponse
 
 
 }
