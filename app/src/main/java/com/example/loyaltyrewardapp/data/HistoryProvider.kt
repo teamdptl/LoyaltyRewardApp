@@ -11,18 +11,18 @@ object HistoryProvider {
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     val currentTimeMillis = System.currentTimeMillis()
 
-    val history =
-        HistoryModel(
-            id = 1,
-            title = "Cua hang tien loi cua Phuc va Duy",
-            pictureUrl = R.drawable.avatar,
-            time = dateFormat.format(currentTimeMillis),
-            des = "sao cung duoc, kì cục dữ vậy, bực quá à, tức quá trời tức rồi trời ơi là trời ",
-            point = 10
-        )
+//    val history =
+//        HistoryModel(
+//            id = 1,
+//            title = "Cua hang tien loi cua Phuc va Duy",
+//            pictureUrl = R.drawable.avatar,
+//            time = dateFormat.format(currentTimeMillis),
+//            des = "sao cung duoc, kì cục dữ vậy, bực quá à, tức quá trời tức rồi trời ơi là trời ",
+//            point = 10
+//        )
 
     val historyList = listOf(
-        history,
+//        history,
         HistoryModel(
             id = 2,
             title = "Tiệm sửa xe",

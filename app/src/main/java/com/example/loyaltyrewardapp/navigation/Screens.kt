@@ -24,4 +24,5 @@ enum class Screens {
     UserCouponQR,
     CURCouponScreen,
     CURShopScreen,
+    ListPointShopScreen
 }
