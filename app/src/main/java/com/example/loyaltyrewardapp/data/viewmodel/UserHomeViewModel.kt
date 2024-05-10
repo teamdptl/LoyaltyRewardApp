@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.Coupon
+import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
@@ -20,9 +21,13 @@ class UserHomeViewModel: ViewModel() {
 
     fun fetchCurrentUser() {
         viewModelScope.launch {
-            val currentUser = ApiSingleton.getApiService().getCurrentUser()
-            user.value = currentUser
-            Log.d("Loading", "fetchCurrentUser: ${user.value}")
+            try {
+                val currentUser = ApiSingleton.getApiService().getCurrentUser()
+                user.value = currentUser
+                Log.d("Loading", "fetchCurrentUser: ${user.value}")
+            } catch (e: Exception) {
+                user.value = NotFoundUserState
+            }
         }
     }
 

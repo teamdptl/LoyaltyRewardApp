@@ -9,4 +9,5 @@ data class User (
     val created_at: String = "",
 )
 
-val UserEmptyState = User()
+val UserEmptyState = User(role="empty")
+val NotFoundUserState = User(role="not_found")

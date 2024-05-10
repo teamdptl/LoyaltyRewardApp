@@ -43,7 +43,7 @@ interface ApiService {
     @GET("shop/{id}")
     suspend fun getShopById(@Path("id") id: String): DetailShop
 
-    
+    // 11. Lấy các ưu đãi có sẵn của bản thân
     @GET("user/coupons")
     suspend fun getCoupons(): List<CouponResponse>
 

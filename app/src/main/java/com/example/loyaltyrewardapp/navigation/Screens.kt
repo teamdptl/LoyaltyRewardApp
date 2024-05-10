@@ -4,6 +4,7 @@ enum class Screens {
     LoginScreen,
     registerScreen,
     OTPVerificationScreen,
+    SplashScreen,
     HomeScreen,
     ShopVerticalScreen,
     DetailShopScreen,

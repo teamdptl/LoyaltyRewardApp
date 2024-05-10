@@ -48,6 +48,10 @@ object ApiSingleton {
     }
 
     private suspend fun getTokenFromLocalStorageOrFirebase(): String {
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        if (firebaseUser == null) {
+            return "";
+        }
         val storedToken = sharedPreferences.getString("idToken", null)
         val expiredTokenTime = sharedPreferences.getLong("expiredTime", 0)
         val currentTime = System.currentTimeMillis()
@@ -55,7 +59,6 @@ object ApiSingleton {
             return storedToken
         }
 
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
         val tokenData = firebaseUser?.getIdToken(false)?.await()
         val idToken = tokenData?.token
         val expiredTime = tokenData?.expirationTimestamp
