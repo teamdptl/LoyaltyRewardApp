@@ -59,6 +59,8 @@ interface ApiService {
 //    @GET("coupon/{id}")
 //    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
 
-//    @GET("")
-//    suspend fun  getCouponUser(@Path("id") id: String): CouponResponse
+    @GET("user/coupon/{id}")
+    suspend fun getCouponUser(@Path("id") id: String): CouponResponse
+
+
 }

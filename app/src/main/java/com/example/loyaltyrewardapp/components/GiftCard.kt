@@ -168,7 +168,7 @@ fun GiftCardItem(
                         .padding(10.dp, 5.dp, 5.dp, 5.dp)
                 ) {
                     SquareOnlineImage(
-                        url = "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+                        url = item.icon,
                     )
                 }
             }
