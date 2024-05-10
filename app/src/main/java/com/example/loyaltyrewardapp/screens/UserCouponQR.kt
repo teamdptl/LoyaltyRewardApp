@@ -39,8 +39,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.loyaltyrewardapp.components.SquareOnlineImage
 import com.example.loyaltyrewardapp.data.viewmodel.CouponUserQRViewModel
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
+import com.lightspark.composeqr.QrCodeView
 
 
 @Composable
@@ -73,16 +75,14 @@ fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel:
                     .verticalScroll(rememberScrollState())
             ) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    AsyncImage(
-                        model = coupon?.icon,
-                        contentDescription = null,
+                    SquareOnlineImage(
+                        url  = coupon!!.icon,
                         modifier = Modifier
                             .height(250.dp)
                             .fillMaxWidth(),
-                        contentScale = ContentScale.Crop)
+                        )
                     Row() {
                         IconButton(
                             onClick = { navController.popBackStack() },
@@ -163,8 +163,6 @@ fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel:
                         .padding(horizontal = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-
-
                     Spacer(
                         modifier = Modifier
                             .weight(0.7f)
@@ -176,9 +174,20 @@ fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel:
                     Spacer(modifier = Modifier
                         .weight(1.15f))
                 }
-                Text(coupon?.description?:"Mô tả",
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
+                Text(coupon?.description?:"Mô tả", maxLines = 4,
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
                 )
+                Row (modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+
+                ) {
+                    QrCodeView(
+                        data = couponId ?: "Error",
+                        modifier = Modifier.size(140.dp)
+                    )
+                }
             }
 
         }
