@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,6 +52,8 @@ fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel:
     LaunchedEffect(null) {
         couponId?.let {
             viewModel.getCouponUserQR(couponId)
+            Log.d("Loading", "Dang load du lieu detail user coupon")
+            Log.d("lay id detail coupon", couponId)
         }
     }
 

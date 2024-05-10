@@ -159,12 +159,12 @@ fun UserNavigation(){
             }
 
             composable(route = Screens.DetailCouponScreen.name + "/{couponId}"){ backStackEntry ->
-                UserCouponQR(navController, backStackEntry.arguments?.getString("couponId"))
+                DetailCoupon(navController, backStackEntry.arguments?.getString("couponId"))
             }
 
-//            composable(route = Screens.UserCouponQR.name + "/{couponId}"){backStackEntry ->
-//                UserCouponQR(navController, backStackEntry.arguments?.getString("couponId"))
-//            }
+            composable(route = Screens.UserCouponQR.name + "/{couponId}"){backStackEntry ->
+                UserCouponQR(navController, backStackEntry.arguments?.getString("couponId"))
+            }
 
         }
     }

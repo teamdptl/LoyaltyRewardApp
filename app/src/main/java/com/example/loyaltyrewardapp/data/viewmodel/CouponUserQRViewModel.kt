@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 
 class CouponUserQRViewModel  : ViewModel() {
     val couponUserQR = mutableStateOf<CouponResponse?>(CouponResponse())
-    fun getCouponUserQR(id: String) {
+    fun getCouponUserQR(couponId: String) {
         viewModelScope.launch {
-            val data = ApiSingleton.getApiService().getCouponUser(id)
+            val data = ApiSingleton.getApiService().getCouponUser(couponId)
             couponUserQR.value = data
         }
     }

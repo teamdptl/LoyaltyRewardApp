@@ -53,7 +53,7 @@ fun ListDiscountCoupon(navController: NavController = rememberNavController(), v
                     GiftCardItem(
                         item = it,
                         onClick = {
-                            navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                            navController.navigate(Screens.UserCouponQR.name + "/${it._id}")
                         }
                     )
                 }
