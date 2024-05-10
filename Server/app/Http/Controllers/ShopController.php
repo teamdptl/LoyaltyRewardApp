@@ -274,7 +274,7 @@ class ShopController extends Controller{
 
             DB::beginTransaction();
             try{
-                $coupon->redeemed_at = now();
+                $coupon->redeemed_at = Carbon::now()->toIso8601String();
                 $coupon->save();
 
                 Transaction::create([
