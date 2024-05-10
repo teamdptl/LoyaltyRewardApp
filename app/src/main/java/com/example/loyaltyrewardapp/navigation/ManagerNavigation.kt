@@ -31,6 +31,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.loyaltyrewardapp.screens.*
+import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.HomeManagerScreen
 import com.example.loyaltyrewardapp.screens.manager.ScanScreen
 
@@ -96,7 +97,10 @@ fun ManagerNavigation(){
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
                                             .size(50.dp)
-                                            .background(Color(0xFFFEE930), RoundedCornerShape(15.dp))
+                                            .background(
+                                                Color(0xFFFEE930),
+                                                RoundedCornerShape(15.dp)
+                                            )
                                     ) {
                                         Icon(
                                             imageVector = navItem.selectedIcon,
@@ -148,6 +152,10 @@ fun ManagerNavigation(){
             }
             composable(route = Screens.ProfileActivity.name){
                 ProfilePreview()
+            }
+            composable(route = Screens.CURCouponScreen.name + "/{couponId}/{screenState}"){ backStackEntry ->
+                backStackEntry.arguments?.getString("couponId")
+                    ?.let { CURCouponScreen(navController, it) }
             }
         }
     }
