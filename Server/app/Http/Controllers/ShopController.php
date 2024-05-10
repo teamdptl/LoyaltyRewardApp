@@ -293,7 +293,7 @@ class ShopController extends Controller{
             }
 
             return Response([
-                'message' => 'Đổi quà thành công!',
+                'message' => 'Đổi quà thành công \''.$coupon->name."'!",
                 'coupon' => $coupon
             ], 200);
         }
