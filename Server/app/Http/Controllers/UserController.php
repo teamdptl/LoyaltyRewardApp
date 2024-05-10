@@ -281,7 +281,7 @@ class UserController extends Controller
         */
 
         User::create($validate);
-        return Response("Tạo user thành công!", 200);
+        return Response(["message" => "Tạo user thành công!"], 200);
     }
 
     /**

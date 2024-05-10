@@ -80,7 +80,8 @@ class ShopController extends Controller{
         //Có thể dùng 1 trong 2 cách bên dưới để lưu shop có relate to user
         $request->user->shop()->save($shop);
 
-        return Response("Tạo shop thành công!", 200);
+        return Response(
+            ['message' => "Tạo shop thành công!"], 200);
     }
 
     /**
@@ -126,7 +127,7 @@ class ShopController extends Controller{
         $shop->fill($validate);
         $shop->save();
 
-        return Response("Cập nhật thành công", 200);
+        return Response(['message' => "Cập nhật thành công"], 200);
     }
 
     /**
@@ -143,7 +144,7 @@ class ShopController extends Controller{
         }
 
         $shop->delete();
-        return Response("Xóa shop thành công!", 200);
+        return Response(['message' => "Xóa shop thành công!"], 200);
     }
 
 
@@ -249,7 +250,7 @@ class ShopController extends Controller{
                 return Response('Tích điểm thất bại!', 404);
             }
 
-            return Response('Tích điểm thành công!', 200);
+            return Response(['message' => 'Tích điểm thành công!'], 200);
         }
 
         // Admin quét mã xem quà tặng cho user

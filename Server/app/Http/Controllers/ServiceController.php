@@ -51,7 +51,9 @@ class ServiceController extends Controller
 
         $service = new Service($validated);
         $shop->services()->save($service);
-        return Response('Tạo dịch vụ thành công!', 200);
+        return Response([
+            'message' => 'Tạo dịch vụ thành công!'
+        ], 200);
     }
 
     /**
@@ -83,7 +85,7 @@ class ServiceController extends Controller
         }
 
         $service->update($validated);
-        return Response('Cập nhật dịch vụ thành công!', 200);
+        return Response(['message' => 'Cập nhật dịch vụ thành công!'], 200);
     }
 
     /**
@@ -104,7 +106,7 @@ class ServiceController extends Controller
         }
 
         $service->delete();
-        return Response('Xóa dịch vụ thành công!', 200);
+        return Response(['message' => 'Xóa dịch vụ thành công!'], 200);
     }
 
 }
