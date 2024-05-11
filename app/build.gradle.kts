@@ -74,7 +74,7 @@ dependencies {
     implementation("io.coil-kt:coil:2.6.0")
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation("androidx.camera:camera-mlkit-vision:1.4.0-alpha05")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.gms:play-services-location:20.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -134,9 +134,24 @@ dependencies {
     // Data store
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    implementation ("androidx.activity:activity-compose:1.9.0")
+
+
     // State
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation ("androidx.activity:activity-ktx:1.9.0")
+
+    // File picker
+    implementation("io.github.huhx:compose-image-picker:1.0.8")
+
+    // Location
+    implementation("com.github.BirjuVachhani:locus-android:3.0.1")
+
+    // QR Scan
+    implementation("io.github.kalinjul.easyqrscan:scanner:0.1.3")
+
+    // Shimmer Loading
+    implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
 }

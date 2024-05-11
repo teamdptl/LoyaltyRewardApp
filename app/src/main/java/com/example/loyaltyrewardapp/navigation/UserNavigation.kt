@@ -145,13 +145,16 @@ fun UserNavigation(){
                 ListDiscountCoupon(navController)
             }
             composable(route = Screens.HistoryScreen.name){
-                HistoryPreview()
+                HistoryPreview(navController)
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfilePreview()
+                ProfileContent(navController)
             }
             composable(route = Screens.ShopVerticalScreen.name){
                 CompaniesListVerticalScreen(navController)
+            }
+            composable(route = Screens.ListPointShopScreen.name){
+                ListPointShop(navController)
             }
 
             composable(route = Screens.DetailShopScreen.name + "/{shopId}"){ backStackEntry ->

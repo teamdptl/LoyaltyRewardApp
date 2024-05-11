@@ -239,7 +239,13 @@ class UserController extends Controller
      *
      */
     public function getCouponById(Request $request, $couponId){
-        return $request->user->coupons()->where('_id', $couponId)->first();
+        $coupon = $request->user->coupons()->where('_id', $couponId)->first();
+        if(!$coupon){
+            return Response('Không tìm thấy mã ưu đãi!', 404);
+        }
+
+        $coupon->user_id = $request->user->_id;
+        return $coupon;
     }
 
 
@@ -275,7 +281,7 @@ class UserController extends Controller
         */
 
         User::create($validate);
-        return Response("Tạo user thành công!", 200);
+        return Response(["message" => "Tạo user thành công!"], 200);
     }
 
     /**

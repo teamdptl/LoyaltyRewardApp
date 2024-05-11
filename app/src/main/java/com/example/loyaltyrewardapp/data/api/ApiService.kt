@@ -4,17 +4,23 @@ package com.example.loyaltyrewardapp.data.api
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.CouponRequest
 import com.example.loyaltyrewardapp.data.model.CouponResponse
+import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
+import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserPoint
 import retrofit2.Call
 import retrofit2.http.Body
+import okhttp3.MultipartBody
+import okhttp3.Response
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -47,9 +53,9 @@ interface ApiService {
     @GET("shop/{id}")
     suspend fun getShopById(@Path("id") id: String): DetailShop
 
-    
+    // 11. Lấy các ưu đãi có sẵn của bản thân
     @GET("user/coupons")
-    suspend fun getCoupons(): List<CouponResponse>
+    suspend fun getCoupons(): List<UserCouponResponse>
 
 
 //    9. Lấy thông tin chi tiết của ưu đãi
@@ -64,7 +70,16 @@ interface ApiService {
 //    suspend fun getCouponById(@Path("id") id: String): DetailShopCoupon
 
     @GET("user/coupon/{id}")
-    suspend fun getCouponUser(@Path("id") id: String): CouponResponse
+    suspend fun getCouponUser(@Path("id") id: String): UserCouponResponse
+
+
+//    17. Quét QR người dùng tích điểm hoặc nhận ưu đãi
+    @POST("shop/scan")
+    suspend fun scanQR(@Query("user_id") user_id: String, @Query("reward_id") reward_id: String?, @Query("service_id") service_id: String?): ResponseMessage
+
+    @POST("upload")
+    @Multipart
+    suspend fun uploadImg(@Part file: MultipartBody.Part): ResponseUpload
 
     @PUT("shop/coupon/{id}")
     suspend fun updateCoupon(@Path("id") id: String, @Body coupon: CouponRequest): ResponseMessage

@@ -184,9 +184,10 @@ fun UserCouponQR(navController: NavHostController, couponId: String?, viewModel:
 
                 ) {
                     QrCodeView(
-                        data = couponId ?: "Error",
-                        modifier = Modifier.size(140.dp)
+                        data = coupon?.user_id+"|"+coupon?._id,
+                        modifier = Modifier.size(200.dp)
                     )
+
                 }
             }
 

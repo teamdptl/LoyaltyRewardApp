@@ -1,6 +1,6 @@
 package com.example.loyaltyrewardapp.data.model
 
-data class CouponResponse (
+data class UserCouponResponse (
     val _id: String = "",
     val name: String = "",
     val description: String = "",
@@ -11,5 +11,6 @@ data class CouponResponse (
     val shop_id: String = "",
     val expired_at: String = "",
     val create_at: String = "",
+    val user_id: String = ""
 )
 

@@ -85,7 +85,7 @@ class CouponController extends Controller
 
         $coupon = new Coupon($validated);
         $shop->coupons()->save($coupon);
-        return Response('Tạo ưu đãi thành công!', 200);
+        return Response(['message' => 'Tạo ưu đãi thành công!'], 200);
     }
 
     /**
@@ -121,7 +121,7 @@ class CouponController extends Controller
         }
 
         $coupon->update($validated);
-        return Response('Sửa ưu đãi thành công!', 200);
+        return Response(['message' => 'Sửa ưu đãi thành công!'], 200);
     }
 
     /**
@@ -147,7 +147,7 @@ class CouponController extends Controller
         }
 
         $coupon->delete();
-        return Response('Xóa ưu đãi thành công!', 200);
+        return Response(['message' => 'Xóa ưu đãi thành công!'], 200);
     }
 
 }
