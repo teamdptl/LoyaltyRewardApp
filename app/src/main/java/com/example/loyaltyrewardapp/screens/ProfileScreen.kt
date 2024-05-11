@@ -72,6 +72,7 @@ import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
 import java.io.File
 import java.util.Calendar
 import java.util.Date
@@ -85,13 +86,40 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
     val context = LocalContext.current
 
 
+
     val user by remember {
         homeViewModel.user
     }
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
         selectedImageUri = uri
+    }
+
+    val displayName by remember { mutableStateOf(firebaseUser?.displayName.toString() ?: "") }
+    val imageUrl by remember { mutableStateOf(firebaseUser?.photoUrl.toString()) }
+    val oldDisplayName by remember { mutableStateOf(displayName) }
+
+
+    fun updateUserProfile(firebaseUser: FirebaseUser,displayName: String?, photoUrl: String?) {
+        val profileUpdates = userProfileChangeRequest {
+            if (displayName != null) {
+                this.displayName = displayName
+            }
+            if (photoUrl != null) {
+                this.photoUri = Uri.parse(photoUrl)
+            }
+        }
+
+        firebaseUser.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("update xong user firebase", "User profile updated")
+                } else {
+                    Log.e("update lỗi user firebase", task.exception.toString())
+                }
+            }
     }
 
     LaunchedEffect(null) {
@@ -111,6 +139,7 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
         ) {
             if (firebaseUser != null) {
                 CircleAvatar(
+                    imageUrl,
                     firebaseUser,
                     user,
                     selectedImageUri = selectedImageUri,
@@ -118,17 +147,37 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
                 )
                 Spacer(modifier = Modifier.size(40.dp))
                 InfoBox(
+                    displayName,
                     firebaseUser,
                     user,
                     onSaveClicked = {
-                        val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
 
-                        val file = File(context.cacheDir, "fileProfile.png")
-                        file.createNewFile()
-                        file.outputStream().use { outputStream ->
-                            inputStream?.copyTo(outputStream)
+                        if(selectedImageUri != null){
+                            val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
+
+                            val file = File(context.cacheDir, "fileProfile.png")
+                            file.createNewFile()
+                            file.outputStream().use { outputStream ->
+                                inputStream?.copyTo(outputStream)
+                            }
+                            val urlCloud = homeViewModel.uploadImage(file)
+
+                            if(oldDisplayName == displayName){
+                                updateUserProfile(firebaseUser, null, urlCloud.toString())
+                            }else{
+                                updateUserProfile(firebaseUser, displayName, urlCloud.toString())
+                            }
+
+                        }else{
+                            if(oldDisplayName != displayName){
+                                updateUserProfile(firebaseUser, displayName, null)
+                            }
                         }
-                        homeViewModel.uploadImage(file)
+
+
+
+
+
                     }
                 )
             }
@@ -137,14 +186,8 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
 }
 
 @Composable
-fun CircleAvatar(firebaseData: FirebaseUser, user: User,   selectedImageUri: Uri?,
+fun CircleAvatar(imageUrl: String,firebaseData: FirebaseUser, user: User,   selectedImageUri: Uri?,
                  onImageSelected: () -> Unit) {
-//    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-//
-//    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-//        selectedImageUri = uri
-//    }
-
     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Box {
             val imageModifier = Modifier
@@ -188,9 +231,9 @@ fun CircleAvatar(firebaseData: FirebaseUser, user: User,   selectedImageUri: Uri
 
 
 @Composable
-fun InfoBox(firebaseData: FirebaseUser, user: User, onSaveClicked: () -> Unit){
+fun InfoBox(displayName: String,firebaseData: FirebaseUser, user: User, onSaveClicked: () -> Unit){
     Column() {
-        fieldInfo(title = "Họ tên", fieldValue = firebaseData.displayName.toString())
+        fieldInfo(title = "Họ tên", fieldValue = displayName)
         Spacer(modifier = Modifier.size(10.dp))
         fieldInfo(title = "Số điện thoại", fieldValue = firebaseData.phoneNumber.toString())
         Spacer(modifier = Modifier.size(10.dp))
