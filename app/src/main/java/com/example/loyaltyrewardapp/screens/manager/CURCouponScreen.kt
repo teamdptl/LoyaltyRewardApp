@@ -42,6 +42,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.ImagePicker
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
@@ -54,21 +56,23 @@ class DetailCouponActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colors.background
             ) {
-                CURCouponScreen()
+//                CURCouponScreen()
             }
         }
     }
 }
 
 @Composable
-fun CURCouponScreen(couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
+fun CURCouponScreen(navController: NavController = rememberNavController(), couponId: String, screen: String = "R", couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
     val coupon by remember {couponViewModel.coupon}
     val screenState by remember {couponViewModel.screenState}
     var title by remember{mutableStateOf("")}
 
     LaunchedEffect(key1 = null){
-        couponViewModel.getDetailCoupon("R", "663a4e93d3b422b0fe0e235b")
-        Log.d("Loading", "Dang load du lieu")
+        couponId.let{
+            couponViewModel.getDetailCoupon(screen, it)
+            Log.d("Loading", "Dang load du lieu")
+        }
     }
 
     if(coupon == null){
@@ -284,6 +288,6 @@ fun LabelTextField(label: String, fieldValue: String, numOfRow : Int = 1, onValu
 @Composable
 fun CURCouponPreview(){
     val couponViewModel = remember {AdminCURCouponViewModel()}
-    CURCouponScreen(couponViewModel)
+    CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b")
 }
 

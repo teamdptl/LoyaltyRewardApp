@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.components.NotificationsItem
 import com.example.loyaltyrewardapp.data.HistoryProvider
+import com.example.loyaltyrewardapp.data.viewmodel.HistoryViewModel
 
 class NotificationsScreen : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +38,8 @@ class NotificationsScreen : ComponentActivity(){
 
 @Preview
 @Composable
-fun NotificationsPreview(){
-    val histories = remember { HistoryProvider.historyList }
+fun NotificationsPreview(viewModel: HistoryViewModel = HistoryViewModel()){
+    val histories by remember { viewModel.histories }
 
     MainBackgroundScreen("Thông báo"){
         LazyColumn(
@@ -49,10 +51,10 @@ fun NotificationsPreview(){
 //                    NotificationsItem(history = it)
                     NotificationsItem(
                         item = it,
-                        titleProvider = { it.title },
-                        timeProvider = { it.time },
-                        descriptionProvider = { it.des },
-                        pictureUrlProvider = { it.pictureUrl }
+//                        titleProvider = { it.title },
+//                        timeProvider = { it.time },
+//                        descriptionProvider = { it.des },
+//                        pictureUrlProvider = { it.pictureUrl }
                     )
                 }
             )

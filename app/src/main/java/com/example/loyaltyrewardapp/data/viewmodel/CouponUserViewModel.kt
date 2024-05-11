@@ -7,12 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
-import com.example.loyaltyrewardapp.data.model.CouponResponse
-import com.example.loyaltyrewardapp.data.model.Shop
+import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import kotlinx.coroutines.launch
 
 class CouponUserViewModel : ViewModel() {
-    var couponListResponse: MutableState<List<CouponResponse>> = mutableStateOf(emptyList<CouponResponse>())
+    var couponListResponse: MutableState<List<UserCouponResponse>> = mutableStateOf(emptyList<UserCouponResponse>())
 
     var errorMessage: String by mutableStateOf("")
     fun fetchCouponList() {

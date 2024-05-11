@@ -4,6 +4,7 @@ enum class Screens {
     LoginScreen,
     registerScreen,
     OTPVerificationScreen,
+    SplashScreen,
     HomeScreen,
     ShopVerticalScreen,
     DetailShopScreen,
@@ -19,6 +20,11 @@ enum class Screens {
     HomeManagerScreen,
     ShopManagerScreen,
     ScanManagerScreen,
+    RewardScanScreen,
+    ConfirmScanScreen,
     NotificationManagerScreen,
-    UserCouponQR
+    UserCouponQR,
+    CURCouponScreen,
+    CURShopScreen,
+    ListPointShopScreen
 }

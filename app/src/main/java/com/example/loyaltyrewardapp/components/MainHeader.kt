@@ -172,7 +172,7 @@ fun MainUserHeader(navController: NavController, firebaseData: FirebaseUser, use
                         .background(color = Yellow, shape = RoundedCornerShape(10.dp))
                         .padding(vertical = 10.dp, horizontal = 6.dp)
                         .clickable{
-                            navController.navigate(Screens.MyPointScreen.name)
+                            navController.navigate(Screens.ListPointShopScreen.name)
                         })
                     Spacer(modifier = Modifier.width(8.dp))
                     BadgedBox(
