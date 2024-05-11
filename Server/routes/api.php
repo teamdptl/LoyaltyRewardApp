@@ -44,12 +44,14 @@ use Illuminate\Support\Facades\Redis;
 // ---------------- API đã hoàn thành -----------------
 
 // API đăng kí tài khoản
-Route::post('/register', [App\Http\Controllers\UserController::class, 'store']);
+//Route::post('/register', [App\Http\Controllers\UserController::class, 'store']);
 
 // 0. Trả về idToken dùng để xác thực user thông qua API header authorization
-Route::get('/token', [App\Http\Controllers\TestController::class, 'getToken']);
+//Route::get('/token', [App\Http\Controllers\TestController::class, 'getToken']);
 
 Route::post('/create-user', [App\Http\Controllers\AuthController::class, 'createUsers']);
+
+Route::post('/send-otp', [App\Http\Controllers\AuthController::class, 'sendOTP']);
 
 Route::middleware('auth-firebase')->group(function () {
 
