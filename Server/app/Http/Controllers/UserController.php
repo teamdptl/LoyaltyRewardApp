@@ -36,7 +36,13 @@ class UserController extends Controller
     public function findUser($id){
         $user = User::find($id);
         if($user){
-            return $user;
+            $auth = app('firebase.auth');
+            $user = $auth->getUser($user->auth_id);
+            return [
+                "name" => $user->displayName,
+                "phone" => $user->phoneNumber,
+                "photo" => $user->photoUrl,
+            ];
         }
         return Response('Không tìm thấy user này!', 404);
     }
