@@ -10,6 +10,7 @@ import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.data.model.UserInfo
 import com.example.loyaltyrewardapp.data.model.UserPoint
 import retrofit2.Call
 import retrofit2.http.Body
@@ -82,4 +83,7 @@ interface ApiService {
 
     @PUT("shop/coupon/{id}")
     suspend fun updateCoupon(@Path("id") id: String, @Body coupon: CouponRequest): ResponseMessage
+
+    @GET("user/{id}")
+    suspend fun getUserById(@Path("id") id: String): UserInfo
 }

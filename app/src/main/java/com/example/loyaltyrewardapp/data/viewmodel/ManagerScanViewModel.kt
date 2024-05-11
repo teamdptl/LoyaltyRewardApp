@@ -17,7 +17,7 @@ class ManagerScanViewModel : ViewModel() {
     val accumulateResponse : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
     val errorAccumulateMessage : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
 
-    suspend fun receiveReward(userId: String, rewardId: String){
+    fun receiveReward(userId: String, rewardId: String){
         viewModelScope.launch {
             try {
                 val data = ApiSingleton.getApiService().scanQR(userId, rewardId, null)
@@ -32,13 +32,15 @@ class ManagerScanViewModel : ViewModel() {
         }
     }
 
-    suspend fun accumulatePoint(userId: String, serviceId: String){
+    fun accumulatePoint(userId: String, serviceId: String){
         viewModelScope.launch {
             try {
                 val data = ApiSingleton.getApiService().scanQR(userId, null, serviceId)
                 accumulateResponse.value = data
+                Log.d("ConfirmScanScreen", "ConfirmScanScreen Success: $accumulateResponse")
             } catch (e: HttpException) {
                 errorAccumulateMessage.value = ResponseMessage(message = e.response()?.errorBody()?.string() ?: "Lỗi hệ thống")
+                Log.d("ConfirmScanScreen", "ConfirmScanScreen Error: $accumulateResponse")
             }
         }
     }
