@@ -4,11 +4,13 @@ import android.net.http.HttpException
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
+import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
@@ -62,7 +64,8 @@ class UserHomeViewModel: ViewModel() {
         }
     }
 
-    fun uploadImage(file: File) {
+    fun uploadImage(file: File): MutableLiveData<ResponseUpload> {
+        val uploadResponse = MutableLiveData<ResponseUpload>()
         viewModelScope.launch {
             try {
                 if (!file.exists()) {
@@ -80,13 +83,11 @@ class UserHomeViewModel: ViewModel() {
                 val response = withContext(Dispatchers.IO) {
                     ApiSingleton.getApiService().uploadImg(body)
                 }
-                Log.d("Trả về ph upload", response.message)
+
+//                Log.d("Trả về ph upload", response.message)
                 Log.d("Trả về ph upload", response.upload_path)
-                Log.d("Trả về ph upload", response.errors.toString())
-
-
-
-
+//                Log.d("Trả về ph upload", response.errors.toString())
+                uploadResponse.postValue(response)
                 // Handle response here if needed
             } catch (e: FileNotFoundException) {
                 // Handle file not found exception
@@ -96,6 +97,11 @@ class UserHomeViewModel: ViewModel() {
                 Log.e("Upload Error", "Error uploading file: ${e.message}")
             }
         }
+//        uploadResponse.value?.message?.let { Log.d("Trả về ph upload", it) }
+        uploadResponse.value?.upload_path?.let { Log.d("Trả về ph upload", it) }
+//        Log.d("Trả về ph upload", uploadResponse.value?.errors.toString())
+        return uploadResponse
+
     }
 
 }

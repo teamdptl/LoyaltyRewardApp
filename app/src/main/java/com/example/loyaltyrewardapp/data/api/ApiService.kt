@@ -3,7 +3,6 @@ package com.example.loyaltyrewardapp.data.api
 
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.CouponRequest
-import com.example.loyaltyrewardapp.data.model.CouponResponse
 import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
