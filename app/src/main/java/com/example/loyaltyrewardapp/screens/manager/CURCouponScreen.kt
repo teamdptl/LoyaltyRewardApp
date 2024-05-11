@@ -1,9 +1,7 @@
 package com.example.loyaltyrewardapp.screens.manager
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -32,7 +30,6 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -74,8 +71,9 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
     var title by remember{mutableStateOf("")}
     val context = LocalContext.current
 
+    Log.d("CUR Coupon Screen", "render screen")
     LaunchedEffect(key1 = null){
-        couponId?.let{
+        couponId.let{
             couponViewModel.getDetailCoupon(screen, it)
             Log.d("Loading", "Dang load du lieu")
         }
@@ -152,7 +150,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(text = "Choose Image", co.icon, screenState != "R")
+                    ImagePicker(couponViewModel, text = "Choose Image", co.icon, screenState != "R")
+
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))

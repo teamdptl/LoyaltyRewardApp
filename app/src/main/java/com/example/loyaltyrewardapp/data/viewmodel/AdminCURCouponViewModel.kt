@@ -1,6 +1,8 @@
 package com.example.loyaltyrewardapp.data.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
@@ -43,13 +45,23 @@ class AdminCURCouponViewModel : ViewModel() {
     }
 
     fun updateDetailCoupon(context: Context){
+        Log.d("AdminCURCouponViewModel", "image url: ${coupon.value?.icon}")
 
+        val inputStream = context.contentResolver.openInputStream(Uri.parse(_coupon.value?.icon))
+
+        val file = File(context.cacheDir, "fileProfile.png")
+        file.createNewFile()
+        file.outputStream().use { outputStream ->
+            inputStream?.copyTo(outputStream)
+        }
+        val userhome = UserHomeViewModel()
+        val iconUrl = userhome.uploadImage(file)
+        Log.d("AdminCURCouponViewModel", "update function: ${iconUrl.value?.upload_path}")
         val couponRequest = CouponRequest(
-            _id = _coupon.value?._id.toString(),
             name = _coupon.value?.name.toString(),
             description = _coupon.value?.description.toString(),
             require_point = _coupon.value?.require_point,
-            icon = File(_coupon.value?.icon.toString()),
+            icon = "https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715429782/o8ll5mbpdh2ych9hlto6.jpg",
             is_active = _coupon.value?.is_active,
             expired_after = _coupon.value?.expired_after
         )
@@ -65,7 +77,7 @@ class AdminCURCouponViewModel : ViewModel() {
                     Toast.makeText(context, "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
                     Log.d("exchangeCoupon", "errorExchange: ${errorMessage.value}")
                 }
-                Log.d("exchangeCoupon", "errorExchange: Out of error number")
+                Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
             }
         }
     }
@@ -91,6 +103,7 @@ class AdminCURCouponViewModel : ViewModel() {
     }
 
     fun updateImageUri(uri: String) {
+        Log.d("Admin CURCoupon", "updated image uri: $uri")
         _coupon.value = _coupon.value?.copy(icon = uri)
     }
 

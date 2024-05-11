@@ -56,7 +56,8 @@ class MainScreen : AppCompatActivity() {
             MaterialTheme {
 //                GuestNavigation(isLogin)
 //                LoginScreen()
-                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R")
+                val viewModel = AdminCURCouponViewModel()
+                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R", couponViewModel = viewModel)
             }
         }
 

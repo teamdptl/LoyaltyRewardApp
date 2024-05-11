@@ -112,7 +112,7 @@ fun CURShopScreen(viewModel: AdminCURShopViewModel = viewModel()){
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(text = "Choose Image", shop.logo)
+//                    ImagePicker(text = "Choose Image", shop.logo)
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
@@ -126,7 +126,7 @@ fun CURShopScreen(viewModel: AdminCURShopViewModel = viewModel()){
                         fontSize = 16.sp
                     )
 
-                    shop.cover?.let { ImagePicker(text = "Choose Image", it) }
+//                    shop.cover?.let { ImagePicker(text = "Choose Image", it) }
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
