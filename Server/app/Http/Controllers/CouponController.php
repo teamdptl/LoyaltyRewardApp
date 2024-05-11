@@ -61,7 +61,7 @@ class CouponController extends Controller
      *
      * Tạo ưu đãi với các thông tin như tên, mô tả, số điểm cần có, icon, trạng thái kích hoạt
      *
-     * @requestMediaType multipart/form-data
+     *
      */
     public function store(Request $request){
         $validated = $request->validate([
@@ -100,7 +100,7 @@ class CouponController extends Controller
             'description' => 'required|string',
             'require_point' => 'required|integer|min:0',
             'icon' => 'required|string',
-            'is_active' => 'require|boolean',
+            'is_active' => 'required|boolean',
             'expired_after' => 'required|integer|min:1',
         ]);
 
