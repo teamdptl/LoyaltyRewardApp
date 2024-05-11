@@ -28,5 +28,7 @@ enum class Screens {
     AdminUpdateCoupon,
     AdminCreateCoupon,
     CURShopScreen,
-    ListPointShopScreen
+    ListPointShopScreen,
+    OTPScreens,
+    doneOTPScreen
 }

@@ -3,11 +3,11 @@ package com.example.loyaltyrewardapp.data.api
 
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.CouponRequest
-import com.example.loyaltyrewardapp.data.model.CouponResponse
 import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
+import com.example.loyaltyrewardapp.data.model.ResponseUser
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
@@ -83,4 +83,10 @@ interface ApiService {
 
     @PUT("shop/coupon/{id}")
     suspend fun updateCoupon(@Path("id") id: String, @Body coupon: CouponRequest): ResponseMessage
+
+    @POST("send-otp")
+    suspend fun sendOTP(@Query ("phone") phone: String): ResponseMessage
+
+    @POST("create-user")
+    suspend fun createAccount(@Query ("name") name: String,@Query("phone") phone: String,@Query("password") password: String,@Query("role") role: String,@Query("otp") otp: String):ResponseMessage
 }

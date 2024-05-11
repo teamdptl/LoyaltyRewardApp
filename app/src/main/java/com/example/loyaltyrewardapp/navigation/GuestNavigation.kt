@@ -5,21 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
-import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.GuestViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.example.loyaltyrewardapp.screens.SplashScreen
 import com.example.loyaltyrewardapp.screens.registerScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
+import com.example.loyaltyrewardapp.ui.OTPScreens
+import com.example.loyaltyrewardapp.ui.doneOTPScreen
 import kotlinx.coroutines.delay
 
 @Composable
@@ -62,11 +58,19 @@ fun GuestNavigation(viewModel : GuestViewModel = GuestViewModel()) {
         composable(route = Screens.LoginScreen.name) {
             LoginScreen(navController)
         }
-        composable(route = Screens.registerScreen.name) {
+        composable(route = Screens.registerScreen.name ) {
+//            backStackEntry ->
+//            val name = backStackEntry.arguments?.getString("name")
+//            val phone = backStackEntry.arguments?.getString("phone")
+//            val password = backStackEntry.arguments?.getString("password")
+//            val role = backStackEntry.arguments?.getString("role")
             registerScreen(navController)
         }
-        composable(route = Screens.OTPVerificationScreen.name) {
-//            OTPVerificationScreen(navController)
+        composable(route = Screens.OTPScreens.name) {
+            OTPScreens()
+        }
+        composable(route = Screens.doneOTPScreen.name) {
+            doneOTPScreen()
         }
         composable(route = Screens.UserNavigationScreen.name) {
             UserNavigation()
@@ -76,4 +80,6 @@ fun GuestNavigation(viewModel : GuestViewModel = GuestViewModel()) {
         }
     }
 }
+
+
 
