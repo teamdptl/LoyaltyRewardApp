@@ -97,9 +97,8 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
         selectedImageUri = uri
     }
 
-    val displayName by remember { mutableStateOf(firebaseUser?.displayName.toString() ?: "") }
+    var displayName by remember { mutableStateOf(firebaseUser?.displayName.toString() ?: "") }
     val imageUrl by remember { mutableStateOf(firebaseUser?.photoUrl.toString()) }
-    val oldDisplayName by remember { mutableStateOf(displayName) }
 
 
     fun updateUserProfile(firebaseUser: FirebaseUser,displayName: String?, photoUrl: String?) {
@@ -122,14 +121,6 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
             }
     }
 
-    LaunchedEffect(null) {
-        if (user == UserEmptyState){
-            homeViewModel.fetchCurrentUser()
-            homeViewModel.fetchRecommendShops()
-            homeViewModel.fetchVisitedShops()
-            homeViewModel.fetchAvailableVoucher()
-        }
-    }
     MainBackgroundScreen("Tài khoản") {
         Column(
             Modifier
@@ -146,40 +137,60 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
                     onImageSelected = { launcher.launch("image/*") }
                 )
                 Spacer(modifier = Modifier.size(40.dp))
-                InfoBox(
-                    displayName,
-                    firebaseUser,
-                    user,
-                    onSaveClicked = {
 
-                        if(selectedImageUri != null){
-                            val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
 
-                            val file = File(context.cacheDir, "fileProfile.png")
-                            file.createNewFile()
-                            file.outputStream().use { outputStream ->
-                                inputStream?.copyTo(outputStream)
-                            }
-                            val urlCloud = homeViewModel.uploadImage(file)
+                Column() {
+                    fieldInfo(title = "Họ tên", fieldValue = displayName,    onNameChange = { displayName = it }
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+                    fieldInfo(title = "Số điện thoại", fieldValue = firebaseUser.phoneNumber.toString(),  onNameChange = { }
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+                    Column {
+                        Button(onClick =  {
 
-                            if(oldDisplayName == displayName){
-                                updateUserProfile(firebaseUser, null, urlCloud.toString())
-                            }else{
+                            if(selectedImageUri != null){
+                                val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
+
+                                val file = File(context.cacheDir, "fileProfile.png")
+                                file.createNewFile()
+                                file.outputStream().use { outputStream ->
+                                    inputStream?.copyTo(outputStream)
+                                }
+                                val urlCloud = homeViewModel.uploadImage(file)
+                                Log.d("urlCloud", urlCloud.toString())
+                                Log.d("displayName nè ba", displayName)
                                 updateUserProfile(firebaseUser, displayName, urlCloud.toString())
-                            }
 
-                        }else{
-                            if(oldDisplayName != displayName){
+                            }else{
+                                Log.d("k đổi ảnh", "huhu")
+
                                 updateUserProfile(firebaseUser, displayName, null)
+                                Log.d("displayName nè ba", displayName)
+
                             }
+                        } ,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF0E4AFF),
+                                contentColor = Color.White,
+                                disabledContainerColor = Color(0xB00E4AFF)
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Lưu", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
-
-
-
-
-
+                        Button(onClick = { /*TODO*/ },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFFF0E23),
+                                contentColor = Color.White,
+                                disabledContainerColor = Color(0xB0FF0E23)
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(text = "Đăng xuất", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        }
                     }
-                )
+                }
             }
         }
     }
@@ -230,40 +241,44 @@ fun CircleAvatar(imageUrl: String,firebaseData: FirebaseUser, user: User,   sele
 }
 
 
-@Composable
-fun InfoBox(displayName: String,firebaseData: FirebaseUser, user: User, onSaveClicked: () -> Unit){
-    Column() {
-        fieldInfo(title = "Họ tên", fieldValue = displayName)
-        Spacer(modifier = Modifier.size(10.dp))
-        fieldInfo(title = "Số điện thoại", fieldValue = firebaseData.phoneNumber.toString())
-        Spacer(modifier = Modifier.size(10.dp))
-        Column {
-            Button(onClick =  onSaveClicked ,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF0E4AFF),
-                    contentColor = Color.White,
-                    disabledContainerColor = Color(0xB00E4AFF)
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Lưu", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
-            Button(onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF0E23),
-                    contentColor = Color.White,
-                    disabledContainerColor = Color(0xB0FF0E23)
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Đăng xuất", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            }
-        }
-    }
-}
+//@Composable
+//fun InfoBox(displayName: String,firebaseData: FirebaseUser, onSaveClicked: () -> Unit){
+//
+//
+//    Column() {
+//        fieldInfo(title = "Họ tên", fieldValue = displayName,    onNameChange = { displayName = it }
+//        )
+//        Spacer(modifier = Modifier.size(10.dp))
+//        fieldInfo(title = "Số điện thoại", fieldValue = firebaseData.phoneNumber.toString(),  onNameChange = { }
+//        )
+//        Spacer(modifier = Modifier.size(10.dp))
+//        Column {
+//            Button(onClick =  onSaveClicked ,
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFF0E4AFF),
+//                    contentColor = Color.White,
+//                    disabledContainerColor = Color(0xB00E4AFF)
+//                ),
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(text = "Lưu", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+//            }
+//            Button(onClick = { /*TODO*/ },
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFFFF0E23),
+//                    contentColor = Color.White,
+//                    disabledContainerColor = Color(0xB0FF0E23)
+//                ),
+//                modifier = Modifier.fillMaxWidth()
+//            ) {
+//                Text(text = "Đăng xuất", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+//            }
+//        }
+//    }
+//}
 
 @Composable
-fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
+fun fieldInfo(title : String, fieldValue : String, onNameChange: (String) -> Unit,type: String = "text"){
     Column {
         Text(
             text = title,
@@ -275,8 +290,11 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
         )
         if(type.equals("text", true)){
             var textValue by remember{ mutableStateOf(fieldValue) }
-            OutlinedTextField(value = textValue,
-                onValueChange = {textValue = it},
+            OutlinedTextField(
+                value = textValue,
+                onValueChange = {
+                    textValue = it
+                    onNameChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
