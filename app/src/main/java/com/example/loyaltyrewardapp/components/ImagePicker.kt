@@ -41,33 +41,45 @@ import coil.request.ImageRequest
 import com.example.loyaltyrewardapp.R
 
 @Composable
-fun ImagePicker(text: String, imageUri: String = ""){
+fun ImagePicker(text: String, imageUri: String = "", enable : Boolean = false){
     var selectedImage by remember { mutableStateOf(imageUri) }
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
-        selectedImage = uri?.toString().toString()
+        if (uri != null){
+            selectedImage = uri.toString()
+        }
     }
 
-    ButtonImagePicker(text, selectedImage) {
+    ButtonImagePicker(text, selectedImage, enable) {
         launcher.launch("image/jpeg")
+        Log.d("ImagePicker", "link: " + selectedImage)
     }
 }
 @Composable
 fun ButtonImagePicker(
     text: String,
     selectedImage: String,
+    enable: Boolean,
     onClickImage: () -> Unit){
+    Log.d("ImagePicker", "link: " + selectedImage)
+
         if (selectedImage != "") {
             Log.d("Image Picker", selectedImage)
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data("https://placehold.co/400")
-                    .crossfade(true)
-                    .build(),
-//                placeholder = painterResource(R.drawable.placeholder),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.clip(CircleShape)
-            )
+            if("https" in selectedImage){
+                AsyncImage(model = selectedImage,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                    .clickable(
+                        enabled = enable
+                    ) { onClickImage() })
+
+            }else{
+                Image(
+                    painter = rememberAsyncImagePainter(model = selectedImage),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp).clickable { onClickImage() }
+                )
+            }
+
         }
         else{
             OutlinedButton(onClick = onClickImage) {

@@ -150,10 +150,6 @@ fun CURShopScreen(viewModel: AdminCURShopViewModel = viewModel()){
 
 
                 Spacer(modifier = Modifier.size(30.dp))
-                GroupButtonAction(screenState = screenState,
-                    "Xác nhận",
-                    "Lưu thay đổi",
-                    "Chỉnh sửa")
             }
 
         }

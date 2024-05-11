@@ -50,7 +50,7 @@ class MainScreen : AppCompatActivity() {
 
         val isLogin = true;
         auth = FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword("+84312345678@app.vn", "123456")
+        auth.signInWithEmailAndPassword("+84890516934@app.vn", "1234567")
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
@@ -68,9 +68,9 @@ class MainScreen : AppCompatActivity() {
             }
         setContent {
             MaterialTheme {
-                GuestNavigation(isLogin)
+//                GuestNavigation(isLogin)
 //                LoginScreen()
-//                CURCouponScreen()
+                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R")
             }
         }
 
