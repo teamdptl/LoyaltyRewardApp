@@ -24,7 +24,9 @@ enum class Screens {
     ConfirmScanScreen,
     NotificationManagerScreen,
     UserCouponQR,
-    CURCouponScreen,
+    AdminReadCoupon,
+    AdminUpdateCoupon,
+    AdminCreateCoupon,
     CURShopScreen,
     ListPointShopScreen
 }

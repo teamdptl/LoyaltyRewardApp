@@ -1,7 +1,9 @@
 package com.example.loyaltyrewardapp.screens.manager
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -30,18 +32,21 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.ImagePicker
@@ -64,12 +69,13 @@ class DetailCouponActivity : ComponentActivity() {
 
 @Composable
 fun CURCouponScreen(navController: NavController = rememberNavController(), couponId: String, screen: String = "R", couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
-    val coupon by remember {couponViewModel.coupon}
-    val screenState by remember {couponViewModel.screenState}
+    var coupon by remember {couponViewModel.coupon}
+    var screenState by remember {couponViewModel.screenState}
     var title by remember{mutableStateOf("")}
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = null){
-        couponId.let{
+        couponId?.let{
             couponViewModel.getDetailCoupon(screen, it)
             Log.d("Loading", "Dang load du lieu")
         }
@@ -99,25 +105,41 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
             coupon?.let { co ->
                 LabelTextField(label = "Tên ưu đãi",
                     fieldValue = co.name,
-                    numOfRow = 1, {couponViewModel.updateCouponName(it)},
+                    numOfRow = 1,
+                    {
+                        couponViewModel.updateCouponName(it)
+                        coupon = coupon?.copy(name = it)
+                    },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Mô tả",
                     fieldValue = co.description,
-                    numOfRow = 4, {couponViewModel.updateDescription(it)},
+                    numOfRow = 4,
+                    {
+                        couponViewModel.updateDescription(it)
+                        coupon = coupon?.copy(description = it)
+                    },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Điểm sử dụng",
                     fieldValue = co.require_point.toString(),
-                    onValueChange = {couponViewModel.updatePoint(it.toInt())},
+                    onValueChange =
+                    {
+                        couponViewModel.updatePoint(it.toInt())
+                        coupon = coupon?.copy(require_point = it.toInt())
+                    },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Hết hạn sau (tháng)",
                     fieldValue = co.expired_after.toString(),
-                    onValueChange = {couponViewModel.updateTimeExpire(it.toInt())},
+                    onValueChange =
+                    {
+                        couponViewModel.updateTimeExpire(it.toInt())
+                        coupon = coupon?.copy(expired_after = it.toInt())
+                    },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
                 Column {
@@ -130,15 +152,20 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(text = "Choose Image", co.icon)
+                    ImagePicker(text = "Choose Image", co.icon, screenState != "R")
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Checkbox(checked = true,
-                        onCheckedChange = {})
+                    Checkbox(checked = co.is_active,
+                        enabled = screenState != "R",
+                        onCheckedChange = {
+                            Log.d("CUR Coupon Screen", "Checkbox click: $it")
+                            couponViewModel.updateIsActive(it)
+                            coupon = coupon?.copy(is_active = it)
+                        })
                     Text(
                         text = "Đang hoạt động",
                         modifier = Modifier.fillMaxWidth(),
@@ -150,10 +177,103 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                 }
 
                 Spacer(modifier = Modifier.size(10.dp))
-                GroupButtonAction(screenState = screenState,
-                    "Thêm khuyến mãi",
-                    "Lưu thay đổi",
-                    "Cập nhật")
+                Row(modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
+                    if (screenState == "R") {
+                        Button(
+                            onClick = {
+//                          navController.navigate(Screens.)
+                            },
+                            contentPadding = PaddingValues(30.dp, 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(0xf0f0f0fc)
+                            )
+                        ) {
+                            Text(text = "Thoát")
+                        }
+                        Button(
+                            onClick = {
+                                couponViewModel.updateScreenState("U")
+                                screenState = couponViewModel.screenState.value
+                            },
+                            contentPadding = PaddingValues(30.dp, 10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(0xFF46BEF8)
+                            )
+                        ) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                                tint = Color.White
+                            )
+                            Spacer(modifier = Modifier.size(5.dp))
+                            Text(text = "Chỉnh sửa",
+                                color = Color.White)
+                        }
+                    } else {
+                        if (screenState == "C") {
+                            Button(
+                                onClick = { /*TODO*/ },
+                                contentPadding = PaddingValues(30.dp, 10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(0xf0f0f0fc)
+                                )
+                            ) {
+                                Text(text = "Hủy")
+                            }
+
+                            Button(
+                                onClick = {
+
+                                },
+                                contentPadding = PaddingValues(30.dp, 10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(0xFF46BEF8)
+                                )
+                            ) {
+                                Icon(
+                                    Icons.Filled.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp),
+                                    tint = Color.White
+                                )
+                                Text(text = "Tạo khuyến mãi",
+                                    color = Color.White)
+                            }
+
+                        } else {
+
+                            Button(
+                                onClick = { /*TODO*/ },
+                                contentPadding = PaddingValues(30.dp, 10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(0xf0f0f0fc)
+                                )
+                            ) {
+                                Text(text = "Hủy")
+                            }
+
+                            Button(
+                                onClick = {couponViewModel.updateDetailCoupon(context)},
+                                contentPadding = PaddingValues(30.dp, 10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(0xFF46BEF8)
+                                )
+                            ) {
+                                Icon(
+                                    Icons.Filled.Save,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp),
+                                    tint = Color.White
+                                )
+                                Text(text = "Lưu khuyến mãi",
+                                    color = Color.White)
+                            }
+
+                        }
+                    }
+                }
             }
 
         }
@@ -161,98 +281,11 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
 }
 
 @Composable
-fun GroupButtonAction(screenState: String, textCreate: String, textUpdate: String, textView: String){
-    Row(modifier = Modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
-        if (screenState == "R") {
-            Button(
-                onClick = { /*TODO*/ },
-                contentPadding = PaddingValues(30.dp, 10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xf0f0f0fc)
-                )
-            ) {
-                Text(text = "Thoát")
-            }
-            Button(
-                onClick = { /*TODO*/ },
-                contentPadding = PaddingValues(30.dp, 10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF46BEF8)
-                )
-            ) {
-                Icon(
-                    Icons.Filled.Edit,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.size(5.dp))
-                Text(text = textView,
-                    color = Color.White)
-            }
-        } else {
-            if (screenState == "C") {
-                Button(
-                    onClick = { /*TODO*/ },
-                    contentPadding = PaddingValues(30.dp, 10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xf0f0f0fc)
-                    )
-                ) {
-                    Text(text = "Hủy")
-                }
+fun GroupButtonAction(navController: NavController = rememberNavController(), viewModel: ViewModel, typeScreen: String, textCreate: String, textUpdate: String, textView: String){
 
-                Button(
-                    onClick = { /*TODO*/ },
-                    contentPadding = PaddingValues(30.dp, 10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF46BEF8)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Check,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.White
-                    )
-                    Text(text = textCreate,
-                        color = Color.White)
-                }
 
-            } else {
-
-                Button(
-                    onClick = { /*TODO*/ },
-                    contentPadding = PaddingValues(30.dp, 10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xf0f0f0fc)
-                    )
-                ) {
-                    Text(text = "Hủy")
-                }
-
-                Button(
-                    onClick = { /*TODO*/ },
-                    contentPadding = PaddingValues(30.dp, 10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xFF46BEF8)
-                    )
-                ) {
-                    Icon(
-                        Icons.Filled.Save,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.White
-                    )
-                    Text(text = textUpdate,
-                        color = Color.White)
-                }
-
-            }
-        }
-    }
 }
+
 
 @Composable
 fun LabelTextField(label: String, fieldValue: String, numOfRow : Int = 1, onValueChange : (String) -> Unit, screenState: String){
@@ -267,7 +300,7 @@ fun LabelTextField(label: String, fieldValue: String, numOfRow : Int = 1, onValu
         )
         OutlinedTextField(
             value = fieldValue,
-            onValueChange = onValueChange,
+            onValueChange = { onValueChange(it)},
             minLines = numOfRow,
             maxLines = numOfRow,
             modifier = Modifier

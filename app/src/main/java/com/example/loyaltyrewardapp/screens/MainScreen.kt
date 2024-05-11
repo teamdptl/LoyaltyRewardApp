@@ -54,7 +54,9 @@ class MainScreen : AppCompatActivity() {
             }
         setContent {
             MaterialTheme {
-                GuestNavigation()
+//                GuestNavigation(isLogin)
+//                LoginScreen()
+                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R")
             }
         }
 

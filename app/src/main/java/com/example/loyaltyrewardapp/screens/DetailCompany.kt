@@ -251,7 +251,9 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                             ) {
                                 Spacer(modifier = Modifier.weight(1f)) // Spacer bên trái để căn chỉnh
                                 AddIconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                              navController.navigate(Screens.AdminCreateCoupon.name + "/${shopId}")
+                                    },
                                     isAdmin = isAdmin
                                 )
                             }

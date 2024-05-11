@@ -159,9 +159,14 @@ fun ManagerNavigation(){
             composable(route = Screens.ProfileActivity.name){
                 ProfilePreview()
             }
-            composable(route = Screens.CURCouponScreen.name + "/{couponId}/{screenState}"){ backStackEntry ->
-                backStackEntry.arguments?.getString("couponId")
-                    ?.let { CURCouponScreen(navController, it) }
+            composable(route = Screens.AdminReadCoupon.name + "/{couponId}"){ backStackEntry ->
+                CURCouponScreen(navController, backStackEntry.arguments?.getString("couponId").toString(), "R")
+            }
+            composable(route = Screens.AdminUpdateCoupon.name + "/{couponId}"){backStackEntry ->
+                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("couponId").toString(), "U")
+            }
+            composable(route = Screens.AdminCreateCoupon.name + "/{shopId}"){backStackEntry ->
+                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("shopId").toString(), "C")
             }
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
                 val userId = backStackEntry.arguments?.getString("userId")

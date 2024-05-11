@@ -2,6 +2,8 @@ package com.example.loyaltyrewardapp.data.api
 
 
 import com.example.loyaltyrewardapp.data.model.Coupon
+import com.example.loyaltyrewardapp.data.model.CouponRequest
+import com.example.loyaltyrewardapp.data.model.CouponResponse
 import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
@@ -10,11 +12,14 @@ import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserPoint
+import retrofit2.Call
+import retrofit2.http.Body
 import okhttp3.MultipartBody
 import okhttp3.Response
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -76,5 +81,6 @@ interface ApiService {
     @Multipart
     suspend fun uploadImg(@Part file: MultipartBody.Part): ResponseUpload
 
-
+    @PUT("shop/coupon/{id}")
+    suspend fun updateCoupon(@Path("id") id: String, @Body coupon: CouponRequest): ResponseMessage
 }
