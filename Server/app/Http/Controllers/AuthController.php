@@ -87,10 +87,10 @@ class AuthController extends Controller
         }
 
         // Mở comment để generate code
-        $otp = "123456";
-//        for ($i = 0; $i < 6; $i++){
-//            $otp .= rand(0, 9);
-//        }
+        $otp = "";
+        for ($i = 0; $i < 6; $i++){
+            $otp .= rand(0, 9);
+        }
 
         $content =  "Mã OTP của bạn là: $otp. Mã OTP sẽ hết hạn sau 5 phút.";
 
@@ -103,25 +103,25 @@ class AuthController extends Controller
 
 
         // Mở comment để gửi OTP qua InfoBip
-//        $request = new HTTP_Request2();
-//        $request->setUrl('https://rgzz5y.api.infobip.com/sms/2/text/advanced');
-//        $request->setMethod(HTTP_Request2::METHOD_POST);
-//        $request->setConfig(array(
-//            'follow_redirects' => TRUE
-//        ));
-//        $request->setHeader(array(
-//            'Authorization' => 'App '.env("SMS_SECRET_KEY"),
-//            'Content-Type' => 'application/json',
-//            'Accept' => 'application/json'
-//        ));
-//
-//        $request->setBody('{"messages":[{"destinations":[{"to":"'.$phone.'"}],"from":"ServiceSMS","text":"'.$content.'"}]}');
-//        try {
-//            $response = $request->send();
-//            return Response(['message' => 'Gửi mã OTP thành công'], 200);
-//        }
-//        catch(HTTP_Request2_Exception $e) {
-//            return Response( 'Gửi mã OTP thất bại');
-//        }
+        $request = new HTTP_Request2();
+        $request->setUrl('https://rgzz5y.api.infobip.com/sms/2/text/advanced');
+        $request->setMethod(HTTP_Request2::METHOD_POST);
+        $request->setConfig(array(
+            'follow_redirects' => TRUE
+        ));
+        $request->setHeader(array(
+            'Authorization' => 'App '.env("SMS_SECRET_KEY"),
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+        ));
+
+        $request->setBody('{"messages":[{"destinations":[{"to":"'.$phone.'"}],"from":"ServiceSMS","text":"'.$content.'"}]}');
+        try {
+            $response = $request->send();
+            return Response(['message' => 'Gửi mã OTP thành công'], 200);
+        }
+        catch(HTTP_Request2_Exception $e) {
+            return Response( 'Gửi mã OTP thất bại');
+        }
     }
 }
