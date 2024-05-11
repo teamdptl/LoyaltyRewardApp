@@ -32,7 +32,7 @@ class ShopController extends Controller{
         if (!$request->user->shop){
             return Response("User chưa có shop!", 400);
         }
-        return $request->user->shop;
+        return $request->user->shop->load('services', 'coupons');
     }
 
     /**
