@@ -122,6 +122,9 @@ Route::middleware('auth-firebase')->group(function () {
 
         // Lấy thông tin của cửa hàng và thống kê trong ngày của cửa hàng (lượt quét, điểm đã cấp, quà đã đổi, danh sách ghé thăm trong ngày đã quét)
         Route::get('/shop/daily', [App\Http\Controllers\ShopController::class, 'getShopDailyStatistic']);
+
+        // Lấy thông tin chi tiết user để tích điểm
+        Route::get('/user/{id}', [App\Http\Controllers\UserController::class, 'findUser']);
     });
 
     Route::middleware('auth-firebase-admin')->group(function () {
