@@ -5,12 +5,17 @@ import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
+import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserPoint
+import okhttp3.MultipartBody
+import okhttp3.Response
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -66,5 +71,10 @@ interface ApiService {
 //    17. Quét QR người dùng tích điểm hoặc nhận ưu đãi
     @POST("shop/scan")
     suspend fun scanQR(@Query("user_id") user_id: String, @Query("reward_id") reward_id: String?, @Query("service_id") service_id: String?): ResponseMessage
+
+    @POST("upload")
+    @Multipart
+    suspend fun uploadImg(@Part file: MultipartBody.Part): ResponseUpload
+
 
 }

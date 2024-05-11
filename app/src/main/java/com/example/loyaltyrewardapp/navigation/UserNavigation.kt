@@ -148,7 +148,7 @@ fun UserNavigation(){
                 HistoryPreview(navController)
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfilePreview()
+                ProfileContent(navController)
             }
             composable(route = Screens.ShopVerticalScreen.name){
                 CompaniesListVerticalScreen(navController)

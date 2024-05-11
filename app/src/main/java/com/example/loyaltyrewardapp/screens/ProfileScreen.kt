@@ -1,10 +1,19 @@
 package com.example.loyaltyrewardapp.screens
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.DatePicker
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +43,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,41 +60,116 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toFile
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
+import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.data.model.UserEmptyState
+import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import java.io.File
 import java.util.Calendar
 import java.util.Date
 
 
 @Composable
-fun ProfileContent(){
-    Column(Modifier
-        .padding(40.dp, 30.dp)
-        .background(Color.White)
-        .verticalScroll(rememberScrollState())
-    ) {
-        CircleAvatar()
-        Spacer(modifier = Modifier.size(40.dp))
-        InfoBox()
+fun ProfileContent(navController: NavController = rememberNavController(), homeViewModel: UserHomeViewModel = UserHomeViewModel()){
+    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    val firebaseUser = auth.currentUser
+//    Log.d("UserId", firebaseUser.toString())
+    val context = LocalContext.current
+
+
+    val user by remember {
+        homeViewModel.user
+    }
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+        selectedImageUri = uri
+    }
+
+    LaunchedEffect(null) {
+        if (user == UserEmptyState){
+            homeViewModel.fetchCurrentUser()
+            homeViewModel.fetchRecommendShops()
+            homeViewModel.fetchVisitedShops()
+            homeViewModel.fetchAvailableVoucher()
+        }
+    }
+    MainBackgroundScreen("Tài khoản") {
+        Column(
+            Modifier
+                .padding(40.dp, 30.dp)
+                .background(Color.White)
+                .verticalScroll(rememberScrollState())
+        ) {
+            if (firebaseUser != null) {
+                CircleAvatar(
+                    firebaseUser,
+                    user,
+                    selectedImageUri = selectedImageUri,
+                    onImageSelected = { launcher.launch("image/*") }
+                )
+                Spacer(modifier = Modifier.size(40.dp))
+                InfoBox(
+                    firebaseUser,
+                    user,
+                    onSaveClicked = {
+                        val inputStream = context.contentResolver.openInputStream(selectedImageUri!!)
+
+                        val file = File(context.cacheDir, "fileProfile.png")
+                        file.createNewFile()
+                        file.outputStream().use { outputStream ->
+                            inputStream?.copyTo(outputStream)
+                        }
+                        homeViewModel.uploadImage(file)
+                    }
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun CircleAvatar() {
+fun CircleAvatar(firebaseData: FirebaseUser, user: User,   selectedImageUri: Uri?,
+                 onImageSelected: () -> Unit) {
+//    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+//
+//    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+//        selectedImageUri = uri
+//    }
+
     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Box {
-            Image(
-                painterResource(id = R.drawable.avatar), contentDescription = "Your avatar",
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(shape = CircleShape)
-            )
+            val imageModifier = Modifier
+                .size(100.dp)
+                .clip(shape = CircleShape)
+            if (selectedImageUri != null) {
+                // Display selected image if available
+                Image(
+                    painter = rememberAsyncImagePainter(selectedImageUri),
+                    contentDescription = "Your avatar",
+                    modifier = imageModifier
+                )
+            } else {
+                // Display default avatar
+                Image(
+                    painterResource(id = R.drawable.avatar),
+                    contentDescription = "Your avatar",
+                    modifier = imageModifier
+                )
+            }
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = onImageSelected,
                 modifier = Modifier
                     .offset(55.dp, 55.dp)
                     .padding(5.dp)
-
             ) {
                 Icon(
                     Icons.Filled.Edit,
@@ -95,26 +180,22 @@ fun CircleAvatar() {
                         .border(BorderStroke(2.dp, Color.Cyan), RoundedCornerShape(5.dp))
                         .padding(3.dp)
                         .size(16.dp)
-
                 )
             }
         }
     }
 }
 
+
 @Composable
-fun InfoBox(){
+fun InfoBox(firebaseData: FirebaseUser, user: User, onSaveClicked: () -> Unit){
     Column() {
-        fieldInfo(title = "Họ tên", fieldValue = "Võ Minh Tuấn")
+        fieldInfo(title = "Họ tên", fieldValue = firebaseData.displayName.toString())
         Spacer(modifier = Modifier.size(10.dp))
-        fieldInfo(title = "Số điện thoại", fieldValue = "0819107257")
+        fieldInfo(title = "Số điện thoại", fieldValue = firebaseData.phoneNumber.toString())
         Spacer(modifier = Modifier.size(10.dp))
-        fieldInfo(title = "Ngày sinh", fieldValue = "11-08-2002", type = "date")
-        Spacer(modifier = Modifier.size(10.dp))
-        fieldInfo(title = "Email", fieldValue = "minhtuan.1108tn@gmail.com")
-        Spacer(modifier = Modifier.size(40.dp))
         Column {
-            Button(onClick = { /*TODO*/ },
+            Button(onClick =  onSaveClicked ,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF0E4AFF),
                     contentColor = Color.White,
@@ -214,7 +295,7 @@ fun fieldInfo(title : String, fieldValue : String, type: String = "text"){
 @Composable
 fun ProfilePreview(){
     MainBackgroundScreen("Tài khoản"){
-        ProfileContent()
+//        ProfileContent()
     }
 }
 
