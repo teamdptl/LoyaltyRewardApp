@@ -68,13 +68,13 @@ class CouponController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'require_point' => 'required|integer|min:0',
-            'icon' => 'required|file|image|max:20000',
+            'icon' => 'required|string',
             'is_active' => 'required|boolean',
             'expired_after' => 'required|integer|min:1',
         ]);
 
-        $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
-        $validated['icon'] = $icon_path;
+//        $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
+//        $validated['icon'] = $icon_path;
         $validated['require_point'] = (int)$validated['require_point'];
         $validated['expired_after'] = (int)$validated['expired_after'];
 
@@ -99,13 +99,13 @@ class CouponController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'require_point' => 'required|integer|min:0',
-            'icon' => 'required|file|image|max:20000',
+            'icon' => 'required|string',
             'is_active' => 'require|boolean',
             'expired_after' => 'required|integer|min:1',
         ]);
 
-        $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
-        $validated['icon'] = $icon_path;
+//        $icon_path = cloudinary()->upload($request->file('icon')->getRealPath())->getSecurePath();
+//        $validated['icon'] = $icon_path;
         $validated['require_point'] = (int)$validated['require_point'];
         $validated['expired_after'] = (int)$validated['expired_after'];
 
