@@ -7,21 +7,19 @@ import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
-import com.example.loyaltyrewardapp.data.model.Shop
+import com.example.loyaltyrewardapp.data.model.ShopRequest
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserPoint
-import retrofit2.Call
 import retrofit2.http.Body
 import okhttp3.MultipartBody
-import okhttp3.Response
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.ResourceBundle
 
 interface ApiService {
     // 1. Lấy thông tin người dùng hiện tại
@@ -30,11 +28,11 @@ interface ApiService {
 
     // 2. Lấy các cửa hàng gợi ý cho người dùng (có thể dựa theo vị trí hoặc cửa hàng mới)
     @GET("user/recommended")
-    suspend fun getRecommendedShops(@Query("limit") limit: Int, @Query("lat") lat: Double? = null, @Query("long") long: Double? = null): List<Shop>
+    suspend fun getRecommendedShops(@Query("limit") limit: Int, @Query("lat") lat: Double? = null, @Query("long") long: Double? = null): List<DetailShop>
 
     // 3. Lấy các cửa hàng đã ghé thăm của người dùng (limit dùng để hạn chế số lượng)
     @GET("user/visited")
-    suspend fun getVisitedShops(@Query("limit") limit: Int = 10): List<Shop>
+    suspend fun getVisitedShops(@Query("limit") limit: Int = 10): List<DetailShop>
 
     // 4. Lấy danh sách điểm các cửa hàng của người dùng
     @GET("user/points")
@@ -80,6 +78,14 @@ interface ApiService {
     @Multipart
     suspend fun uploadImg(@Part file: MultipartBody.Part): ResponseUpload
 
-    @PUT("shop/coupon/{id}")
+    @POST("shop/coupon/{id}")
     suspend fun updateCoupon(@Path("id") id: String, @Body coupon: CouponRequest): ResponseMessage
+
+    @POST("shop/coupon")
+    suspend fun createCoupon(@Body coupon: CouponRequest): ResponseMessage
+
+    @POST("shop/{id}")
+    suspend fun updateShop(@Path("id") id: String, @Body shop: ShopRequest): ResponseMessage
+
+
 }

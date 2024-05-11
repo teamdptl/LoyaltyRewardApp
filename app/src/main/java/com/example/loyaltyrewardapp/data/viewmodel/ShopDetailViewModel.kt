@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.DetailShop
-import com.example.loyaltyrewardapp.data.model.Shop
 import kotlinx.coroutines.launch
 
 class ShopDetailViewModel : ViewModel() {

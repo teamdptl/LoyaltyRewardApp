@@ -5,7 +5,7 @@ data class User (
     val role: String = "",
     val auth_id: String = "",
     val qr: String? = null,
-    val shop: Shop? = null,
+    val shop: DetailShop? = null,
     val created_at: String = "",
 )
 
