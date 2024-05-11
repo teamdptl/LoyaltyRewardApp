@@ -102,19 +102,19 @@ Route::middleware('auth-firebase')->group(function () {
         // API dùng để quản lý shop
         Route::get('/shop', [App\Http\Controllers\ShopController::class, 'show']);
         Route::post('/shop', [App\Http\Controllers\ShopController::class, 'store']);
-        Route::put('/shop', [App\Http\Controllers\ShopController::class, 'update']);
+        Route::post('/shop', [App\Http\Controllers\ShopController::class, 'update']);
 
         // Delete shop sẽ gây ra rất nhiều lỗi :((
-         Route::delete('/shop', [App\Http\Controllers\ShopController::class, 'destroy']);
+        Route::delete('/shop', [App\Http\Controllers\ShopController::class, 'destroy']);
 
         // Coupon: Ưu đãi
         Route::post('/shop/coupon', [App\Http\Controllers\CouponController::class, 'store']);
-        Route::put('/shop/coupon/{id}', [App\Http\Controllers\CouponController::class, 'update']);
+        Route::post('/shop/coupon/{id}', [App\Http\Controllers\CouponController::class, 'update']);
         Route::delete('/shop/coupon/{id}', [App\Http\Controllers\CouponController::class, 'destroy']);
 
         // Service: Dịch vụ
         Route::post('/shop/service', [App\Http\Controllers\ServiceController::class, 'store']);
-        Route::put('/shop/service/{id}', [App\Http\Controllers\ServiceController::class, 'update']);
+        Route::post('/shop/service/{id}', [App\Http\Controllers\ServiceController::class, 'update']);
         Route::delete('/shop/service/{id}', [App\Http\Controllers\ServiceController::class, 'destroy']);
 
         // 17. Quét mã qr của người dùng để tích điểm hoặc nhận ưu đãi

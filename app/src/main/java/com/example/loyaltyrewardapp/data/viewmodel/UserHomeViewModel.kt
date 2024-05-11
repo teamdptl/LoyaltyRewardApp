@@ -1,5 +1,7 @@
 package com.example.loyaltyrewardapp.data.viewmodel
 
+import android.net.Uri
+import android.net.http.HttpException
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -15,6 +17,8 @@ import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -51,23 +51,23 @@ class ShopController extends Controller{
             'description' => 'nullable|string',
             'address' => 'required|string',
             'phone' => 'nullable|regex:/(0)[0-9]{9}/',
-            'logo' => 'required|file|image|max:20000',
-            'cover' => 'nullable|file|image|max:20000',
+            'logo' => 'required|string',
+            'cover' => 'nullable|string',
             'point_trigger' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric'
         ]);
 
         //Lưu file logo và cover vào storage
-        if ($request->hasFile('logo')) {
-            $logo_path = cloudinary()->upload($request->file('logo')->getRealPath())->getSecurePath();
-            $validate['logo'] = $logo_path;
-        }
-
-        if ($request->hasFile('cover')) {
-            $cover_path = cloudinary()->upload($request->file('cover')->getRealPath())->getSecurePath();
-            $validate['cover'] = $cover_path;
-        }
+//        if ($request->hasFile('logo')) {
+//            $logo_path = cloudinary()->upload($request->file('logo')->getRealPath())->getSecurePath();
+//            $validate['logo'] = $logo_path;
+//        }
+//
+//        if ($request->hasFile('cover')) {
+//            $cover_path = cloudinary()->upload($request->file('cover')->getRealPath())->getSecurePath();
+//            $validate['cover'] = $cover_path;
+//        }
 
         $shop = new Shop($validate);
 
@@ -101,22 +101,22 @@ class ShopController extends Controller{
             'description' => 'nullable|string',
             'address' => 'required|string',
             'phone' => 'nullable|regex:/(0)[0-9]{9}/',
-            'logo' => 'required|file|image|max:20000',
-            'cover' => 'nullable|file|image|max:20000',
+            'logo' => 'required|string',
+            'cover' => 'nullable|string',
             'point_trigger' => 'nullable|string',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric'
         ]);
 
-        if ($request->hasFile('logo')) {
-            $logo_path = cloudinary()->upload($request->file('logo')->getRealPath())->getSecurePath();
-            $validate['logo'] = $logo_path;
-        }
-
-        if ($request->hasFile('cover')) {
-            $cover_path = cloudinary()->upload($request->file('cover')->getRealPath())->getSecurePath();
-            $validate['cover'] = $cover_path;
-        }
+//        if ($request->hasFile('logo')) {
+//            $logo_path = cloudinary()->upload($request->file('logo')->getRealPath())->getSecurePath();
+//            $validate['logo'] = $logo_path;
+//        }
+//
+//        if ($request->hasFile('cover')) {
+//            $cover_path = cloudinary()->upload($request->file('cover')->getRealPath())->getSecurePath();
+//            $validate['cover'] = $cover_path;
+//        }
 
         if ($request->has('latitude') && $request->has('longitude'))
             $shop->location = [
