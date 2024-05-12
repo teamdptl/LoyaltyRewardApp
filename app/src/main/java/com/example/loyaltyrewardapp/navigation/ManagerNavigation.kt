@@ -31,6 +31,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.loyaltyrewardapp.data.viewmodel.ManagerConfirmScanViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.ManagerScanViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
 import com.example.loyaltyrewardapp.screens.*
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.ConfirmScanScreen
@@ -169,14 +172,21 @@ fun ManagerNavigation(){
                 CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("shopId").toString(), "C")
             }
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
-                val userId = backStackEntry.arguments?.getString("userId")
-                ConfirmScanScreen()
+                val userId = backStackEntry.arguments?.getString("userId")?: ""
+//                val viewModel = ManagerConfirmScanViewModel()
+//                val shopViewModel = ShopDetailViewModel()
+//                val shopScan = ManagerScanViewModel()
+                ConfirmScanScreen(navController, userId)
             }
             composable(route = Screens.RewardScanScreen.name + "/{qrData}"){backStackEntry ->
                 val qrData = backStackEntry.arguments?.getString("qrData")
                 val userId = qrData?.substringBefore("|")
                 val rewardId = qrData?.substringAfter("|")
                 RewardScanScreen(navController, userId, rewardId)
+            }
+
+            composable(route = Screens.DetailCouponScreen.name + "/{couponId}"){ backStackEntry ->
+                DetailCoupon(navController, backStackEntry.arguments?.getString("couponId"))
             }
         }
     }

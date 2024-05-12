@@ -172,6 +172,7 @@ fun ScanScreen(navController: NavController = rememberNavController()) {
             ) {
                 ScannerWithPermissions(onScanned = {
                     val stringList = it.split("|")
+                    Log.d("ScanScreen", "Scanned: ${stringList.size}")
                     if (stringList.size == 1){
                         state.value = true
                         navController.navigate(Screens.ConfirmScanScreen.name + "/${stringList[0]}")
