@@ -28,6 +28,8 @@ class AdminCURShopViewModel : ViewModel(){
     private val _shop = mutableStateOf<DetailShop?>(null)
     val shop get() = _shop
 
+    private val _isEdited = mutableStateOf<Boolean>(false)
+    val isEdited get() = _isEdited
 
     suspend fun getDetailShop(typeAction: String, id: String){
         _screenState.value = typeAction
@@ -42,24 +44,102 @@ class AdminCURShopViewModel : ViewModel(){
     }
 
     fun updateDetailShop(context: Context){
-        val logoUrl = getUrlAfterUploaded(context, _shop.value?.logo.toString())
-        val coverUrl = getUrlAfterUploaded(context, _shop.value?.cover.toString())
+        val logoUrl = mutableStateOf<String>(_shop.value?.logo.toString())
+        Log.d("Admin CUR Coupon", "update detail shop")
+        if ("https://res.cloudinary.com" !in _shop.value?.logo.toString()){
+            val inputStream = context.contentResolver.openInputStream(Uri.parse(_shop.value?.logo.toString()))
+            val file = File(context.cacheDir, "fileProfile.png")
+            file.createNewFile()
+            file.outputStream().use { outputStream ->
+                inputStream?.copyTo(outputStream)
+            }
+            val userhome = UserHomeViewModel()
+            viewModelScope.launch {
+                val url = userhome.uploadImage2(file)
+                Log.d("AdminCURCoupon", url)
+                logoUrl.value = url
+                subUpdateShop(context, logoUrl = url)
+            }
+        }else{
+            subUpdateShop(context, logoUrl = _shop.value?.logo.toString())
+        }
+
+
+    }
+
+    private fun subUpdateShop(context: Context, logoUrl: String){
         val shopRequest = ShopRequest(
             name = _shop.value?.name.toString(),
             description = _shop.value?.description.toString(),
             address = _shop.value?.address.toString(),
-            logo = logoUrl.value?.upload_path.toString(),
+            logo = logoUrl,
             phone = _shop.value?.phone.toString(),
-            cover = coverUrl.value?.upload_path.toString(),
+            cover = "",
             point_trigger = "",
-            longitude = "",
-            latitude = ""
+            longitude = _shop.value?.location?.coordinates?.get(0).toString(),
+            latitude = _shop.value?.location?.coordinates?.get(1).toString()
+        )
+
+        if(checkValidShop(shopRequest)){
+            if(_isEdited.value){
+                viewModelScope.launch {
+                    try {
+                        val response = ApiSingleton.getApiService().updateShop(shopRequest)
+                        Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                    } catch (e: HttpException){
+                        if (e.code() in 400..499){
+                            Toast.makeText(context, e.response()?.errorBody()?.string() ?: "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
+                        }
+                        Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
+                    }
+                }
+            }else{
+                Toast.makeText(context, "Chưa có thay đổi để cập nhật!", Toast.LENGTH_SHORT).show()
+            }
+        }else{
+            Toast.makeText(context, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun createDetailShop(context: Context){
+        val logoUrl = mutableStateOf<String>(_shop.value?.logo.toString())
+        Log.d("Admin CUR Coupon", "update detail shop")
+        if (_shop.value?.logo.toString().isNotBlank()){
+            val inputStream = context.contentResolver.openInputStream(Uri.parse(_shop.value?.logo.toString()))
+            val file = File(context.cacheDir, "fileProfile.png")
+            file.createNewFile()
+            file.outputStream().use { outputStream ->
+                inputStream?.copyTo(outputStream)
+            }
+            val userhome = UserHomeViewModel()
+            viewModelScope.launch {
+                val url = userhome.uploadImage2(file)
+                Log.d("AdminCURCoupon", url)
+                logoUrl.value = url
+                subCreateShop(context, url)
+            }
+        }else{
+            subCreateShop(context, _shop.value?.logo.toString())
+        }
+    }
+
+    private fun subCreateShop(context: Context, url: String){
+        val shopRequest = ShopRequest(
+            name = _shop.value?.name.toString(),
+            description = _shop.value?.description.toString(),
+            address = _shop.value?.address.toString(),
+            logo = url,
+            phone = _shop.value?.phone.toString(),
+            cover = "",
+            point_trigger = "",
+            longitude = _shop.value?.location?.coordinates?.get(0).toString(),
+            latitude = _shop.value?.location?.coordinates?.get(1).toString()
         )
 
         if(checkValidShop(shopRequest)){
             viewModelScope.launch {
                 try {
-                    val response = ApiSingleton.getApiService().updateShop(_shop.value?._id.toString(), shopRequest)
+                    val response = ApiSingleton.getApiService().createShop(shopRequest)
                     Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
                 } catch (e: HttpException){
                     if (e.code() in 400..499){
@@ -73,30 +153,11 @@ class AdminCURShopViewModel : ViewModel(){
         }
     }
 
-    fun createDetailShop(context: Context){
-
-    }
-
-    private fun getUrlAfterUploaded(context: Context, url: String): MutableLiveData<ResponseUpload> {
-
-        if ("https://res.cloudinary.com" !in url){
-            val inputStream = context.contentResolver.openInputStream(Uri.parse(url))
-            val file = File(context.cacheDir, "fileProfile.png")
-            file.createNewFile()
-            file.outputStream().use { outputStream ->
-                inputStream?.copyTo(outputStream)
-            }
-            val userhome = UserHomeViewModel()
-            return userhome.uploadImage(file)
-        }
-        return MutableLiveData(null)
-    }
-    fun checkValidShop(shop: ShopRequest): Boolean{
+    private fun checkValidShop(shop: ShopRequest): Boolean{
         return with(shop) {
             // Kiểm tra các trường dữ liệu
             return@with name.isNotBlank() &&
                     description.isNotBlank() &&
-                    point_trigger.isNotBlank() &&
                     address.isNotBlank() &&
                     logo.isNotBlank()
         }
@@ -149,4 +210,7 @@ class AdminCURShopViewModel : ViewModel(){
         _screenState.value = state
     }
 
+    fun updateIsEdited(edited: Boolean){
+        _isEdited.value = edited
+    }
 }

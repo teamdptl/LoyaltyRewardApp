@@ -30,6 +30,9 @@ class AdminCURCouponViewModel : ViewModel() {
     private val _coupon = mutableStateOf<Coupon?>(null)
     val coupon get() = _coupon
 
+    private val _isEdited = mutableStateOf<Boolean>(false)
+    val isEdited get() = _isEdited
+
     val successMessage : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
     val errorMessage : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
 
@@ -69,7 +72,7 @@ class AdminCURCouponViewModel : ViewModel() {
 
     }
 
-    fun subUpdateCoupon(context:Context, iconUrl:String){
+    private fun subUpdateCoupon(context:Context, iconUrl:String){
         val couponRequest = CouponRequest(
             name = _coupon.value?.name.toString(),
             description = _coupon.value?.description.toString(),
@@ -82,18 +85,22 @@ class AdminCURCouponViewModel : ViewModel() {
 
 
         if(checkValidCoupon(couponRequest)){
-            viewModelScope.launch {
-                try {
-                    val response = ApiSingleton.getApiService().updateCoupon(_coupon.value?._id.toString(), couponRequest)
-                    successMessage.value = response
-                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
-                } catch (e: HttpException){
-                    if (e.code() in 400..499){
-                        errorMessage.value = ResponseMessage(message = e.response()?.errorBody()?.string() ?: "Lỗi hệ thống")
-                        Toast.makeText(context, e.response()?.errorBody()?.string() ?: "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
+            if(_isEdited.value){
+                viewModelScope.launch {
+                    try {
+                        val response = ApiSingleton.getApiService().updateCoupon(_coupon.value?._id.toString(), couponRequest)
+                        successMessage.value = response
+                        Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                    } catch (e: HttpException){
+                        if (e.code() in 400..499){
+                            errorMessage.value = ResponseMessage(message = e.response()?.errorBody()?.string() ?: "Lỗi hệ thống")
+                            Toast.makeText(context, e.response()?.errorBody()?.string() ?: "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
+                        }
+                        Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
                     }
-                    Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
                 }
+            }else{
+                Toast.makeText(context, "Chưa có thay đổi để cập nhật!", Toast.LENGTH_SHORT).show()
             }
         }else{
             Toast.makeText(context, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
@@ -102,7 +109,7 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun createDetailCoupon(context: Context){
         Log.d("AdminCURCouponViewModel", "image url: ${coupon.value?.icon}")
-        var iconUrl : MutableLiveData<ResponseUpload> = MutableLiveData(null)
+        val iconUrl = mutableStateOf<String>(_coupon.value?.icon.toString())
         if (_coupon.value?.icon.toString().isNotBlank()){
             val inputStream = context.contentResolver.openInputStream(Uri.parse(_coupon.value?.icon))
 
@@ -112,15 +119,24 @@ class AdminCURCouponViewModel : ViewModel() {
                 inputStream?.copyTo(outputStream)
             }
             val userhome = UserHomeViewModel()
-            iconUrl = userhome.uploadImage(file)
+            viewModelScope.launch {
+                val url = userhome.uploadImage2(file)
+                Log.d("AdminCURCoupon", url)
+                iconUrl.value = url
+                subCreateCoupon(context, url)
+            }
+        }else{
+            subCreateCoupon(context, "")
         }
 
+    }
 
+    fun subCreateCoupon(context: Context, url: String){
         val couponRequest = CouponRequest(
             name = _coupon.value?.name.toString(),
             description = _coupon.value?.description.toString(),
             require_point = _coupon.value?.require_point,
-            icon = iconUrl.value?.upload_path?: _coupon.value?.icon.toString(),
+            icon = url,
             is_active = _coupon.value?.is_active,
             expired_after = _coupon.value?.expired_after
         )
@@ -190,6 +206,10 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun updateScreenState(state: String) {
         _screenState.value = state
+    }
+
+    fun updateIsEdited(edited: Boolean){
+        _isEdited.value = edited
     }
 
 }

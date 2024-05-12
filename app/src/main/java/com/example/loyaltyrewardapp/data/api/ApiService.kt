@@ -13,6 +13,7 @@ import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserInfo
 import com.example.loyaltyrewardapp.data.model.UserPoint
+import com.example.loyaltyrewardapp.data.model.ServiceResponse
 import retrofit2.http.Body
 import okhttp3.MultipartBody
 import retrofit2.http.GET
@@ -86,9 +87,20 @@ interface ApiService {
     @POST("shop/coupon")
     suspend fun createCoupon(@Body coupon: CouponRequest): ResponseMessage
 
-    @POST("shop/{id}")
-    suspend fun updateShop(@Path("id") id: String, @Body shop: ShopRequest): ResponseMessage
+    @POST("shop/update")
+    suspend fun updateShop(@Body shop: ShopRequest): ResponseMessage
 
+    @POST("shop")
+    suspend fun createShop(@Body shop: ShopRequest): ResponseMessage
+
+    @GET("service/{id}")
+    suspend fun getServiceById(@Path("id") id: String): ServiceResponse
+
+    @POST("shop/service/{id}")
+    suspend fun updateService(@Path("id") id: String, @Body service: ServiceResponse): ResponseMessage
+
+    @POST("")
+    suspend fun createService()
     @GET("user/{id}")
     suspend fun getUserById(@Path("id") id: String): UserInfo
     @POST("send-otp")

@@ -1,9 +1,6 @@
 package com.example.loyaltyrewardapp.screens.manager
 
-import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +16,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -49,42 +44,29 @@ import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.ImagePicker
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
-
-class DetailCouponActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent{
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colors.background
-            ) {
-//                CURCouponScreen()
-            }
-        }
-    }
-}
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURServiceViewModel
 
 @Composable
-fun CURCouponScreen(navController: NavController = rememberNavController(), couponId: String, screen: String = "R", couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
+fun CURServiceScreen(navController: NavController = rememberNavController(), serviceId: String, screen: String = "R", serviceViewModel : AdminCURServiceViewModel = AdminCURServiceViewModel()){
 
-    var coupon by remember {couponViewModel.coupon}
-    var screenState by remember {couponViewModel.screenState}
-    var point by remember { mutableStateOf<String>(couponViewModel.coupon.value?.require_point.toString())}
-    var expiredAt by remember { mutableStateOf<String>(couponViewModel.coupon.value?.expired_after.toString())}
-    var title by remember{mutableStateOf("")}
+    var service by remember {serviceViewModel.service}
+    var screenState by remember {serviceViewModel.screenState}
+    var point by remember { mutableStateOf<String>(serviceViewModel.service.value?.points_reward.toString()) }
+    var period by remember { mutableStateOf<String>(serviceViewModel.service.value?.period.toString()) }
+    var title by remember{ mutableStateOf("") }
     val context = LocalContext.current
 
     Log.d("CUR Coupon Screen", "render screen")
     LaunchedEffect(key1 = null){
-        couponId.let{
-            couponViewModel.getDetailCoupon(screen, it)
-            point = couponViewModel.coupon.value?.require_point.toString()
-            expiredAt = couponViewModel.coupon.value?.expired_after.toString()
+        serviceId.let{
+            serviceViewModel.getDetailService(screen, it)
+            point = serviceViewModel.service.value?.points_reward.toString()
+            period = serviceViewModel.service.value?.period.toString()
             Log.d("Loading", "Dang load du lieu")
         }
     }
 
-    if(coupon == null){
+    if(service == null){
         Log.d("Loading", "Chua co du lieu")
     }else{
         title = if (screenState == "R") {
@@ -105,16 +87,16 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                 .padding(40.dp, 30.dp)
                 .background(Color.White)
         ) {
-            coupon?.let { co ->
-                LabelTextField(label = "Tên ưu đãi",
+            service?.let { co ->
+                LabelTextField(label = "Tên dịch vụ",
                     fieldValue = co.name,
                     numOfRow = 1,
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
+                        if (!serviceViewModel.isEdited.value){
+                            serviceViewModel.updateIsEdited(true)
                         }
-                        couponViewModel.updateCouponName(it)
-                        coupon = coupon?.copy(name = it)
+                        serviceViewModel.updateServiceName(it)
+                        service = service?.copy(name = it)
                     },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -123,87 +105,70 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     fieldValue = co.description,
                     numOfRow = 4,
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
+                        if (!serviceViewModel.isEdited.value){
+                            serviceViewModel.updateIsEdited(true)
                         }
-                        couponViewModel.updateDescription(it)
-                        coupon = coupon?.copy(description = it)
+                        serviceViewModel.updateServiceDescription(it)
+                        service = service?.copy(description = it)
                     },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
-                LabelTextField(label = "Điểm sử dụng",
+                LabelTextField(label = "Điểm thưởng (mỗi lần)",
                     fieldValue = point.toString(),
                     onValueChange =
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
-                        }
                         point = it
+                        if (!serviceViewModel.isEdited.value){
+                            serviceViewModel.updateIsEdited(true)
+                        }
                         if (point.isBlank()){
-                            couponViewModel.updatePoint(-1)
-                            coupon = coupon?.copy(require_point = -1)
+                            serviceViewModel.updateServicePoint(-1)
+                            service = service?.copy(points_reward = -1)
                         }else{
-                            couponViewModel.updatePoint(it.toIntOrNull()?: -1)
-                            coupon = coupon?.copy(require_point = it.toIntOrNull()?: -1)
+                            serviceViewModel.updateServicePoint(it.toIntOrNull()?: -1)
+                            service = service?.copy(points_reward = it.toIntOrNull()?: -1)
                         }
                     },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
-                LabelTextField(label = "Hết hạn sau (tháng)",
-                    fieldValue = expiredAt,
-                    onValueChange =
-                    {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
-                        }
-                        expiredAt = it
-                        if (expiredAt.isBlank()){
-                            couponViewModel.updateTimeExpire(0)
-                            coupon = coupon?.copy(expired_after = 0)
-                        }else{
-                            couponViewModel.updateTimeExpire(it.toIntOrNull()?: 0)
-                            coupon = coupon?.copy(expired_after = it.toIntOrNull()?: 0)
-                        }
-                    },
-                    screenState = screenState)
-                Spacer(modifier = Modifier.size(10.dp))
-                Column {
-                    Text(
-                        text = "Hình ảnh",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Start,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-
-                    ImagePicker(updateUri = {
-                        couponViewModel.updateImageUri(it)
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
-                        }
-                                            },
-                        text = "Choose Image", co.icon, screenState)
-
+                if (service?.should_notification == true){
+                    LabelTextField(label = "Thông báo định kì",
+                        fieldValue = period,
+                        onValueChange =
+                        {
+                            period = it
+                            if (!serviceViewModel.isEdited.value){
+                                serviceViewModel.updateIsEdited(true)
+                            }
+                            if (period.isBlank()){
+                                serviceViewModel.updateServicePeriod(0)
+                                service = service?.copy(period = 0)
+                            }else{
+                                serviceViewModel.updateServicePeriod(it.toIntOrNull()?: 0)
+                                service = service?.copy(period = it.toIntOrNull()?: 0)
+                            }
+                        },
+                        screenState = screenState)
                 }
+
 
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Checkbox(checked = co.is_active,
+                    Checkbox(checked = co.should_notification,
                         enabled = screenState != "R",
                         onCheckedChange = {
-                            if (!couponViewModel.isEdited.value){
-                                couponViewModel.updateIsEdited(true)
+                            if (!serviceViewModel.isEdited.value){
+                                serviceViewModel.updateIsEdited(true)
                             }
-                            couponViewModel.updateIsActive(it)
-                            coupon = coupon?.copy(is_active = it)
+                            serviceViewModel.updateServiceNotify(it)
+                            service = service?.copy(should_notification = it)
                         })
                     Text(
-                        text = "Đang hoạt động",
+                        text = "Phải thông báo định kỳ",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Start,
                         color = Color.Black,
@@ -229,8 +194,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                         }
                         Button(
                             onClick = {
-                                couponViewModel.updateScreenState("U")
-                                screenState = couponViewModel.screenState.value
+                                serviceViewModel.updateScreenState("U")
+                                screenState = serviceViewModel.screenState.value
                             },
                             contentPadding = PaddingValues(30.dp, 10.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -261,7 +226,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
 
                             Button(
                                 onClick = {
-                                    couponViewModel.createDetailCoupon(context)
+                                    serviceViewModel.createDetailService(context)
                                 },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -274,7 +239,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                                     modifier = Modifier.size(16.dp),
                                     tint = Color.White
                                 )
-                                Text(text = "Tạo khuyến mãi",
+                                Text(text = "Tạo dịch vụ",
                                     color = Color.White)
                             }
 
@@ -291,7 +256,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                             }
 
                             Button(
-                                onClick = {couponViewModel.updateDetailCoupon(context)},
+                                onClick = {serviceViewModel.updateDetailService(context)},
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xFF46BEF8)
@@ -303,7 +268,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                                     modifier = Modifier.size(16.dp),
                                     tint = Color.White
                                 )
-                                Text(text = "Lưu khuyến mãi",
+                                Text(text = "Lưu dịch vụ",
                                     color = Color.White)
                             }
 
@@ -316,47 +281,12 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
     }
 }
 
-@Composable
-fun GroupButtonAction(navController: NavController = rememberNavController(), viewModel: ViewModel, typeScreen: String, textCreate: String, textUpdate: String, textView: String){
 
 
-}
-
-
-@Composable
-fun LabelTextField(label: String, fieldValue: String, numOfRow : Int = 1, onValueChange : (String) -> Unit, screenState: String){
-    Column {
-        Text(
-            text = label,
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
-        )
-        OutlinedTextField(
-            value = fieldValue,
-            onValueChange = { onValueChange(it)},
-            minLines = numOfRow,
-            maxLines = numOfRow,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-            textStyle = TextStyle(
-                fontSize=14.sp,
-                color = Color.Black,
-            ),
-            shape = RoundedCornerShape(15.dp),
-            readOnly = screenState == "R",
-            enabled =  screenState != "R"
-        )
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
-fun CURCouponPreview(){
-    val couponViewModel = remember {AdminCURCouponViewModel()}
+fun CURServicePreview(){
+    val couponViewModel = remember { AdminCURCouponViewModel() }
     CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b")
 }
-
