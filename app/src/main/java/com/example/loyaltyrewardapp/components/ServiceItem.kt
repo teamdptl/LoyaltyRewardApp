@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ServiceItem(name: String, description: String, onEdit: () -> Unit = {}, onDelete: () -> Unit = {}) {
+fun ServiceItem(name: String, description: String, isAdmin: Boolean = false, onEdit: () -> Unit = {}, onDelete: () -> Unit = {}) {
     var expandedMenu by remember { mutableStateOf(false) }
     ElevatedCard(
         colors = CardDefaults.cardColors(
@@ -54,20 +54,22 @@ fun ServiceItem(name: String, description: String, onEdit: () -> Unit = {}, onDe
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(vertical = 2.dp).weight(0.8f)
                 )
-                Spacer(modifier = Modifier.weight(0.1f))
-                Column (modifier = Modifier.weight(0.1f).clickable { expandedMenu = true }, horizontalAlignment = Alignment.End) {
-                    Icon(
-                        imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "More options"
-                    )
-                    DropdownMenu(
-                        expanded = expandedMenu,
-                        onDismissRequest = {
-                            expandedMenu = false
-                        },
-                    ) {
-                        DropdownMenuItem(onClick = { onEdit() }, text = { Text("Chỉnh sửa") })
-                        DropdownMenuItem(onClick = { onDelete() }, text = { Text("Xóa") })
+                if (isAdmin){
+                    Spacer(modifier = Modifier.weight(0.1f))
+                    Column (modifier = Modifier.weight(0.1f).clickable { expandedMenu = true }, horizontalAlignment = Alignment.End) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreVert,
+                            contentDescription = "More options"
+                        )
+                        DropdownMenu(
+                            expanded = expandedMenu,
+                            onDismissRequest = {
+                                expandedMenu = false
+                            },
+                        ) {
+                            DropdownMenuItem(onClick = { onEdit() }, text = { Text("Chỉnh sửa") })
+                            DropdownMenuItem(onClick = { onDelete() }, text = { Text("Xóa") })
+                        }
                     }
                 }
             }

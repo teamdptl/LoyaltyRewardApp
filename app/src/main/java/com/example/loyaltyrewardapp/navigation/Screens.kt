@@ -32,4 +32,5 @@ enum class Screens {
     OTPScreens,
     doneOTPScreen,
     GetCurrentLocation,
+    CreateShopScreen
 }

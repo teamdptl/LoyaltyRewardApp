@@ -16,6 +16,7 @@ import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.GuestViewModel
 import com.example.loyaltyrewardapp.screens.SplashScreen
+import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.screens.registerScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.OTPScreens
@@ -49,7 +50,12 @@ fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
         startDestination = Screens.SplashScreen.name
     }
     else if (user?.role == "manager") {
-        startDestination = Screens.ManagerNavigationScreen.name
+        if (user?.shop == null){
+            Log.d("GuestViewModel", ("Error Manager " + user?.shop?.name) ?: "Here")
+            startDestination = Screens.CreateShopScreen.name
+        }
+        else
+            startDestination = Screens.ManagerNavigationScreen.name
     }
     else if (user?.role == "user") {
         startDestination = Screens.UserNavigationScreen.name
@@ -76,10 +82,18 @@ fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
             doneOTPScreen(navController)
         }
         composable(route = Screens.UserNavigationScreen.name) {
-            UserNavigation(guestNav = navController)
+            UserNavigation(onLogout = {
+                reloadActivity = false
+            })
         }
         composable(route = Screens.ManagerNavigationScreen.name) {
-            ManagerNavigation(guestNav = navController)
+            ManagerNavigation(onLogout = {
+                reloadActivity = false
+            })
+        }
+
+        composable(route = Screens.CreateShopScreen.name) {
+            CURShopScreen(navController, "", "C")
         }
     }
 }

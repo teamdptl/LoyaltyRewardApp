@@ -88,7 +88,6 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
             viewModel.getShopDetail(SharedObject.shopId)
             isAdmin = true
         }
-
     }
 
     if (shop == null) {
@@ -133,7 +132,7 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                         )
                     }
 
-                    if (isAdmin){
+                    if (!isAdmin){
                         Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                             .fillMaxWidth()
                             .padding(all = 10.dp)){
@@ -315,7 +314,8 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                 itemContent = {
                                     ServiceItem(
                                         name = it.name,
-                                        description = it.description
+                                        description = it.description,
+                                        isAdmin = isAdmin,
                                     )
                                 }
                             )

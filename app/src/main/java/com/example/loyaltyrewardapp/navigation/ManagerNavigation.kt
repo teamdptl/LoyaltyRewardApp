@@ -42,7 +42,7 @@ import com.example.loyaltyrewardapp.screens.manager.ScanScreen
 
 @Composable
 @Preview
-fun ManagerNavigation(guestNav: NavHostController = rememberNavController()) {
+fun ManagerNavigation(onLogout: () -> Unit = {}) {
     val navController = rememberNavController()
 
     Scaffold (
@@ -158,7 +158,7 @@ fun ManagerNavigation(guestNav: NavHostController = rememberNavController()) {
                 HistoryPreview()
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfileContent()
+                ProfileContent(navController, onLogout)
             }
             composable(route = Screens.AdminReadCoupon.name + "/{couponId}"){ backStackEntry ->
                 CURCouponScreen(navController, backStackEntry.arguments?.getString("couponId").toString(), "R")
