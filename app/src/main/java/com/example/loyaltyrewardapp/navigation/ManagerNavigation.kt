@@ -34,6 +34,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.loyaltyrewardapp.screens.*
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
+import com.example.loyaltyrewardapp.screens.manager.CURServiceScreen
+import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.screens.manager.ConfirmScanScreen
 import com.example.loyaltyrewardapp.screens.manager.HomeManagerScreen
 import com.example.loyaltyrewardapp.screens.manager.RewardScanScreen
@@ -145,7 +147,7 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
                 .padding(paddingValues)
         ) {
             composable(route = Screens.HomeManagerScreen.name){
-                HomeManagerScreen()
+                HomeManagerScreen(navController)
             }
             composable(route = Screens.ShopManagerScreen.name){ backStackEntry ->
                 DetailCompany(navController, backStackEntry.arguments?.getString("shopId"))
@@ -169,6 +171,17 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
             composable(route = Screens.AdminCreateCoupon.name + "/{shopId}"){backStackEntry ->
                 CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("shopId").toString(), "C")
             }
+
+            composable(route = Screens.AdminReadService.name + "/{serviceId}"){ backStackEntry ->
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "R")
+            }
+            composable(route = Screens.AdminUpdateService.name + "/{serviceId}"){backStackEntry ->
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "U")
+            }
+            composable(route = Screens.AdminCreateService.name + "/{serviceId}"){backStackEntry ->
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "C")
+            }
+
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
                 val userId = backStackEntry.arguments?.getString("userId")?: ""
 //                val viewModel = ManagerConfirmScanViewModel()
@@ -185,6 +198,10 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
 
             composable(route = Screens.DetailCouponScreen.name + "/{couponId}"){ backStackEntry ->
                 DetailCoupon(navController, backStackEntry.arguments?.getString("couponId"))
+            }
+
+            composable(route = Screens.UpdateShopScreen.name + "/{shopId}"){ backStackEntry ->
+                CURShopScreen(navController, backStackEntry.arguments?.getString("shopId")?:"", "U")
             }
         }
     }

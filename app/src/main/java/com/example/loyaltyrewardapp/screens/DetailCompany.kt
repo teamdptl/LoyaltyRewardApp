@@ -245,10 +245,10 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                         description = it.description,
                                         isAdmin = isAdmin,
                                         onClick = {
-                                            navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                                            navController.navigate(Screens.AdminReadCoupon.name + "/${it._id}")
                                         },
                                         onEdit = {
-
+                                            navController.navigate(Screens.AdminUpdateCoupon.name + "/${it._id}")
                                         },
                                         onDelete = {
 
@@ -316,6 +316,15 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                         name = it.name,
                                         description = it.description,
                                         isAdmin = isAdmin,
+                                        onClick = {
+                                            navController.navigate(Screens.AdminReadService.name + "/${it._id}")
+                                        },
+                                        onEdit = {
+                                            navController.navigate(Screens.AdminUpdateService.name + "/${it._id}")
+                                        },
+                                        onDelete = {
+
+                                        }
                                     )
                                 }
                             )
@@ -329,7 +338,9 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                             ) {
                                 Spacer(modifier = Modifier.weight(1f)) // Spacer bên trái để căn chỉnh
                                 AddIconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        navController.navigate(Screens.AdminCreateService.name + "/${shopId}")
+                                    },
                                     isAdmin = isAdmin
                                 )
                             }

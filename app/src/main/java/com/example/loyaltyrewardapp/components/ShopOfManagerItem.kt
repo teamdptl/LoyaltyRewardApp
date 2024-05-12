@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.data.model.User
@@ -37,7 +38,8 @@ import com.google.firebase.auth.FirebaseUser
 
 @Composable
 fun ShopOfManagerItem(
-    user: User
+    user: User,
+    onClick: () -> Unit
 ){
     Row(
         modifier = Modifier
@@ -71,19 +73,21 @@ fun ShopOfManagerItem(
             )
             Text(
                 text = user.shop?.address.toString(),
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp),
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text =  user.shop?.description.toString(),
-                fontSize = 10.sp,
+                fontSize = 12.sp,
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = 8.dp, bottom = 3.dp),
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Row(modifier = Modifier.padding(start = 8.dp),) {
                 Box(
@@ -97,9 +101,12 @@ fun ShopOfManagerItem(
                                 bottomEnd = 8.dp
                             )
                         )
+                        .clickable{
+                            onClick()
+                        }
                 ) {
                     Text(
-                        text = "Quản lý cửa hàng",
+                        text = "Sửa cửa hàng",
                         modifier = Modifier
                             .padding(8.dp),
                         color = Color.White,

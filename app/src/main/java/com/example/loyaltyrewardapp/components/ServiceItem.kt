@@ -31,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ServiceItem(name: String, description: String, isAdmin: Boolean = false, onEdit: () -> Unit = {}, onDelete: () -> Unit = {}) {
+fun ServiceItem(name: String, description: String, isAdmin: Boolean = false, onClick: () -> Unit = {}, onEdit: () -> Unit = {}, onDelete: () -> Unit = {}) {
     var expandedMenu by remember { mutableStateOf(false) }
     ElevatedCard(
         colors = CardDefaults.cardColors(
@@ -40,7 +40,7 @@ fun ServiceItem(name: String, description: String, isAdmin: Boolean = false, onE
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         ),
-        modifier = Modifier.padding(6.dp)
+        modifier = Modifier.padding(6.dp).clickable { onClick() }
     )
     {
         Column(

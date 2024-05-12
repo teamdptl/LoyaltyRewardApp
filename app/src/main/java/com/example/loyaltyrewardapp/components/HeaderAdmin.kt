@@ -143,7 +143,7 @@ fun CardHeader(
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(text = "Đã quét cho")
-                    Text(text = visitedManagers.size.toString() + " users",fontWeight = FontWeight.W500,)
+                    Text(text = visitedManagers.size.toString() + " lần",fontWeight = FontWeight.W500,)
                 }
             }
             // Cặp thứ hai Icon và Column

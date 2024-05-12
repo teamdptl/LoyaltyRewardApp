@@ -39,13 +39,22 @@ class AdminCURCouponViewModel : ViewModel() {
     suspend fun getDetailCoupon(typeAction: String, id: String) {
         _screenState.value = typeAction
         //Lấy dữ liệu từ api nếu state không phải create
-        if (typeAction != "C") {
-            val coupon = ApiSingleton.getApiService().getCouponById(id)
-            _coupon.value = coupon
-        } else {
-            val coupon = Coupon("", "", "", 0, "", false, 0, null)
-            _coupon.value = coupon
+        try {
+            if (typeAction != "C") {
+                Log.d("Edit coupon", "getDetailCoupon: $id")
+                val coupon = ApiSingleton.getApiService().getCouponById(id)
+                _coupon.value = coupon
+            } else {
+                val coupon = Coupon("", "", "", 0, "", false, 0, null)
+                _coupon.value = coupon
+            }
+        } catch (e: HttpException) {
+            if (e.code() in 400..499) {
+                errorMessage.value = ResponseMessage(message = e.response()?.errorBody()?.string() ?: "Lỗi hệ thống")
+            }
+            Log.d("getDetailCoupon", "error: ${e.response()?.errorBody()?.string()}")
         }
+
 
     }
 

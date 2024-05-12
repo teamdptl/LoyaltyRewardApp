@@ -27,10 +27,14 @@ enum class Screens {
     AdminReadCoupon,
     AdminUpdateCoupon,
     AdminCreateCoupon,
+    AdminReadService,
+    AdminCreateService,
+    AdminUpdateService,
     CURShopScreen,
     ListPointShopScreen,
     OTPScreens,
     doneOTPScreen,
     GetCurrentLocation,
-    CreateShopScreen
+    CreateShopScreen,
+    UpdateShopScreen,
 }
