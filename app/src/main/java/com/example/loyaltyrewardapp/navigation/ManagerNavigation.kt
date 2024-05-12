@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ManagerConfirmScanViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ManagerScanViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
@@ -163,13 +164,16 @@ fun ManagerNavigation(){
                 ProfileContent()
             }
             composable(route = Screens.AdminReadCoupon.name + "/{couponId}"){ backStackEntry ->
-                CURCouponScreen(navController, backStackEntry.arguments?.getString("couponId").toString(), "R")
+                val viewModel = AdminCURCouponViewModel()
+                CURCouponScreen(navController, backStackEntry.arguments?.getString("couponId").toString(), "R", viewModel)
             }
             composable(route = Screens.AdminUpdateCoupon.name + "/{couponId}"){backStackEntry ->
-                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("couponId").toString(), "U")
+                val viewModel = AdminCURCouponViewModel()
+                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("couponId").toString(), "U", viewModel)
             }
             composable(route = Screens.AdminCreateCoupon.name + "/{shopId}"){backStackEntry ->
-                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("shopId").toString(), "C")
+                val viewModel = AdminCURCouponViewModel()
+                CURCouponScreen(navController, couponId = backStackEntry.arguments?.getString("shopId").toString(), "C", viewModel)
             }
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
                 val userId = backStackEntry.arguments?.getString("userId")?: ""

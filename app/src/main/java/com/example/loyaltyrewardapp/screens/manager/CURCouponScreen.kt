@@ -73,6 +73,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
     var expiredAt by remember { mutableStateOf<String>(couponViewModel.coupon.value?.expired_after.toString())}
     var title by remember{mutableStateOf("")}
     val context = LocalContext.current
+    var edited: Boolean = false
 
     Log.d("CUR Coupon Screen", "render screen")
     LaunchedEffect(key1 = null){
@@ -110,8 +111,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     fieldValue = co.name,
                     numOfRow = 1,
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         couponViewModel.updateCouponName(it)
                         coupon = coupon?.copy(name = it)
@@ -123,8 +124,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     fieldValue = co.description,
                     numOfRow = 4,
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         couponViewModel.updateDescription(it)
                         coupon = coupon?.copy(description = it)
@@ -136,10 +137,10 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     fieldValue = point.toString(),
                     onValueChange =
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
-                        }
                         point = it
+                        if (!edited){
+                            edited = true
+                        }
                         if (point.isBlank()){
                             couponViewModel.updatePoint(-1)
                             coupon = coupon?.copy(require_point = -1)
@@ -155,10 +156,10 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     fieldValue = expiredAt,
                     onValueChange =
                     {
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
-                        }
                         expiredAt = it
+                        if (!edited){
+                            edited = true
+                        }
                         if (expiredAt.isBlank()){
                             couponViewModel.updateTimeExpire(0)
                             coupon = coupon?.copy(expired_after = 0)
@@ -181,8 +182,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
 
                     ImagePicker(updateUri = {
                         couponViewModel.updateImageUri(it)
-                        if (!couponViewModel.isEdited.value){
-                            couponViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                                             },
                         text = "Choose Image", co.icon, screenState)
@@ -196,8 +197,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     Checkbox(checked = co.is_active,
                         enabled = screenState != "R",
                         onCheckedChange = {
-                            if (!couponViewModel.isEdited.value){
-                                couponViewModel.updateIsEdited(true)
+                            if (!edited){
+                                edited = true
                             }
                             couponViewModel.updateIsActive(it)
                             coupon = coupon?.copy(is_active = it)
@@ -291,7 +292,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                             }
 
                             Button(
-                                onClick = {couponViewModel.updateDetailCoupon(context)},
+                                onClick = {couponViewModel.updateDetailCoupon(context, edited)},
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xFF46BEF8)

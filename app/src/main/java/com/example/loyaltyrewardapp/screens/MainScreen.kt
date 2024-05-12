@@ -43,7 +43,7 @@ class MainScreen : ComponentActivity() {
         ApiSingleton.initialize(applicationContext)
 
         auth = FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword("+84890516934@app.vn", "1234567")
+        auth.signInWithEmailAndPassword("+84329311905@app.vn", "123456")
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
@@ -63,13 +63,13 @@ class MainScreen : ComponentActivity() {
             MaterialTheme {
                 GuestNavigation()
 //                LoginScreen()
-//                val viewModel = AdminCURCouponViewModel()
-//                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R", couponViewModel = viewModel)
+                val viewModel = AdminCURCouponViewModel()
+                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "C", couponViewModel = viewModel)
 
 //                val viewModel = AdminCURShopViewModel()
 //                CURShopScreen(shopId = "663a4e93d3b422b0fe0e2356", screen = "C", shopViewModel = viewModel)
-                val viewModel = AdminCURServiceViewModel()
-                CURServiceScreen(serviceId = "663a4e93d3b422b0fe0e2357", screen = "C", serviceViewModel = viewModel)
+//                val viewModel = AdminCURServiceViewModel()
+//                CURServiceScreen(serviceId = "663a4e93d3b422b0fe0e2357", screen = "C", serviceViewModel = viewModel)
             }
         }
 

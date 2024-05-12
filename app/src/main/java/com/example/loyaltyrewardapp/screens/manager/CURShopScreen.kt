@@ -67,11 +67,12 @@ class DetailShopActivity : ComponentActivity() {
 }
 
 @Composable
-fun CURShopScreen(navController: NavController = rememberNavController(), shopId: String, screen: String = "R", shopViewModel : AdminCURShopViewModel = AdminCURShopViewModel()){
+fun CURShopScreen(navController: NavController = rememberNavController(), shopId: String, screen: String = "R", shopViewModel : AdminCURShopViewModel){
     var shop by remember {shopViewModel.shop}
     var screenState by remember {shopViewModel.screenState}
     var title by remember{mutableStateOf("")}
     val context = LocalContext.current
+    var edited: Boolean = false
 
     Log.d("CUR Coupon Screen", "render screen")
     LaunchedEffect(key1 = null){
@@ -122,8 +123,8 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.description,
                     numOfRow = 4,
                     {
-                        if (!shopViewModel.isEdited.value){
-                            shopViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         shopViewModel.updateShopDescription(it)
                         shop = shop?.copy(description = it)
@@ -136,8 +137,8 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.address,
                     numOfRow = 1,
                     onValueChange = {
-                        if (!shopViewModel.isEdited.value){
-                            shopViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         shopViewModel.updateShopAddress(it)
                         shop = shop?.copy(address = it)
@@ -150,8 +151,8 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.phone,
                     numOfRow = 1,
                     onValueChange = {
-                        if (!shopViewModel.isEdited.value){
-                            shopViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         shopViewModel.updateShopPhone(it)
                         shop = shop?.copy(phone = it)
@@ -171,10 +172,10 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
 
                     ImagePicker(updateUri =
                     {
-                        shopViewModel.updateShopLogo(it)
-                        if (!shopViewModel.isEdited.value){
-                            shopViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
+                        shopViewModel.updateShopLogo(it)
                     },
                         text = "Choose Image", sh.logo, screenState)
                 }
@@ -215,8 +216,8 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                                         val location = Location("Point", coordinates = coordinate)
                                         shopViewModel.updateShopLocation(location)
                                         shop = shop?.copy(location = location)
-                                        if (!shopViewModel.isEdited.value){
-                                            shopViewModel.updateIsEdited(true)
+                                        if (!edited){
+                                            edited = true
                                         }
                                         Log.d("TestCamera", "Location: ${it.longitude} ${it.latitude}")
                                     }
@@ -309,7 +310,7 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                             }
 
                             Button(
-                                onClick = {shopViewModel.updateDetailShop(context)},
+                                onClick = {shopViewModel.updateDetailShop(context, edited)},
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xFF46BEF8)
