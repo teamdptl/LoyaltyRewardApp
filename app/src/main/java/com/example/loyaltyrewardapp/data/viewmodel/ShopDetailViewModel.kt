@@ -6,10 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.Shop
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ShopDetailViewModel : ViewModel() {
+@HiltViewModel
+class ShopDetailViewModel @Inject constructor() : ViewModel() {
     val shop = mutableStateOf<DetailShop?>(null)
 
     fun getShopDetail(shopId: String) {

@@ -10,10 +10,14 @@ import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ManagerConfirmScanViewModel : ViewModel() {
+@HiltViewModel
+class ManagerConfirmScanViewModel @Inject constructor() : ViewModel() {
     val user : MutableState<UserInfo?> = mutableStateOf(null)
     val error : MutableState<ResponseMessage?> = mutableStateOf(null)
 

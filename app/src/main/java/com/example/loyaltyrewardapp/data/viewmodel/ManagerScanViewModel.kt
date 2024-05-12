@@ -8,10 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ManagerScanViewModel : ViewModel() {
+@HiltViewModel
+class ManagerScanViewModel @Inject constructor() : ViewModel() {
     val successRewardMessage : MutableState<ResponseMessage?> = mutableStateOf(null)
     val errorRewardMessage : MutableState<ResponseMessage?> = mutableStateOf(null)
     val accumulateResponse : MutableLiveData<ResponseMessage?> = MutableLiveData(null)

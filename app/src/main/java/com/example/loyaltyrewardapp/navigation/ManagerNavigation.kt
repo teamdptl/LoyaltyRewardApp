@@ -173,16 +173,20 @@ fun ManagerNavigation(){
             }
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
                 val userId = backStackEntry.arguments?.getString("userId")?: ""
-                val viewModel = ManagerConfirmScanViewModel()
-                val shopViewModel = ShopDetailViewModel()
-                val shopScan = ManagerScanViewModel()
-                ConfirmScanScreen(navController, userId, viewModel, shopViewModel, shopScan)
+//                val viewModel = ManagerConfirmScanViewModel()
+//                val shopViewModel = ShopDetailViewModel()
+//                val shopScan = ManagerScanViewModel()
+                ConfirmScanScreen(navController, userId)
             }
             composable(route = Screens.RewardScanScreen.name + "/{qrData}"){backStackEntry ->
                 val qrData = backStackEntry.arguments?.getString("qrData")
                 val userId = qrData?.substringBefore("|")
                 val rewardId = qrData?.substringAfter("|")
                 RewardScanScreen(navController, userId, rewardId)
+            }
+
+            composable(route = Screens.DetailCouponScreen.name + "/{couponId}"){ backStackEntry ->
+                DetailCoupon(navController, backStackEntry.arguments?.getString("couponId"))
             }
         }
     }

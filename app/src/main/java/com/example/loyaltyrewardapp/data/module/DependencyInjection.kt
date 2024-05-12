@@ -9,11 +9,13 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ManagerScanModule {
+object DependencyInjection {
 
-    @Singleton
-    @Provides
-    fun provideManagerScanViewModel(): ManagerScanViewModel {
-        return ManagerScanViewModelSingleton.getInstance()
-    }
+//    @Singleton
+//    @Provides
+//    fun provideManagerScanViewModel(): ManagerScanViewModel {
+//        return ManagerScanViewModel()
+//    }
+
+
 }
