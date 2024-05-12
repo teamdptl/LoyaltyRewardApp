@@ -10,6 +10,7 @@ import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class GuestViewModel : ViewModel() {
     val user: MutableLiveData<User> = MutableLiveData<User>()
@@ -23,8 +24,8 @@ class GuestViewModel : ViewModel() {
                 user.value = currentUser
                 SharedObject.shopId = currentUser.shop?._id?:""
                 Log.e("GuestViewModel", "Fetching successfully")
-            } catch (e: Exception) {
-                Log.e("GuestViewModel", "Error fetching current user: ${e.message}")
+            } catch (e: HttpException) {
+                Log.e("GuestViewModel", "Error fetching current user: ${e.response()?.errorBody()?.string()}")
                 user.value = NotFoundUserState
             }
         }

@@ -88,7 +88,6 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
             viewModel.getShopDetail(SharedObject.shopId)
             isAdmin = true
         }
-
     }
 
     if (shop == null) {
@@ -133,7 +132,7 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                         )
                     }
 
-                    if (isAdmin){
+                    if (!isAdmin){
                         Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                             .fillMaxWidth()
                             .padding(all = 10.dp)){
@@ -246,10 +245,10 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                         description = it.description,
                                         isAdmin = isAdmin,
                                         onClick = {
-                                            navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                                            navController.navigate(Screens.AdminReadCoupon.name + "/${it._id}")
                                         },
                                         onEdit = {
-
+                                            navController.navigate(Screens.AdminUpdateCoupon.name + "/${it._id}")
                                         },
                                         onDelete = {
 
@@ -315,7 +314,17 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                 itemContent = {
                                     ServiceItem(
                                         name = it.name,
-                                        description = it.description
+                                        description = it.description,
+                                        isAdmin = isAdmin,
+                                        onClick = {
+                                            navController.navigate(Screens.AdminReadService.name + "/${it._id}")
+                                        },
+                                        onEdit = {
+                                            navController.navigate(Screens.AdminUpdateService.name + "/${it._id}")
+                                        },
+                                        onDelete = {
+
+                                        }
                                     )
                                 }
                             )
@@ -329,7 +338,9 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                             ) {
                                 Spacer(modifier = Modifier.weight(1f)) // Spacer bên trái để căn chỉnh
                                 AddIconButton(
-                                    onClick = { /*TODO*/ },
+                                    onClick = {
+                                        navController.navigate(Screens.AdminCreateService.name + "/${shopId}")
+                                    },
                                     isAdmin = isAdmin
                                 )
                             }

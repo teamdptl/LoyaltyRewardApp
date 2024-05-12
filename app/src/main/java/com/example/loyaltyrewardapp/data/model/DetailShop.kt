@@ -13,3 +13,13 @@ data class DetailShop(
     val coupons: List<Coupon> = emptyList(),
     val services: List<DetailShopService> = emptyList(),
 )
+
+data class ShopDaily(
+    val luotTichDiem: Int? = 0,
+    val luotDoiQua: Int? = 0,
+    val luotDoiQuaTaiCuaHang: Int? = 0,
+    val diemDaCap: Int? = 0,
+    val visited: List<Visited> = emptyList()
+)
+
+

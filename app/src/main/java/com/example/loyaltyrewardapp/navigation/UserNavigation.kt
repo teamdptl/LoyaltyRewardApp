@@ -33,13 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.loyaltyrewardapp.screens.*
 
 
 @Composable
 @Preview
-fun UserNavigation(){
+fun UserNavigation(onLogout: () -> Unit = {}) {
     val navController = rememberNavController()
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
@@ -100,7 +101,10 @@ fun UserNavigation(){
                                             contentAlignment = Alignment.Center,
                                             modifier = Modifier
                                                 .size(50.dp)
-                                                .background(Color(0xFFFEE930), RoundedCornerShape(15.dp))
+                                                .background(
+                                                    Color(0xFFFEE930),
+                                                    RoundedCornerShape(15.dp)
+                                                )
                                         ) {
                                             Icon(
                                                 imageVector = navItem.selectedIcon,
@@ -148,7 +152,7 @@ fun UserNavigation(){
                 HistoryPreview(navController)
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfileContent(navController)
+                ProfileContent(navController, onLogout)
             }
             composable(route = Screens.ShopVerticalScreen.name){
                 CompaniesListVerticalScreen(navController)

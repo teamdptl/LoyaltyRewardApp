@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
 
+
 @Composable
 fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false, onClick: () -> Unit = {  }, onEdit: () -> Unit = { }, onDelete: () -> Unit = { }){
     var expandedMenu by remember { mutableStateOf(false) }
@@ -125,7 +126,7 @@ fun InfoRewardCard(url: String, name: String, description: String, point: Int, i
                     )
                 }
                 Row{
-                    Text(text = description, style = MaterialTheme.typography.bodyMedium, color = Color.Gray,  maxLines = 2, overflow = TextOverflow.Ellipsis,
+                    Text(text = description, style = MaterialTheme.typography.bodyMedium, color = Color.Gray,  maxLines = 1, overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(vertical = 2.dp))
                 }
                 Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){

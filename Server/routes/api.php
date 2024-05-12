@@ -64,6 +64,8 @@ Route::middleware('auth-firebase')->group(function () {
     // 9. Lấy thông tin chi tiết của ưu đãi
     Route::get('/coupon/{id}', [App\Http\Controllers\CouponController::class, 'show']);
 
+    Route::get('/service/{id}', [App\Http\Controllers\ServiceController::class, 'show']);
+
     // 17. Upload file (Dùng chung)
     Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload']);
 

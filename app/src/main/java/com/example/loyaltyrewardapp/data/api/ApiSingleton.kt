@@ -14,49 +14,47 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiSingleton {
     private const val BASE_URL = "https://app.dy.id.vn/api/"
-    private var apiService: ApiService? = null
     private lateinit var sharedPreferences: SharedPreferences
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     fun initialize(context: Context) {
         sharedPreferences = context.getSharedPreferences("MyApp", Context.MODE_PRIVATE)
     }
 
     suspend fun getApiService(): ApiService {
-        if (apiService == null) {
-            val httpClient = OkHttpClient.Builder()
-            val token = getTokenFromLocalStorageOrFirebase()
+        val httpClient = OkHttpClient.Builder()
+        val token = getTokenFromLocalStorageOrFirebase()
 
-            httpClient.addInterceptor(Interceptor { chain: Interceptor.Chain ->
-                chain.proceed(
-                    chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $token").build()
-                )
-            })
+        httpClient.addInterceptor(Interceptor { chain: Interceptor.Chain ->
+            chain.proceed(
+                chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $token").build()
+            )
+        })
 
-            val client = httpClient.build()
+        val client = httpClient.build()
 
-            val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
 
-            apiService = retrofit.create(ApiService::class.java)
-        }
-
-        return apiService!!
+        return retrofit.create(ApiService::class.java)
     }
 
     private suspend fun getTokenFromLocalStorageOrFirebase(): String {
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        if (firebaseUser == null) {
-            return "";
+        val firebaseUser = auth.currentUser
+        if (firebaseUser == null){
+            Log.d("FirebaseAuthToken", "Do not login")
+            return ""
         }
         val storedToken = sharedPreferences.getString("idToken", null)
         val expiredTokenTime = sharedPreferences.getLong("expiredTime", 0)
         val previousId = sharedPreferences.getString("firebaseId", null)
         val currentTime = System.currentTimeMillis()
         if (storedToken != null && expiredTokenTime*1000 > currentTime && previousId == firebaseUser.uid){
+            Log.d("FirebaseAuthToken", "Get from local")
             return storedToken
         }
 
@@ -75,6 +73,8 @@ object ApiSingleton {
                 apply()
             }
         }
+
+        Log.d("FirebaseAuthToken", "Get from firebase")
 
         return idToken ?: ""
     }

@@ -121,8 +121,8 @@ class UserController extends Controller
      */
 
     public function getListPoint(Request $request){
-        $request->user->points->load('shop')->sortByDesc('updated_at');
-        return $request->user->points->all();
+        $request->user->points->load('shop');
+        return $request->user->points->sortByDesc('updated_at')->values();
     }
 
     /**
@@ -177,7 +177,7 @@ class UserController extends Controller
     public function getTransaction(Request $request)
     {
         $request->user->transactions->load('shop');
-        return $request->user->transactions;
+        return $request->user->transactions->sortByDesc('created_at')->values();
     }
 
     /**
@@ -249,7 +249,7 @@ class UserController extends Controller
      */
     public function getCoupons(Request $request){
         $request->user->coupons->load('shop');
-        return $request->user->coupons;
+        return $request->user->coupons->where('redeemed_at', null)->where('expired_at', '>', now())->values();
     }
 
     /**

@@ -74,9 +74,9 @@ val listOfManagerNavItems: List<NavItems> = listOf(
         route = Screens.ScanManagerScreen.name
     ),
     NavItems(
-        label = "Thông báo",
-        selectedIcon = Icons.Outlined.Notifications,
-        unselectedIcon = Icons.Outlined.Notifications,
+        label = "Lịch sử",
+        selectedIcon = Icons.Outlined.History,
+        unselectedIcon = Icons.Outlined.History,
         hasNews = false,
         route = Screens.NotificationManagerScreen.name
     ),

@@ -318,7 +318,8 @@ class ShopController extends Controller
         $tomorrow = Carbon::tomorrow();
         $transaction = $request->user->shop->transactions()->with('user')
             ->whereDate('created_at', '>=' , $today)
-            ->whereDate('created_at', '<', $tomorrow)->get();
+            ->whereDate('created_at', '<', $tomorrow)
+            ->orderByDesc('created_at')->get();
         $luotTichDiem = $transaction->where('type', 'plus')->count();
         $luotDoiQua = $transaction->where('type', 'minus')->count();
         $luotDoiQuaTaiCuaHang = $transaction->where('type', 'receive')->count();
