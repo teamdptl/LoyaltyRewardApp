@@ -7,6 +7,7 @@ use Dedoc\Scramble\Support\Generator\Response;
 use HTTP_Request2;
 use HTTP_Request2_Exception;
 use Illuminate\Http\Request;
+use Kreait\Firebase\Auth\UserQuery;
 use Twilio\Rest\Client;
 
 class AuthController extends Controller
@@ -76,6 +77,12 @@ class AuthController extends Controller
         ]);
 
         $phone = '84'.substr($validate['phone'], 1);
+        $userQuery = UserQuery::all()->withFilter(UserQuery::FILTER_PHONE_NUMBER, "+".$phone);
+        $auth = app('firebase.auth');
+        $users = $auth->queryUsers($userQuery);
+        if ($users){
+            return Response('Số điện thoại đã tồn tại', 400);
+        }
 
         // Check old otp model exist with expired_at > now
         $oldOtp = OtpCode::where('phone', $phone)

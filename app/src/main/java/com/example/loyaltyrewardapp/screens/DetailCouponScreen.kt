@@ -45,12 +45,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.loyaltyrewardapp.data.SharedObject
 import com.example.loyaltyrewardapp.data.viewmodel.CouponDetailViewModel
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailCoupon(navController: NavHostController, couponId: String?, isAdmin: Boolean = false, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
+fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
     val coupon by remember {
         viewModel.coupon
     }
@@ -192,7 +193,7 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, isAdmin: B
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                 )
         }
-        if (!isAdmin){
+        if (SharedObject.shopId.isEmpty()){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

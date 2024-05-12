@@ -60,7 +60,7 @@ class MainScreen : ComponentActivity() {
             MaterialTheme {
                 GuestNavigation()
 //                LoginScreen()
-//                val viewModel = AdminCURCouponViewModel()
+                val viewModel = AdminCURCouponViewModel()
 //                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R", couponViewModel = viewModel)
             }
         }

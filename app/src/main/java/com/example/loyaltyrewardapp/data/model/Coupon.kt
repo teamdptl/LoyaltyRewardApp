@@ -8,5 +8,5 @@ data class Coupon(
     val icon: String = "",
     val is_active: Boolean = true,
     val expired_after: Int = 0,
-    val shop: Shop? = null,
+    val shop: DetailShop? = null,
 )
