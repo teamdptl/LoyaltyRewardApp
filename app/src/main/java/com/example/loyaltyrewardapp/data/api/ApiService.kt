@@ -9,6 +9,8 @@ import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.ShopRequest
 import com.example.loyaltyrewardapp.data.model.ResponseUser
+import com.example.loyaltyrewardapp.data.model.Shop
+import com.example.loyaltyrewardapp.data.model.ShopDaily
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserInfo
@@ -108,4 +110,6 @@ interface ApiService {
 
     @POST("create-user")
     suspend fun createAccount(@Query ("name") name: String,@Query("phone") phone: String,@Query("password") password: String,@Query("role") role: String,@Query("otp") otp: String):ResponseMessage
+    @GET("shop-daily")
+    suspend fun visitedOfADay(): ShopDaily
 }
