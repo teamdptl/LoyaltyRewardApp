@@ -17,6 +17,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.navigation.Screens
 
 class DoneOTPScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +46,10 @@ class DoneOTPScreen : ComponentActivity() {
 }
 
 @Composable
-fun doneOTPScreen(){
+fun doneOTPScreen(navController: NavController = rememberNavController()){
     Column(modifier = Modifier.fillMaxSize()) {
         titleDoneOTP()
-        btnBackHome()
+        btnBackHome(navController)
     }
 }
 
@@ -55,7 +59,9 @@ fun titleDoneOTP(){
         .fillMaxWidth()
         .padding(all = 20.dp)
     ){
-        Image(painter = painterResource(id = R.drawable.otp_done), contentDescription = null, modifier = Modifier.size(width = 361.dp, height = 253.dp).padding(top = 30.dp))
+        Image(painter = painterResource(id = R.drawable.otp_done), contentDescription = null, modifier = Modifier
+            .size(width = 361.dp, height = 253.dp)
+            .padding(top = 30.dp))
         Spacer(modifier = Modifier.padding(all = 300.dp))
         Text(
             text = "Thành công",
@@ -78,22 +84,23 @@ fun titleDoneOTP(){
     }
 }
 @Composable
-fun btnBackHome(){
-    Box(
+fun btnBackHome(navController: NavController) {
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
     ) {
-        Button(
-            onClick = { /*TODO*/ },
+        TextButton(
+            onClick = {
+                navController.navigate(Screens.LoginScreen.name)
+                /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 14.dp, end = 14.dp, bottom = 150.dp)
+                .padding(start = 14.dp, end = 14.dp)
                 .clip(RoundedCornerShape(100.dp)),
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF37A1ED)),
             contentPadding = PaddingValues(vertical = 16.dp, horizontal = 24.dp),
         ) {
             Text(
-                text = "Trở về trang chủ",
+                text = "Đi tới đăng nhập",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -102,6 +109,7 @@ fun btnBackHome(){
         }
     }
 }
+
 @Preview(showBackground = true )
 @Composable
 fun PreviewDoneOTP(){

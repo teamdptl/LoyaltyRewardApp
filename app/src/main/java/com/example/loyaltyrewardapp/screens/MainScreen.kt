@@ -28,6 +28,7 @@ import com.example.loyaltyrewardapp.screens.manager.CURServiceScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.OTPScreens
+import com.example.loyaltyrewardapp.ui.doneOTPScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
