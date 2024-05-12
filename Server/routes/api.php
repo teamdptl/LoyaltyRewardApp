@@ -53,6 +53,9 @@ Route::post('/create-user', [App\Http\Controllers\AuthController::class, 'create
 
 Route::post('/send-otp', [App\Http\Controllers\AuthController::class, 'sendOTP']);
 
+// 17. Upload file (Dùng chung)
+Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload']);
+
 Route::middleware('auth-firebase')->group(function () {
 
     // 1. Lấy thông tin của người dùng (bao gồm thông tin cơ bản, mã qr, vai trò, shop) (Dùng chung vs quản lý)
@@ -65,9 +68,6 @@ Route::middleware('auth-firebase')->group(function () {
     Route::get('/coupon/{id}', [App\Http\Controllers\CouponController::class, 'show']);
 
     Route::get('/service/{id}', [App\Http\Controllers\ServiceController::class, 'show']);
-
-    // 17. Upload file (Dùng chung)
-    Route::post('/upload', [App\Http\Controllers\FileController::class, 'upload']);
 
     // 15. Cập nhật FCM Token
     Route::post('/fcm', [App\Http\Controllers\UserController::class, 'updateFCMToken']);
@@ -124,6 +124,8 @@ Route::middleware('auth-firebase')->group(function () {
 
         // Lấy thông tin của cửa hàng và thống kê trong ngày của cửa hàng (lượt quét, điểm đã cấp, quà đã đổi, danh sách ghé thăm trong ngày đã quét)
         Route::get('/shop-daily', [App\Http\Controllers\ShopController::class, 'getShopDailyStatistic']);
+
+        Route::get('/shop-history', [App\Http\Controllers\ShopController::class, 'getShopTransaction']);
 
         // Lấy thông tin chi tiết user để tích điểm
         Route::get('/user/{id}', [App\Http\Controllers\UserController::class, 'findUser']);
