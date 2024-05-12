@@ -30,9 +30,6 @@ class AdminCURCouponViewModel : ViewModel() {
     private val _coupon = mutableStateOf<Coupon?>(null)
     val coupon get() = _coupon
 
-    private val _isEdited = mutableStateOf<Boolean>(false)
-    val isEdited get() = _isEdited
-
     val successMessage : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
     val errorMessage : MutableLiveData<ResponseMessage?> = MutableLiveData(null)
 
@@ -58,9 +55,9 @@ class AdminCURCouponViewModel : ViewModel() {
 
     }
 
-    fun updateDetailCoupon(context: Context){
+    fun updateDetailCoupon(context: Context, edited: Boolean){
         val iconUrl = mutableStateOf<String>(_coupon.value?.icon.toString())
-
+        Log.d("Admin CUR Coupon", "Update detail coupon function: ${_coupon.value?.icon.toString()}")
         if ("https://res.cloudinary.com" !in _coupon.value?.icon.toString()){
             val inputStream = context.contentResolver.openInputStream(Uri.parse(_coupon.value?.icon))
             val file = File(context.cacheDir, "fileProfile.png")
@@ -73,15 +70,15 @@ class AdminCURCouponViewModel : ViewModel() {
                 val url = userhome.uploadImage2(file)
                 Log.d("AdminCURCoupon", url)
                 iconUrl.value = url
-                subUpdateCoupon(context, url)
+                subUpdateCoupon(context, url, edited)
             }
         }else{
-            subUpdateCoupon(context, _coupon.value?.icon.toString())
+            subUpdateCoupon(context, _coupon.value?.icon.toString(), edited)
         }
 
     }
 
-    private fun subUpdateCoupon(context:Context, iconUrl:String){
+    private fun subUpdateCoupon(context:Context, iconUrl:String, edited: Boolean){
         val couponRequest = CouponRequest(
             name = _coupon.value?.name.toString(),
             description = _coupon.value?.description.toString(),
@@ -94,7 +91,7 @@ class AdminCURCouponViewModel : ViewModel() {
 
 
         if(checkValidCoupon(couponRequest)){
-            if(_isEdited.value){
+            if(edited){
                 viewModelScope.launch {
                     try {
                         val response = ApiSingleton.getApiService().updateCoupon(_coupon.value?._id.toString(), couponRequest)
@@ -118,7 +115,6 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun createDetailCoupon(context: Context){
         Log.d("AdminCURCouponViewModel", "image url: ${coupon.value?.icon}")
-        val iconUrl = mutableStateOf<String>(_coupon.value?.icon.toString())
         if (_coupon.value?.icon.toString().isNotBlank()){
             val inputStream = context.contentResolver.openInputStream(Uri.parse(_coupon.value?.icon))
 
@@ -131,7 +127,6 @@ class AdminCURCouponViewModel : ViewModel() {
             viewModelScope.launch {
                 val url = userhome.uploadImage2(file)
                 Log.d("AdminCURCoupon", url)
-                iconUrl.value = url
                 subCreateCoupon(context, url)
             }
         }else{
@@ -167,7 +162,6 @@ class AdminCURCouponViewModel : ViewModel() {
         }else{
             Toast.makeText(context, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     fun checkValidCoupon(coupon: CouponRequest): Boolean{
@@ -205,7 +199,6 @@ class AdminCURCouponViewModel : ViewModel() {
     }
 
     fun updateImageUri(uri: String) {
-        Log.d("Admin CURCoupon", "updated image uri: $uri")
         _coupon.value = _coupon.value?.copy(icon = uri)
     }
 
@@ -215,10 +208,6 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun updateScreenState(state: String) {
         _screenState.value = state
-    }
-
-    fun updateIsEdited(edited: Boolean){
-        _isEdited.value = edited
     }
 
 }

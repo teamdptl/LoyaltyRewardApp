@@ -33,7 +33,7 @@ class AdminCURServiceViewModel: ViewModel() {
         }
     }
 
-    fun updateDetailService(context: Context){
+    fun updateDetailService(context: Context, edited: Boolean){
         val serviceRequest = ServiceResponse(
             name = _service.value?.name.toString(),
             description = _service.value?.description.toString(),
@@ -43,7 +43,7 @@ class AdminCURServiceViewModel: ViewModel() {
         )
 
         if(checkValidShop(serviceRequest)){
-            if(_isEdited.value){
+            if(edited){
                 viewModelScope.launch {
                     try {
                         val response = ApiSingleton.getApiService().updateService(_service.value?._id.toString(),serviceRequest)
@@ -73,21 +73,18 @@ class AdminCURServiceViewModel: ViewModel() {
         )
 
         if(checkValidShop(serviceRequest)){
-            if(_isEdited.value){
-                viewModelScope.launch {
-                    try {
-                        val response = ApiSingleton.getApiService().updateService(_service.value?._id.toString(),serviceRequest)
-                        Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
-                    } catch (e: HttpException){
-                        if (e.code() in 400..499){
-                            Toast.makeText(context, e.response()?.errorBody()?.string() ?: "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
-                        }
-                        Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
+            viewModelScope.launch {
+                try {
+                    val response = ApiSingleton.getApiService().createService(serviceRequest)
+                    Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                } catch (e: HttpException){
+                    if (e.code() in 400..499){
+                        Toast.makeText(context, e.response()?.errorBody()?.string() ?: "Lỗi hệ thống", Toast.LENGTH_SHORT).show()
                     }
+                    Log.d("exchangeCoupon", "errorExchange: ${e.response()?.errorBody()?.string()}")
                 }
-            }else{
-                Toast.makeText(context, "Chưa có thay đổi để cập nhật!", Toast.LENGTH_SHORT).show()
             }
+
         }else{
             Toast.makeText(context, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
         }

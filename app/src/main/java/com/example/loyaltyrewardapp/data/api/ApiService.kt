@@ -100,8 +100,8 @@ interface ApiService {
     @POST("shop/service/{id}")
     suspend fun updateService(@Path("id") id: String, @Body service: ServiceResponse): ResponseMessage
 
-    @POST("")
-    suspend fun createService()
+    @POST("shop/service")
+    suspend fun createService(@Body service: ServiceResponse): ResponseMessage
     @GET("user/{id}")
     suspend fun getUserById(@Path("id") id: String): UserInfo
     @POST("send-otp")
