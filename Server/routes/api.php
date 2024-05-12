@@ -102,7 +102,7 @@ Route::middleware('auth-firebase')->group(function () {
         // API dùng để quản lý shop
         Route::get('/shop', [App\Http\Controllers\ShopController::class, 'show']);
         Route::post('/shop', [App\Http\Controllers\ShopController::class, 'store']);
-        Route::post('/shop', [App\Http\Controllers\ShopController::class, 'update']);
+        Route::post('/shop/update', [App\Http\Controllers\ShopController::class, 'update']);
 
         // Delete shop sẽ gây ra rất nhiều lỗi :((
         Route::delete('/shop', [App\Http\Controllers\ShopController::class, 'destroy']);
