@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.UserCouponResponse
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class CouponUserViewModel : ViewModel() {
     var couponListResponse: MutableState<List<UserCouponResponse>> = mutableStateOf(emptyList<UserCouponResponse>())
@@ -21,8 +22,9 @@ class CouponUserViewModel : ViewModel() {
                 val couponList = ApiSingleton.getApiService().getCoupons()
                 couponListResponse.value = couponList
                 Log.d("CouponList", couponList.toString())
-            } catch (e: Exception) {
+            } catch (e: HttpException) {
                 errorMessage = e.message.toString()
+                Log.d("CouponList", "Error fetching current user: ${e.response()?.errorBody()?.string()}")
             }
         }
     }
