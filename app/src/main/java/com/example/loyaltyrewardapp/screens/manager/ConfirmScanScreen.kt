@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
@@ -60,20 +61,20 @@ fun ConfirmScanScreen(navController: NavHostController = rememberNavController()
     
     val accumulateError by shopScan.errorAccumulateMessage.observeAsState()
 
+    val context = LocalContext.current
+
     LaunchedEffect(null) {
         viewModel.fetchUser(userId)
         shopViewModel.getShopDetail(SharedObject.shopId)
     }
 
-    Log.d("TAG", "ConfirmScanScreen: $accumulateMessage")
-
     if (accumulateMessage != null) {
-        Toast.makeText(LocalContext.current, accumulateMessage?.message, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, accumulateMessage?.message, Toast.LENGTH_LONG).show()
         Log.d("TAG", "ConfirmScanScreen: ${accumulateMessage?.message}")
     }
 
     if (accumulateError != null) {
-        Toast.makeText(LocalContext.current, accumulateError?.message, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, accumulateError?.message, Toast.LENGTH_LONG).show()
         Log.d("TAG", "ConfirmScanScreen: ${accumulateMessage?.message}")
     }
 

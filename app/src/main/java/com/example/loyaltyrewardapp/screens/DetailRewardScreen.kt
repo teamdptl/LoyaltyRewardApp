@@ -56,7 +56,7 @@ import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
 
 @Composable
-fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false, onClick: () -> Unit){
+fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false, onClick: () -> Unit = {  }, onEdit: () -> Unit = { }, onDelete: () -> Unit = { }){
     var expandedMenu by remember { mutableStateOf(false) }
 //    val anchorPosition = remember { mutableStateOf<Offset?>(null) }
 
@@ -67,10 +67,12 @@ fun InfoRewardCard(url: String, name: String, description: String, point: Int, i
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         ),
-        modifier = Modifier.padding(6.dp)
+        modifier = Modifier
+            .padding(6.dp)
             .clickable {
                 onClick()
-            }.widthIn(max = 200.dp)
+            }
+            .widthIn(max = 200.dp)
     ) {
         Column {
             Box {
@@ -104,8 +106,8 @@ fun InfoRewardCard(url: String, name: String, description: String, point: Int, i
                                         expandedMenu = false
                                     },
                                 ) {
-                                    DropdownMenuItem(onClick = { /* Handle edit action */ },  text = {  Text("Chỉnh sửa") })
-                                    DropdownMenuItem(onClick = { /* Handle edit action */ },  text = {  Text("Xóa") })
+                                    DropdownMenuItem(onClick = { onEdit() },  text = {  Text("Chỉnh sửa") })
+                                    DropdownMenuItem(onClick = { onDelete() },  text = {  Text("Xóa") })
                                 }
 
 

@@ -50,7 +50,7 @@ import com.example.loyaltyrewardapp.ui.theme.OrangeColor
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
+fun DetailCoupon(navController: NavHostController, couponId: String?, isAdmin: Boolean = false, viewModel: CouponDetailViewModel = CouponDetailViewModel()) {
     val coupon by remember {
         viewModel.coupon
     }
@@ -106,7 +106,7 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                         ),
                         modifier = Modifier
                             .clip(shape = CircleShape)
-                            .size(50.dp)
+                            .size(60.dp)
                             .padding(all = 10.dp)
                     ) {
                         Icon(
@@ -192,25 +192,27 @@ fun DetailCoupon(navController: NavHostController, couponId: String?, viewModel:
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                 )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 50.dp, vertical = 16.dp)
-                .align(Alignment.BottomCenter), // Điều chỉnh khoảng cách của button
-            horizontalArrangement = Arrangement.Center,
+        if (!isAdmin){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 50.dp, vertical = 16.dp)
+                    .align(Alignment.BottomCenter), // Điều chỉnh khoảng cách của button
+                horizontalArrangement = Arrangement.Center,
 
-        ) {
-            // Các Spacer và nội dung khác
+                ) {
+                // Các Spacer và nội dung khác
 
-            // Button ở đây
-            RoundedOrangeButton(
-                onClick = {
-                    // Xử lý khi button được nhấn
-                    coupon?._id?.let { viewModel.exchangeCoupon(it) }
-                },
-                buttonText = "Đổi ưu đãi"
-            )
+                // Button ở đây
+                RoundedOrangeButton(
+                    onClick = {
+                        // Xử lý khi button được nhấn
+                        coupon?._id?.let { viewModel.exchangeCoupon(it) }
+                    },
+                    buttonText = "Đổi ưu đãi"
+                )
 
+            }
         }
     }
 //    if (errorMess?.isNotEmpty() == true) {
