@@ -30,6 +30,6 @@ enum class Screens {
     CURShopScreen,
     ListPointShopScreen,
     OTPScreens,
-    doneOTPScreen
+    doneOTPScreen,
     GetCurrentLocation,
 }

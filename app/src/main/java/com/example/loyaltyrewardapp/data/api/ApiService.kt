@@ -9,7 +9,6 @@ import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.ShopRequest
 import com.example.loyaltyrewardapp.data.model.ResponseUser
-import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.ShopDaily
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User

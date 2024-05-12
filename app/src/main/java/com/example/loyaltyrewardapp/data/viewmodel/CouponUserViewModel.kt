@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.data.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ class CouponUserViewModel : ViewModel() {
             try {
                 val couponList = ApiSingleton.getApiService().getCoupons()
                 couponListResponse.value = couponList
+                Log.d("CouponList", couponList.toString())
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             }

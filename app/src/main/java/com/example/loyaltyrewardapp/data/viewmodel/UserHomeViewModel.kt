@@ -16,7 +16,6 @@ import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.DetailShop
-import com.example.loyaltyrewardapp.data.model.Shop
 import com.example.loyaltyrewardapp.data.model.ShopDaily
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState

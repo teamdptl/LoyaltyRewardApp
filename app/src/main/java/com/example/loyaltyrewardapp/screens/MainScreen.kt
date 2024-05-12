@@ -43,10 +43,10 @@ class MainScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         ApiSingleton.initialize(applicationContext)
 
-        auth = FirebaseAuth.getInstance()
+//        auth = FirebaseAuth.getInstance()
 
 //        logout
-        auth.signOut()
+//        auth.signOut()
 
 //        auth.signInWithEmailAndPassword("+84890516934@app.vn", "1234567")
 //            .addOnCompleteListener(this) { task ->
@@ -73,8 +73,8 @@ class MainScreen : ComponentActivity() {
 
 //                val viewModel = AdminCURShopViewModel()
 //                CURShopScreen(shopId = "663a4e93d3b422b0fe0e2356", screen = "C", shopViewModel = viewModel)
-                val viewModel = AdminCURServiceViewModel()
-                CURServiceScreen(serviceId = "663a4e93d3b422b0fe0e2357", screen = "C", serviceViewModel = viewModel)
+//                val viewModel = AdminCURServiceViewModel()
+//                CURServiceScreen(serviceId = "663a4e93d3b422b0fe0e2357", screen = "C", serviceViewModel = viewModel)
             }
         }
 
