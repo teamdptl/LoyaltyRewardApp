@@ -310,7 +310,7 @@ class ShopController extends Controller{
     public function getShopDailyStatistic(Request $request){
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
-        $transaction = $request->user->shop->transactions()
+        $transaction = $request->user->shop->transactions()->with('user')
             ->whereDate('created_at', '>=' , $today)
             ->whereDate('created_at', '<', $tomorrow)->get();
         $luotTichDiem = $transaction->where('type', 'plus')->count();
