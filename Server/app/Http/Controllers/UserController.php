@@ -249,7 +249,7 @@ class UserController extends Controller
      */
     public function getCoupons(Request $request){
         $request->user->coupons->load('shop');
-        return $request->user->coupons;
+        return $request->user->coupons->where('redeemed_at', null)->where('expired_at', '>', now());
     }
 
     /**
