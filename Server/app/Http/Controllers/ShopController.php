@@ -356,4 +356,15 @@ class ShopController extends Controller
             return $item;
         });
     }
+
+    public function getShopTransaction(Request $request){
+        $today = Carbon::today();
+        $tomorrow = Carbon::today()->subMonths(1);
+        $transaction = $request->user->shop->transactions()->with('user')
+            ->whereDate('created_at', '>=' , $today)
+            ->whereDate('created_at', '<', $tomorrow)
+            ->orderByDesc('created_at')->get();
+        $transaction = $this->mapTransactionWithFirebaseUser($transaction);
+        return Response($transaction, 200);
+    }
 }
