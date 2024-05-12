@@ -54,6 +54,7 @@ import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.RewardItemPreview
 import com.example.loyaltyrewardapp.components.ServiceItem
 import com.example.loyaltyrewardapp.components.SquareImage
+import com.example.loyaltyrewardapp.data.SharedObject
 import com.example.loyaltyrewardapp.data.ShopProvider
 import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
 import com.example.loyaltyrewardapp.navigation.Screens
@@ -73,14 +74,21 @@ enum class SelectedItem {
 @Composable
 fun DetailCompany(navController: NavHostController = rememberNavController(), shopId: String?, viewModel: ShopDetailViewModel = ShopDetailViewModel()) {
     var selectedItem by remember { mutableStateOf(SelectedItem.First) }
-    val companies = remember { ShopProvider.shopList }
-    val isAdmin = false
+    var isAdmin by remember {
+        mutableStateOf(false)
+    }
     val shop by remember {
         viewModel.shop
     }
 
     LaunchedEffect(null) {
-        viewModel.getShopDetail(shopId!!)
+        if (shopId != null)
+            viewModel.getShopDetail(shopId)
+        else if (SharedObject.shopId.isNotEmpty()){
+            viewModel.getShopDetail(SharedObject.shopId)
+            isAdmin = true
+        }
+
     }
 
     if (shop == null) {
@@ -125,15 +133,16 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                         )
                     }
 
-                    Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 10.dp)){
-                        Text(text = "Điểm: ${shop?.your_points?:"0"}", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 13.sp, fontWeight = FontWeight.Medium, modifier = Modifier
-                            .width(100.dp)
-                            .background(color = Yellow, shape = RoundedCornerShape(10.dp))
-                            .padding(10.dp))
+                    if (isAdmin){
+                        Row (horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 10.dp)){
+                            Text(text = "Điểm: ${shop?.your_points?:"0"}", textAlign = TextAlign.Center, color = TextBlackColor, fontSize = 13.sp, fontWeight = FontWeight.Medium, modifier = Modifier
+                                .width(100.dp)
+                                .background(color = Yellow, shape = RoundedCornerShape(10.dp))
+                                .padding(10.dp))
+                        }
                     }
-
                 }
 
 //            SquareImage(
@@ -235,8 +244,15 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                                         url = it.icon,
                                         point = it.require_point,
                                         description = it.description,
+                                        isAdmin = isAdmin,
                                         onClick = {
                                             navController.navigate(Screens.DetailCouponScreen.name + "/${it._id}")
+                                        },
+                                        onEdit = {
+
+                                        },
+                                        onDelete = {
+
                                         }
                                     )
                                 }
@@ -326,24 +342,26 @@ fun DetailCompany(navController: NavHostController = rememberNavController(), sh
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 50.dp)
+                            .padding(horizontal = 50.dp, vertical = 10.dp)
                         ,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
 
 
-                        Spacer(modifier = Modifier
-                            .weight(1.15f))
-                        Spacer(modifier = Modifier
-                            .weight(1.15f))
-                        Spacer(
-                            modifier = Modifier
-                                .weight(0.7f)
-                                .height(1.dp)
-                                .background(color = OrangeColor)
-                        )
+//                        Spacer(modifier = Modifier
+//                            .weight(1.15f))
+//                        Spacer(modifier = Modifier
+//                            .weight(1.15f))
+//                        Spacer(
+//                            modifier = Modifier
+//                                .weight(0.7f)
+//                                .height(1.dp)
+//                                .background(color = OrangeColor)
+//                        )
+
+                        Text(shop?.description?:"Mô tả")
                     }
-                    Text(shop?.description?:"Mô tả")
+
                 }
 
             }

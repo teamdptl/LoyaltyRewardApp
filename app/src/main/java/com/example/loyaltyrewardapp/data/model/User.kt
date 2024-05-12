@@ -11,3 +11,9 @@ data class User (
 
 val UserEmptyState = User(role="empty")
 val NotFoundUserState = User(role="not_found")
+
+data class UserInfo(
+    val name: String,
+    val phone: String,
+    val photo: String,
+)

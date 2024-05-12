@@ -10,6 +10,7 @@ import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.ShopRequest
 import com.example.loyaltyrewardapp.data.model.Transaction
 import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.data.model.UserInfo
 import com.example.loyaltyrewardapp.data.model.UserPoint
 import com.example.loyaltyrewardapp.data.model.ServiceResponse
 import retrofit2.http.Body
@@ -99,4 +100,6 @@ interface ApiService {
 
     @POST("")
     suspend fun createService()
+    @GET("user/{id}")
+    suspend fun getUserById(@Path("id") id: String): UserInfo
 }

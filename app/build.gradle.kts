@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("io.realm.kotlin") version "1.11.0"
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -57,7 +59,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -154,4 +155,13 @@ dependencies {
 
     // Shimmer Loading
     implementation("com.valentinilk.shimmer:compose-shimmer:1.3.0")
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

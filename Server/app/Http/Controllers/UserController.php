@@ -28,6 +28,26 @@ class UserController extends Controller
     }
 
     /**
+     * 31. Xem chi tiết user
+     *
+     * Hiển thị user
+     *
+     */
+    public function findUser($id){
+        $user = User::find($id);
+        if($user){
+            $auth = app('firebase.auth');
+            $user = $auth->getUser($user->auth_id);
+            return [
+                "name" => $user->displayName,
+                "phone" => $user->phoneNumber,
+                "photo" => $user->photoUrl,
+            ];
+        }
+        return Response('Không tìm thấy user này!', 404);
+    }
+
+    /**
      * 1. Thông tin người dùng hiện tại
      *
      * Hiển thị vai trò, shop sở hữu (đối với manager), mã qr (đối với user)
