@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OtpCode;
+use App\Models\User;
 use Dedoc\Scramble\Support\Generator\Response;
 use HTTP_Request2;
 use HTTP_Request2_Exception;
@@ -59,6 +60,12 @@ class AuthController extends Controller
         } catch (\Exception $e){
             return response()->json('Tạo user thất bại', 401);
         }
+
+        User::create([
+            'auth_id' => $user->uid,
+            'role' => $validate['role'],
+            'fcm_token' => "",
+        ]);
 
         return Response(['message' => 'Tạo user thành công', 'data' => $user]);
     }
