@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,8 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Button
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.ButtonDefaults
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Icon
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.MaterialTheme
@@ -41,12 +45,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.birjuvachhani.locus.Locus
 import com.example.loyaltyrewardapp.components.ImagePicker
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
-import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
+import com.example.loyaltyrewardapp.data.model.Location
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
 
 class DetailShopActivity : ComponentActivity() {
@@ -104,6 +108,9 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.name,
                     numOfRow = 1,
                     {
+                        if (!shopViewModel.isEdited.value){
+                            shopViewModel.updateIsEdited(true)
+                        }
                         shopViewModel.updateShopName(it)
                         shop = shop?.copy(name = it)
                     },
@@ -115,6 +122,9 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.description,
                     numOfRow = 4,
                     {
+                        if (!shopViewModel.isEdited.value){
+                            shopViewModel.updateIsEdited(true)
+                        }
                         shopViewModel.updateShopDescription(it)
                         shop = shop?.copy(description = it)
                     },
@@ -126,6 +136,9 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.address,
                     numOfRow = 1,
                     onValueChange = {
+                        if (!shopViewModel.isEdited.value){
+                            shopViewModel.updateIsEdited(true)
+                        }
                         shopViewModel.updateShopAddress(it)
                         shop = shop?.copy(address = it)
                     },
@@ -137,6 +150,9 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     fieldValue = sh.phone,
                     numOfRow = 1,
                     onValueChange = {
+                        if (!shopViewModel.isEdited.value){
+                            shopViewModel.updateIsEdited(true)
+                        }
                         shopViewModel.updateShopPhone(it)
                         shop = shop?.copy(phone = it)
                     },
@@ -153,22 +169,29 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(updateUri = {shopViewModel.updateShopLogo(it)}, text = "Choose Image", sh.logo, screenState != "R")
+                    ImagePicker(updateUri =
+                    {
+                        shopViewModel.updateShopLogo(it)
+                        if (!shopViewModel.isEdited.value){
+                            shopViewModel.updateIsEdited(true)
+                        }
+                    },
+                        text = "Choose Image", sh.logo, screenState)
                 }
 
-                Spacer(modifier = Modifier.size(10.dp))
-                Column {
-                    Text(
-                        text = "Ảnh bìa",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Start,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-
-                    ImagePicker(updateUri = {shopViewModel.updateShopCover(it)}, text = "Choose Image", sh.cover.toString(), screenState != "R")
-                }
+//                Spacer(modifier = Modifier.size(10.dp))
+//                Column {
+//                    Text(
+//                        text = "Ảnh bìa",
+//                        modifier = Modifier.fillMaxWidth(),
+//                        textAlign = TextAlign.Start,
+//                        color = Color.Black,
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 16.sp
+//                    )
+//
+//                    ImagePicker(updateUri = {shopViewModel.updateShopCover(it)}, text = "Choose Image", sh.cover.toString(), screenState)
+//                }
 
                 Spacer(modifier = Modifier.size(10.dp))
                 Column {
@@ -182,7 +205,24 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                     )
                     Spacer(modifier = Modifier.size(10.dp))
                     Text(text = "Kinh độ ${sh.location?.coordinates?.get(0)}, vĩ độ ${sh.location?.coordinates?.get(1)}",
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(enabled = screenState != "R")
+                            {
+                                Locus.getCurrentLocation(context) { result ->
+                                    result.location?.let {
+                                        val coordinate = doubleArrayOf(it.longitude, it.latitude).toList()
+                                        val location = Location("Point", coordinates = coordinate)
+                                        shopViewModel.updateShopLocation(location)
+                                        shop = shop?.copy(location = location)
+                                        if (!shopViewModel.isEdited.value){
+                                            shopViewModel.updateIsEdited(true)
+                                        }
+                                        Log.d("TestCamera", "Location: ${it.longitude} ${it.latitude}")
+                                    }
+                                    result.error?.let { /* Received error! */ }
+                                }
+                            },
                         textAlign = TextAlign.Start,
                         color = Color(0xFFCCEBF5),
                         fontWeight = FontWeight.Normal,

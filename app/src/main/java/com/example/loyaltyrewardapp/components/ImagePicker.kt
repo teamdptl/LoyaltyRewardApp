@@ -25,7 +25,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
 
 @Composable
-fun ImagePicker(updateUri: (String) -> Unit, text: String, imageUri: String = "", enable : Boolean = false){
+fun ImagePicker(updateUri: (String) -> Unit, text: String, imageUri: String = "", screenState : String = "R"){
     var selectedImage by remember { mutableStateOf(imageUri) }
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
         if (uri != null){
@@ -34,7 +34,7 @@ fun ImagePicker(updateUri: (String) -> Unit, text: String, imageUri: String = ""
         }
     }
 
-    ButtonImagePicker(text, selectedImage, enable) {
+    ButtonImagePicker(text, selectedImage, screenState) {
         launcher.launch("image/jpeg")
         Log.d("ImagePicker", "link: " + selectedImage)
     }
@@ -43,7 +43,7 @@ fun ImagePicker(updateUri: (String) -> Unit, text: String, imageUri: String = ""
 fun ButtonImagePicker(
     text: String,
     selectedImage: String,
-    enable: Boolean,
+    screenState: String,
     onClickImage: () -> Unit){
     Log.d("ImagePicker", "link: " + selectedImage)
 
@@ -54,7 +54,7 @@ fun ButtonImagePicker(
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
                     .clickable(
-                        enabled = enable
+                        enabled = screenState != "R"
                     ) { onClickImage() })
 
             }else{

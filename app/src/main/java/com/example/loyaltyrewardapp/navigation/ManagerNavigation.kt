@@ -178,6 +178,10 @@ fun ManagerNavigation(){
                 val rewardId = qrData?.substringAfter("|")
                 RewardScanScreen(navController, userId, rewardId)
             }
+
+            composable(route = Screens.GetCurrentLocation.name){backStackEntry ->
+
+            }
         }
     }
 }

@@ -18,10 +18,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.imageLoader
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURServiceViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.example.loyaltyrewardapp.ui.OTPPreview
 import com.example.loyaltyrewardapp.navigation.GuestNavigation
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
+import com.example.loyaltyrewardapp.screens.manager.CURServiceScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
@@ -56,8 +59,13 @@ class MainScreen : AppCompatActivity() {
             MaterialTheme {
                 GuestNavigation()
 //                LoginScreen()
-                val viewModel = AdminCURCouponViewModel()
+//                val viewModel = AdminCURCouponViewModel()
 //                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R", couponViewModel = viewModel)
+
+//                val viewModel = AdminCURShopViewModel()
+//                CURShopScreen(shopId = "663a4e93d3b422b0fe0e2356", screen = "C", shopViewModel = viewModel)
+                val viewModel = AdminCURServiceViewModel()
+                CURServiceScreen(serviceId = "663a4e93d3b422b0fe0e2357", screen = "C", serviceViewModel = viewModel)
             }
         }
 
