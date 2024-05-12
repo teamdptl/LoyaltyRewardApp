@@ -30,10 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.loyaltyrewardapp.data.viewmodel.ManagerConfirmScanViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.ManagerScanViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
 import com.example.loyaltyrewardapp.screens.*
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.ConfirmScanScreen
@@ -44,7 +42,7 @@ import com.example.loyaltyrewardapp.screens.manager.ScanScreen
 
 @Composable
 @Preview
-fun ManagerNavigation(){
+fun ManagerNavigation(guestNav: NavHostController = rememberNavController()) {
     val navController = rememberNavController()
 
     Scaffold (

@@ -60,18 +60,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun LoginScreen(navController: NavHostController = rememberNavController()) {
+fun LoginScreen(navController: NavHostController = rememberNavController(), onLogin: () -> Unit = {}) {
     Column(
         Modifier
             .fillMaxSize()
             .background(Color.White)) {
         Title()
-        getField(navController)
+        getField(navController, onLogin = onLogin)
     }
 }
 object ScreenState {
@@ -107,7 +108,7 @@ fun Title() {
     }
 }
 @Composable
-fun getField(navController: NavHostController) {
+fun getField(navController: NavHostController, onLogin: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -216,7 +217,7 @@ fun getField(navController: NavHostController) {
         )
         Button(
             onClick = {
-                LoginUsersByEmail(context,navController,numberPhone.value,password.value)
+                LoginUsersByEmail(context,navController,numberPhone.value,password.value, onLogin = onLogin)
                       /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
@@ -346,14 +347,15 @@ fun getField(navController: NavHostController) {
 
 fun isValidPhoneNumber(phoneNumber: String): Boolean {
     if (phoneNumber.isBlank()) return false
-    val prefixList = listOf("03", "05", "07", "08", "09")
+    val prefixList = listOf("0")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
 fun LoginUsersByEmail(
     context: Context,
     navController: NavController,
     phoneNumber: String,
-    password: String
+    password: String,
+    onLogin: () -> Unit = {}
 ) {
     val auth = FirebaseAuth.getInstance()
     val phoneChangeEmail = "+84" +phoneNumber.substring(1) +"@app.vn"
@@ -365,15 +367,8 @@ fun LoginUsersByEmail(
                     Log.d("User", "signInWithEmail:success")
                     val user = auth.currentUser;
                     // TODO: Fix this to navigate to the correct screen manager or user
-                    navController.navigate(Screens.UserNavigationScreen.name)
                     Toast.makeText(context,"Đăng nhập thành công",Toast.LENGTH_SHORT).show()
-                    user?.getIdToken(false)?.addOnCompleteListener(Activity()) {
-                        if (it.isSuccessful) {
-                            val idToken = it.result?.token
-                            Log.d("User", "idToken: $idToken")
-
-                        }
-                    }
+                    onLogin()
                 } else {
                     Log.d("User", "signInWithEmail:fail")
                     Toast.makeText(context,"Số điện thoại hoặc mật khẩu đã sai",Toast.LENGTH_SHORT).show()
