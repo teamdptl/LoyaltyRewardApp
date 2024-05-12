@@ -160,7 +160,7 @@ fun ManagerNavigation(){
                 HistoryPreview()
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfilePreview()
+                ProfileContent()
             }
             composable(route = Screens.AdminReadCoupon.name + "/{couponId}"){ backStackEntry ->
                 CURCouponScreen(navController, backStackEntry.arguments?.getString("couponId").toString(), "R")

@@ -29,7 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.MainUserHeader
 import com.example.loyaltyrewardapp.data.model.Coupon
-import com.example.loyaltyrewardapp.data.model.Shop
+import com.example.loyaltyrewardapp.data.model.DetailShop
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
 import com.example.loyaltyrewardapp.navigation.Screens
@@ -110,7 +110,7 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
                 }
             }
 
-            if (recommendShops == emptyList<Shop>()){
+            if (recommendShops == emptyList<DetailShop>()){
                 Log.d("Loading", "Chua co du lieu")
             } else {
                 Log.d("Loading", "Da load xong du lieu ${recommendShops[0].logo}")
@@ -167,7 +167,7 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
 //                }
             }
 
-            if (visitedShops == emptyList<Shop>()){
+            if (visitedShops == emptyList<DetailShop>()){
                 Log.d("Loading", "Chua co du lieu")
             } else {
                 LazyRow(

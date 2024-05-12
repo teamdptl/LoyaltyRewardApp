@@ -66,8 +66,11 @@ class DetailCouponActivity : ComponentActivity() {
 
 @Composable
 fun CURCouponScreen(navController: NavController = rememberNavController(), couponId: String, screen: String = "R", couponViewModel : AdminCURCouponViewModel = AdminCURCouponViewModel()){
+
     var coupon by remember {couponViewModel.coupon}
     var screenState by remember {couponViewModel.screenState}
+    var point by remember { mutableStateOf<String>(couponViewModel.coupon.value?.require_point.toString())}
+    var expiredAt by remember { mutableStateOf<String>(couponViewModel.coupon.value?.expired_after.toString())}
     var title by remember{mutableStateOf("")}
     val context = LocalContext.current
 
@@ -75,6 +78,8 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
     LaunchedEffect(key1 = null){
         couponId.let{
             couponViewModel.getDetailCoupon(screen, it)
+            point = couponViewModel.coupon.value?.require_point.toString()
+            expiredAt = couponViewModel.coupon.value?.expired_after.toString()
             Log.d("Loading", "Dang load du lieu")
         }
     }
@@ -122,21 +127,33 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Điểm sử dụng",
-                    fieldValue = co.require_point.toString(),
+                    fieldValue = point.toString(),
                     onValueChange =
                     {
-                        couponViewModel.updatePoint(it.toInt())
-                        coupon = coupon?.copy(require_point = it.toInt())
+                        point = it
+                        if (point.isBlank()){
+                            couponViewModel.updatePoint(-1)
+                            coupon = coupon?.copy(require_point = -1)
+                        }else{
+                            couponViewModel.updatePoint(it.toIntOrNull()?: -1)
+                            coupon = coupon?.copy(require_point = it.toIntOrNull()?: -1)
+                        }
                     },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
 
                 LabelTextField(label = "Hết hạn sau (tháng)",
-                    fieldValue = co.expired_after.toString(),
+                    fieldValue = expiredAt,
                     onValueChange =
                     {
-                        couponViewModel.updateTimeExpire(it.toInt())
-                        coupon = coupon?.copy(expired_after = it.toInt())
+                        expiredAt = it
+                        if (expiredAt.isBlank()){
+                            couponViewModel.updateTimeExpire(0)
+                            coupon = coupon?.copy(expired_after = 0)
+                        }else{
+                            couponViewModel.updateTimeExpire(it.toIntOrNull()?: 0)
+                            coupon = coupon?.copy(expired_after = it.toIntOrNull()?: 0)
+                        }
                     },
                     screenState = screenState)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -150,7 +167,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                         fontSize = 16.sp
                     )
 
-                    ImagePicker(couponViewModel, text = "Choose Image", co.icon, screenState != "R")
+                    ImagePicker(updateUri = {couponViewModel.updateImageUri(it)}, text = "Choose Image", co.icon, screenState != "R")
 
                 }
 
@@ -161,7 +178,6 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
                     Checkbox(checked = co.is_active,
                         enabled = screenState != "R",
                         onCheckedChange = {
-                            Log.d("CUR Coupon Screen", "Checkbox click: $it")
                             couponViewModel.updateIsActive(it)
                             coupon = coupon?.copy(is_active = it)
                         })
@@ -224,7 +240,7 @@ fun CURCouponScreen(navController: NavController = rememberNavController(), coup
 
                             Button(
                                 onClick = {
-
+                                    couponViewModel.createDetailCoupon(context)
                                 },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(

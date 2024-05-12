@@ -7,5 +7,5 @@ data class Transaction(
     val reason: String="",
     val type: String="", // plus, minus, receive
     val created_at: String="",
-    val shop: Shop,
+    val shop: DetailShop,
 )
