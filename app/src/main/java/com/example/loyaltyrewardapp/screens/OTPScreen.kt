@@ -60,7 +60,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.DataUser
 import com.example.loyaltyrewardapp.data.viewmodel.RegisterViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.isCreateAccount
 import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.getOTP.otp
 
@@ -82,7 +81,7 @@ class OTPScreen : ComponentActivity() {
 fun OTPScreens(navController: NavController= rememberNavController(), viewModel: RegisterViewModel = RegisterViewModel()) {
     val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize()) {
-        btnIconBackScreen()
+        btnIconBackScreen(navController)
         TitleOTP()
         InputOTP(length = 6, onOtpEntered = { otp -> Log.d("OTP value", "val: $otp") })
 //        BackSendCodeOTP()
@@ -92,9 +91,11 @@ fun OTPScreens(navController: NavController= rememberNavController(), viewModel:
 }
 
 @Composable
-fun btnIconBackScreen() {
+fun btnIconBackScreen(navController: NavController) {
     IconButton(
-        onClick = { /*TODO*/ },
+        onClick = {
+                  navController.navigate(Screens.registerScreen.name)
+                  /*TODO*/ },
         modifier = Modifier
             .width(20.dp)
             .height(20.dp)
