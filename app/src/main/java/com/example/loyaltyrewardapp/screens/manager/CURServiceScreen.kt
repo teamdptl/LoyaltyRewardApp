@@ -183,9 +183,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
                     if (screenState == "R") {
                         Button(
-                            onClick = {
-//                          navController.navigate(Screens.)
-                            },
+                            onClick = {navController.popBackStack()},
                             contentPadding = PaddingValues(30.dp, 10.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(0xf0f0f0fc)
@@ -216,7 +214,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     } else {
                         if (screenState == "C") {
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = { navController.popBackStack() },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xf0f0f0fc)
@@ -247,7 +245,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                         } else {
 
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = { navController.popBackStack() },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xf0f0f0fc)

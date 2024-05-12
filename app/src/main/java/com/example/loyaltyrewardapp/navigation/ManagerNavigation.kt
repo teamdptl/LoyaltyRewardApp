@@ -33,6 +33,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURServiceViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ManagerConfirmScanViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ManagerScanViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
@@ -180,13 +182,16 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
             }
 
             composable(route = Screens.AdminReadService.name + "/{serviceId}"){ backStackEntry ->
-                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "R")
+                val viewModel = AdminCURServiceViewModel()
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "R", viewModel)
             }
             composable(route = Screens.AdminUpdateService.name + "/{serviceId}"){backStackEntry ->
-                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "U")
+                val viewModel = AdminCURServiceViewModel()
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "U", viewModel)
             }
             composable(route = Screens.AdminCreateService.name + "/{serviceId}"){backStackEntry ->
-                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "C")
+                val viewModel = AdminCURServiceViewModel()
+                CURServiceScreen(navController, serviceId = backStackEntry.arguments?.getString("serviceId").toString(), "C", viewModel)
             }
 
             composable(route = Screens.ConfirmScanScreen.name + "/{userId}"){backStackEntry ->
@@ -208,7 +213,8 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
             }
 
             composable(route = Screens.UpdateShopScreen.name + "/{shopId}"){ backStackEntry ->
-                CURShopScreen(navController, backStackEntry.arguments?.getString("shopId")?:"", "U")
+                val viewModel = AdminCURShopViewModel()
+                CURShopScreen(navController, backStackEntry.arguments?.getString("shopId")?:"", "U", viewModel)
             }
         }
     }
