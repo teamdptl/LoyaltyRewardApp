@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.loyaltyrewardapp.R
 
+
 @Composable
 fun InfoRewardCard(url: String, name: String, description: String, point: Int, isAdmin: Boolean = false, onClick: () -> Unit){
     var expandedMenu by remember { mutableStateOf(false) }

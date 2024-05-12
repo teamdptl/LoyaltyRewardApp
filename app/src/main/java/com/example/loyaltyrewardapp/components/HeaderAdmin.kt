@@ -18,9 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CurrencyExchange
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -32,21 +30,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.model.ShopDaily
+import com.example.loyaltyrewardapp.data.model.User
+import com.example.loyaltyrewardapp.data.model.Visited
 import com.example.loyaltyrewardapp.ui.theme.TextBlackColor
-import com.example.loyaltyrewardapp.ui.theme.Yellow
 import com.example.loyaltyrewardapp.ui.theme.OrangeColor
+import com.google.firebase.auth.FirebaseUser
 
-@Preview
 @Composable
-fun HeaderAdmin(){
+fun HeaderAdmin(
+    firebaseData: FirebaseUser,
+    user: User,
+    shopDaily: ShopDaily,
+    visitedManagers: List<Visited>
+){
     Box(modifier = Modifier
         .fillMaxWidth()
-        .height(210.dp)) {
+        .height(250.dp)) {
         Image(
             painter = painterResource(id = R.drawable.background),
             contentDescription = null,
@@ -72,7 +75,7 @@ fun HeaderAdmin(){
                     )
                     Column(modifier = Modifier.padding(start = 8.dp)) {
                         Text(
-                            text = "Huỳnh Khánh Duy",
+                            text = firebaseData.displayName.toString(),
                             color = TextBlackColor,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(bottom = 4.dp)
@@ -101,8 +104,8 @@ fun HeaderAdmin(){
                     }
                 }
             }
-            Text(text = "Thống kê ngày 04/08/2024")
-            CardHeader()
+            Text(text = "Thống kê hôm nay")
+            CardHeader(firebaseData, user, shopDaily, visitedManagers)
 
 
         }
@@ -110,7 +113,12 @@ fun HeaderAdmin(){
 }
 
 @Composable
-fun CardHeader() {
+fun CardHeader(
+    firebaseData: FirebaseUser,
+    user: User,
+    shopDaily: ShopDaily,
+    visitedManagers: List<Visited>
+) {
     Column(
         modifier = Modifier.padding(top = 20.dp, end = 20.dp, start = 20.dp)
     ) {
@@ -132,10 +140,10 @@ fun CardHeader() {
                     modifier = Modifier.size(30.dp)
                 )
                 Column(
-                    modifier = Modifier.padding(start = 10.dp)
+                    modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Text(text = "Đã quét cho")
-                    Text(text = "10 khách",fontWeight = FontWeight.W500,)
+                    Text(text = visitedManagers.size.toString() + " users",fontWeight = FontWeight.W500,)
                 }
             }
             // Cặp thứ hai Icon và Column
@@ -148,10 +156,15 @@ fun CardHeader() {
                     modifier = Modifier.size(30.dp)
                 )
                 Column(
-                    modifier = Modifier.padding(start = 10.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(text = "Điểm đã cấp")
-                    Text(text = "100 điểm",fontWeight = FontWeight.W500,)
+                    Text(text = shopDaily.diemDaCap.toString(),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp,
+                        maxLines = 1,
+                        )
                 }
 
             }

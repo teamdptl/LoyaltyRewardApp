@@ -11,10 +11,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
+import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.Shop
+import com.example.loyaltyrewardapp.data.model.ShopDaily
 import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
+import com.example.loyaltyrewardapp.data.model.Visited
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.userProfileChangeRequest
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +36,8 @@ class UserHomeViewModel: ViewModel() {
     val recommendShops: MutableState<List<Shop>> = mutableStateOf(emptyList<Shop>())
     val visitedShops: MutableState<List<Shop>> = mutableStateOf(emptyList<Shop>())
     val availableCoupons: MutableState<List<Coupon>> = mutableStateOf(emptyList<Coupon>())
+    val visitedManagers: MutableState<List<Visited>> = mutableStateOf(emptyList<Visited>())
+    val shopDaily: MutableState<ShopDaily?> = mutableStateOf(null)
 
     fun fetchCurrentUser() {
         viewModelScope.launch {
@@ -64,6 +69,14 @@ class UserHomeViewModel: ViewModel() {
         viewModelScope.launch {
             val vouchers = ApiSingleton.getApiService().getAvailableCoupons()
             availableCoupons.value = vouchers
+        }
+    }
+
+    fun fetchVisitedManager(){
+        viewModelScope.launch {
+            val visites = ApiSingleton.getApiService().visitedOfADay()
+            visitedManagers.value = visites.visited
+            shopDaily.value = visites
         }
     }
 
