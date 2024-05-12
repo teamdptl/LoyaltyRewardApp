@@ -2,9 +2,7 @@ package com.example.loyaltyrewardapp.screens
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +27,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
@@ -38,6 +35,7 @@ import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,26 +52,29 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.loyaltyrewardapp.R
-import com.google.firebase.auth.FirebaseAuth
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.loyaltyrewardapp.R
+import com.example.loyaltyrewardapp.data.DataUser
+import com.example.loyaltyrewardapp.data.viewmodel.SenOTPViewModel
 import com.example.loyaltyrewardapp.navigation.Screens
-import com.example.loyaltyrewardapp.ui.ScreenState
 
 
 @Composable
-fun registerScreen(navController: NavHostController = rememberNavController()) {
+fun registerScreen(
+    navController: NavHostController = rememberNavController(),
+    viewModel: SenOTPViewModel = SenOTPViewModel()
+) {
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Title()
         ChangeUserRegister()
-        getField(navController)
+        getField(navController,viewModel)
     }
 }
+
 
 @Composable
 fun Title() {
@@ -101,12 +102,16 @@ fun Title() {
     }
 }
 
+object roleUser{
+    var roleText = "user"
+}
+
+
 @Composable
 fun ChangeUserRegister() {
     val selectedButton = remember {
         mutableStateOf(true)
     }
-
     Row(
         modifier = Modifier
             .width(width = 327.dp)
@@ -117,7 +122,8 @@ fun ChangeUserRegister() {
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         TextButton(
-            onClick = { selectedButton.value = true },
+            onClick = {selectedButton.value = true
+                roleUser.roleText ="user" },
             modifier = Modifier
                 .width(width = 151.dp)
                 .height(height = 48.dp)
@@ -132,7 +138,8 @@ fun ChangeUserRegister() {
             Text(text = "Khách hàng", color = Color.Black, fontWeight = FontWeight.Bold)
         }
         TextButton(
-            onClick = { selectedButton.value = false }, // Khi click vào button "Chủ cửa hàng"
+            onClick = { selectedButton.value = false
+                roleUser.roleText ="manager"}, // Khi click vào button "Chủ cửa hàng"
             modifier = Modifier
                 .width(width = 152.dp)
                 .height(height = 48.dp)
@@ -149,13 +156,17 @@ fun ChangeUserRegister() {
 }
 
 @Composable
-fun getField(navController: NavHostController) {
+fun getField(
+    navController: NavHostController,
+    viewModel: SenOTPViewModel,
+) {
     Column(
         modifier = Modifier
             .width(327.dp)
             .fillMaxHeight()
             .padding(top = 20.dp)
     ) {
+
         val userName = remember {
             mutableStateOf("")
         }
@@ -179,6 +190,12 @@ fun getField(navController: NavHostController) {
         val isPasswordValid = password.value.isNotEmpty() && password.value.length >= 6
         val isLoginEnabled = isPhoneNumberValid && isPasswordValid && isNameValid
         val focusManager = LocalFocusManager.current
+
+//        LaunchedEffect(key1 = null) {
+//            viewModel.sendCodeOTP(numberPhone.value)
+//            Log.d("NumberPhone", "getNumber: $numberPhone")
+//        }
+
         Text(
             modifier = Modifier.padding(top = 10.dp),
             text = "Họ tên",
@@ -290,8 +307,15 @@ fun getField(navController: NavHostController) {
         )
         Button(
             onClick = {
-//                sendOTP(numberPhone.value)
-                      /*TODO*/ },
+                DataUser._name = userName.value
+                DataUser.phone = numberPhone.value
+                DataUser.password = password.value
+                DataUser.role = roleUser.roleText
+                viewModel.sendCodeOTP(numberPhone.value)
+                navController.navigate(Screens.OTPScreens.name)
+
+                Log.d("NumberPhone", "getNumber:"+ numberPhone.value)
+                /*TODO*/ },
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally)
@@ -417,86 +441,14 @@ fun getField(navController: NavHostController) {
 }
 
 
+
+
+
 fun isValidPhoneNumber(phoneNumber: String): Boolean {
     if (phoneNumber.isBlank()) return false
     val prefixList = listOf("03", "05", "07", "08", "09")
     return phoneNumber.length == 10 && prefixList.any { phoneNumber.startsWith(it) }
 }
 
-//@OptIn(ExperimentalTime::class)
-//fun sendOTP( phoneNumber: String) {
-//    val auth = FirebaseAuth.getInstance()
-//    val options = PhoneAuthOptions.newBuilder(auth)
-//        .setPhoneNumber(phoneNumber) // Phone number to verify
-//        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//        .setActivity(this) // Activity (for callback binding)
-//        .setCallbacks( object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-//
-//            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-//                // This callback will be invoked in two situations:
-//                // 1 - Instant verification. In some cases the phone number can be instantly
-//                //     verified without needing to send or enter a verification code.
-//                // 2 - Auto-retrieval. On some devices Google Play services can automatically
-//                //     detect the incoming verification SMS and perform verification without
-//                //     user action.
-//                signInWithPhoneAuthCredential(credential)
-//            }
-//
-//            override fun onVerificationFailed(e: FirebaseException) {
-//                // This callback is invoked in an invalid request for verification is made,
-//                // for instance if the the phone number format is not valid.
-//
-//                if (e is FirebaseAuthInvalidCredentialsException) {
-//                    // Invalid request
-//                } else if (e is FirebaseTooManyRequestsException) {
-//                    // The SMS quota for the project has been exceeded
-//                } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
-//                    // reCAPTCHA verification attempted with null Activity
-//                }
-//
-//                // Show a message and update the UI
-//            }
-//
-//            override fun onCodeSent(
-//                verificationId: String,
-//                token: PhoneAuthProvider.ForceResendingToken,
-//            ) {
-//                // The SMS verification code has been sent to the provided phone number, we
-//                // now need to ask the user to enter the code and then construct a credential
-//                // by combining the code with a verification ID.
-//
-//                // Save verification ID and resending token so we can use them later
-//                var storedVerificationId = verificationId
-//                var resendToken = token
-//            }
-//        }) // OnVerificationStateChangedCallbacks
-//        .build()
-//    PhoneAuthProvider.verifyPhoneNumber(options)
-//
-//
-//}
-//
-// fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-//     val auth = FirebaseAuth.getInstance()
-//     auth.signInWithCredential(credential)
-//        .addOnCompleteListener(this) { task ->
-//            if (task.isSuccessful) {
-//                // Sign in success, update UI with the signed-in user's information
-//
-//                val user = task.result?.user
-//            } else {
-//                // Sign in failed, display a message and update the UI
-//                if (task.exception is FirebaseAuthInvalidCredentialsException) {
-//                    // The verification code entered was invalid
-//                }
-//                // Update UI
-//            }
-//        }
-//}
 
 
-@Preview(showBackground = true)
-@Composable
-fun RegisterDefaultView() {
-    registerScreen()
-}

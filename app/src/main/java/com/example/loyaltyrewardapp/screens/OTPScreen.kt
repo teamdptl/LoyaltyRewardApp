@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -34,33 +33,30 @@ import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.example.loyaltyrewardapp.data.DataUser
+import com.example.loyaltyrewardapp.data.viewmodel.RegisterViewModel
+import com.example.loyaltyrewardapp.ui.getOTP.otp
 
 class OTPScreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,13 +73,14 @@ class OTPScreen : ComponentActivity() {
 }
 
 @Composable
-fun OTPScreens() {
+fun OTPScreens(viewModel: RegisterViewModel = RegisterViewModel()) {
     Column(modifier = Modifier.fillMaxSize()) {
         btnIconBackScreen()
         TitleOTP()
         InputOTP(length = 6, onOtpEntered = { otp -> Log.d("OTP value", "val: $otp") })
-        BackSendCodeOTP()
-        BtnConfirm()
+//        BackSendCodeOTP()
+        BtnConfirm(viewModel)
+        Log.d("data", "data: "+DataUser._name+","+DataUser.phone+","+DataUser.password+","+DataUser.role)
     }
 }
 
@@ -118,7 +115,7 @@ fun TitleOTP() {
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Đã gửi mã xác thực đến số điện thoại +233 *******53. Vui lòng kiểm tra tin nhắn.",
+            text = "Đã gửi mã xác thực. Vui lòng kiểm tra tin nhắn.",
             modifier = Modifier.align(Alignment.BottomStart),
             style = TextStyle(
                 fontSize = 16.sp,
@@ -132,12 +129,19 @@ object IsButtonVisible {
     val isButtonVisible: MutableState<Boolean> = mutableStateOf(false)
 
 }
+object getOTP {
+    var otp by mutableStateOf(mutableListOf("","","","","",""))
+
+    val getotp: String
+        get() = otp.joinToString(separator = "")
+}
+
 @Composable
 fun InputOTP(
     length: Int,
     onOtpEntered: (String) -> Unit
 ) {
-    var otp by remember { mutableStateOf(mutableListOf("","","","","","")) }
+
     val focusManager = LocalFocusManager.current
     val focusRequesters = remember { List(length) { FocusRequester() } }
     var isOutlineTextField = remember { List(length) { mutableStateOf(true) } }
@@ -149,7 +153,7 @@ fun InputOTP(
             .padding(top = 120.dp)
             .fillMaxWidth()
             .clickable {
-                if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() && !startFocusLast.value}){
+                if (otp.all { it.isNotBlank() } && otp.all { it.isDigitsOnly() && !startFocusLast.value }) {
                     focusRequesters[5].requestFocus()
                     startFocusLast.value = true
                 }
@@ -264,34 +268,38 @@ private fun OtpDigitInput(
 }
 
 
-@Composable
-fun BackSendCodeOTP() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp),
-        Arrangement.Center
-    ) {
-        Text(text = "Chưa nhận được mã?", modifier = Modifier.alpha(0.5f))
-        Text(
-            text = " Gửi lại", fontWeight = FontWeight.Bold, modifier = Modifier
-                .clickable(onClick = {
-                    Unit
-                })
-                .padding(start = 3.dp), color = Color(0xFF37A1ED)
-        )
+//@Composable
+//fun BackSendCodeOTP() {
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(top = 30.dp),
+//        Arrangement.Center
+//    ) {
+//        Text(text = "Chưa nhận được mã?", modifier = Modifier.alpha(0.5f))
+//        Text(
+//            text = " Gửi lại", fontWeight = FontWeight.Bold, modifier = Modifier
+//                .clickable(onClick = {
+//                    Unit
+//                })
+//                .padding(start = 3.dp), color = Color(0xFF37A1ED)
+//        )
+//
+//    }
+//}
 
-    }
-}
-
 @Composable
-fun BtnConfirm() {
+fun BtnConfirm(viewModel: RegisterViewModel) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                viewModel.createResgister(DataUser._name,DataUser.phone,DataUser.password,DataUser.role,
+                    getOTP.getotp)
+                Log.d("data", "data: "+DataUser._name+","+DataUser.phone+","+DataUser.password+","+DataUser.role+","+ getOTP.getotp)
+                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 14.dp, end = 14.dp, bottom = 150.dp)
@@ -309,10 +317,4 @@ fun BtnConfirm() {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OTPPreview() {
-    OTPScreens()
 }
