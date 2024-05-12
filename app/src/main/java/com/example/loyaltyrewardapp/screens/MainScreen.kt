@@ -24,6 +24,7 @@ import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.OTPScreens
+import com.example.loyaltyrewardapp.ui.doneOTPScreen
 import com.example.loyaltyrewardapp.ui.theme.LoyaltyRewardAppTheme
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.HttpException
@@ -59,7 +60,7 @@ class MainScreen : AppCompatActivity() {
         setContent {
             MaterialTheme {
                 GuestNavigation()
-//                OTPScreens()
+//                doneOTPScreen()
 //                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "R")
             }
         }

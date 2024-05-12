@@ -67,10 +67,10 @@ fun GuestNavigation(viewModel : GuestViewModel = GuestViewModel()) {
             registerScreen(navController)
         }
         composable(route = Screens.OTPScreens.name) {
-            OTPScreens()
+            OTPScreens(navController)
         }
         composable(route = Screens.doneOTPScreen.name) {
-            doneOTPScreen()
+            doneOTPScreen(navController)
         }
         composable(route = Screens.UserNavigationScreen.name) {
             UserNavigation()

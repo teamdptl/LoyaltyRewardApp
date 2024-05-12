@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.screens
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -35,7 +36,6 @@ import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -59,6 +60,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.data.DataUser
 import com.example.loyaltyrewardapp.data.viewmodel.SenOTPViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.isCreateAccount
 import com.example.loyaltyrewardapp.navigation.Screens
 
 
@@ -67,11 +69,12 @@ fun registerScreen(
     navController: NavHostController = rememberNavController(),
     viewModel: SenOTPViewModel = SenOTPViewModel()
 ) {
+    val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Title()
         ChangeUserRegister()
-        getField(navController,viewModel)
+        getField(navController,viewModel,context)
     }
 }
 
@@ -159,6 +162,7 @@ fun ChangeUserRegister() {
 fun getField(
     navController: NavHostController,
     viewModel: SenOTPViewModel,
+    context: Context,
 ) {
     Column(
         modifier = Modifier
@@ -311,8 +315,12 @@ fun getField(
                 DataUser.phone = numberPhone.value
                 DataUser.password = password.value
                 DataUser.role = roleUser.roleText
-                viewModel.sendCodeOTP(numberPhone.value)
-                navController.navigate(Screens.OTPScreens.name)
+                viewModel.sendCodeOTP(numberPhone.value,context,navController)
+                isCreateAccount.isCheckPhone = !isCreateAccount.isCheckPhone
+//                if (isCreateAccount.isCheckPhone){
+//                    navController.navigate(Screens.OTPScreens.name)
+//                }
+
 
                 Log.d("NumberPhone", "getNumber:"+ numberPhone.value)
                 /*TODO*/ },

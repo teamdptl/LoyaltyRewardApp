@@ -1,5 +1,6 @@
 package com.example.loyaltyrewardapp.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,8 +56,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.DataUser
 import com.example.loyaltyrewardapp.data.viewmodel.RegisterViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.isCreateAccount
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.example.loyaltyrewardapp.ui.getOTP.otp
 
 class OTPScreen : ComponentActivity() {
@@ -73,13 +79,14 @@ class OTPScreen : ComponentActivity() {
 }
 
 @Composable
-fun OTPScreens(viewModel: RegisterViewModel = RegisterViewModel()) {
+fun OTPScreens(navController: NavController= rememberNavController(), viewModel: RegisterViewModel = RegisterViewModel()) {
+    val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize()) {
         btnIconBackScreen()
         TitleOTP()
         InputOTP(length = 6, onOtpEntered = { otp -> Log.d("OTP value", "val: $otp") })
 //        BackSendCodeOTP()
-        BtnConfirm(viewModel)
+        BtnConfirm(navController,viewModel,context)
         Log.d("data", "data: "+DataUser._name+","+DataUser.phone+","+DataUser.password+","+DataUser.role)
     }
 }
@@ -289,17 +296,23 @@ private fun OtpDigitInput(
 //}
 
 @Composable
-fun BtnConfirm(viewModel: RegisterViewModel) {
+fun BtnConfirm(navController: NavController, viewModel: RegisterViewModel, context: Context) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
         Button(
             onClick = {
+
                 viewModel.createResgister(DataUser._name,DataUser.phone,DataUser.password,DataUser.role,
-                    getOTP.getotp)
+                    getOTP.getotp,context,navController)
+//                isCreateAccount.isCheckOTP = isCreateAccount.isCheckOTP
                 Log.d("data", "data: "+DataUser._name+","+DataUser.phone+","+DataUser.password+","+DataUser.role+","+ getOTP.getotp)
-                      },
+//                if (isCreateAccount.isCheckOTP){
+//                    navController.navigate(Screens.doneOTPScreen.name)
+//                }
+                      }
+                ,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 14.dp, end = 14.dp, bottom = 150.dp)
