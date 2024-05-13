@@ -35,9 +35,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURCouponViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURServiceViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.ManagerConfirmScanViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.ManagerScanViewModel
-import com.example.loyaltyrewardapp.data.viewmodel.ShopDetailViewModel
 import com.example.loyaltyrewardapp.screens.*
 import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.CURServiceScreen
@@ -51,7 +48,7 @@ import com.example.loyaltyrewardapp.screens.manager.ScanScreen
 
 @Composable
 @Preview
-fun ManagerNavigation(onLogout: () -> Unit = {}) {
+fun ManagerNavigation(onLogout: () -> Unit = {}, guestNavigation: NavHostController = rememberNavController()) {
     val navController = rememberNavController()
 
     Scaffold (
@@ -167,7 +164,7 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
                 HistoryManagerPreview()
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfileContent(navController, onLogout)
+                ProfileContent(navController, onLogout, guestNavigation)
             }
             composable(route = Screens.AdminReadCoupon.name + "/{couponId}"){ backStackEntry ->
                 val viewModel = AdminCURCouponViewModel()

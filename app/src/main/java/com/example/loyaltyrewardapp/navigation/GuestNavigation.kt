@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
+import com.example.loyaltyrewardapp.data.viewmodel.FCMViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.GuestViewModel
 import com.example.loyaltyrewardapp.screens.SplashScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
@@ -22,11 +23,12 @@ import com.example.loyaltyrewardapp.screens.registerScreen
 import com.example.loyaltyrewardapp.ui.LoginScreen
 import com.example.loyaltyrewardapp.ui.OTPScreens
 import com.example.loyaltyrewardapp.ui.doneOTPScreen
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
+import com.google.firebase.messaging.FirebaseMessaging
 
 @Composable
-fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
+fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel(), fcmViewModel: FCMViewModel = hiltViewModel()) {
 
     val user by viewModel.user.observeAsState()
     var reloadActivity by remember { mutableStateOf(false) }
@@ -60,6 +62,16 @@ fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
     }
     else if (user?.role == "user") {
         startDestination = Screens.UserNavigationScreen.name
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("ErrorFCM", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            fcmViewModel.updateFCMToken(token)
+        })
     }
 
     Log.d("TAG", "Change Screen: $startDestination")
@@ -85,12 +97,12 @@ fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
         composable(route = Screens.UserNavigationScreen.name) {
             UserNavigation(onLogout = {
                 reloadActivity = false
-            })
+            }, guestNavigation = navController)
         }
         composable(route = Screens.ManagerNavigationScreen.name) {
             ManagerNavigation(onLogout = {
                 reloadActivity = false
-            })
+            }, guestNavigation = navController)
         }
 
         composable(route = Screens.CreateShopScreen.name) {

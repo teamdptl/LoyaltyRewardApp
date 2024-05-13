@@ -115,7 +115,7 @@ class AdminCURCouponViewModel : ViewModel() {
 
     fun createDetailCoupon(context: Context){
         Log.d("AdminCURCouponViewModel", "image url: ${coupon.value?.icon}")
-        if (_coupon.value?.icon.toString().isNotBlank()){
+        if (_coupon.value?.icon?.isNotBlank() == true){
             val inputStream = context.contentResolver.openInputStream(Uri.parse(_coupon.value?.icon))
 
             val file = File(context.cacheDir, "fileProfile.png")

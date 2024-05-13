@@ -1,18 +1,10 @@
 package com.example.loyaltyrewardapp.screens
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.DatePicker
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,7 +14,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -35,15 +26,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,16 +48,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toFile
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.example.loyaltyrewardapp.R
 import com.example.loyaltyrewardapp.components.MainBackgroundScreen
 import com.example.loyaltyrewardapp.data.model.User
-import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
@@ -79,7 +66,7 @@ import java.util.Date
 
 
 @Composable
-fun ProfileContent(navController: NavController = rememberNavController(), onLogout :() -> Unit = {}, homeViewModel: UserHomeViewModel = UserHomeViewModel()){
+fun ProfileContent(navController: NavController = rememberNavController(), onLogout:() -> Unit = {}, guestNavigation : NavController = rememberNavController(), homeViewModel: UserHomeViewModel = UserHomeViewModel()){
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val firebaseUser = auth.currentUser
 //    Log.d("UserId", firebaseUser.toString())
@@ -182,6 +169,7 @@ fun ProfileContent(navController: NavController = rememberNavController(), onLog
                         Button(onClick = {
                             auth.signOut()
                             onLogout()
+                            guestNavigation.navigate(Screens.LoginScreen.name)
                                          },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFFFF0E23),

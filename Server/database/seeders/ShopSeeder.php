@@ -73,19 +73,19 @@ class ShopSeeder extends Seeder
         ]);
 
         $tiemHotToc->coupons()->create([
-            'name' => 'Tặng chai dầu gội Sunsik miễn phí',
-            'description' => 'Tặng lọ dầu gội miễn phí',
+            'name' => 'Tặng chai keo vuốt tóc miễn phí',
+            'description' => 'Tặng keo vuốt tóc miễn phí khi đủ 10 điểm',
             'require_point' => 10,
-            'icon' => 'https://placehold.co/400',
+            'icon' => 'https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715571636/uywh6pdsiqtiawmtmzpn.jpg',
             'is_active' => true,
             'expired_after' => 30,
         ]);
 
         $tiemHotToc->coupons()->create([
             'name' => 'Miễn phí 1 lần hớt tóc',
-            'description' => 'Miễn phí 1 lần hớt tóc khi đủ 20 điểm',
-            'require_point' => 20,
-            'icon' => 'https://placehold.co/300',
+            'description' => 'Miễn phí 1 lần hớt tóc khi đủ 10 điểm',
+            'require_point' => 10,
+            'icon' => 'https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715571636/uywh6pdsiqtiawmtmzpn.jpg',
             'is_active' => true,
             'expired_after' => 30,
         ]);
@@ -130,7 +130,7 @@ class ShopSeeder extends Seeder
             'name' => 'Miễn phí thay nhớt xe máy',
             'description' => 'Miễn phí thay nhớt xe máy khi tích đủ 10 điểm',
             'require_point' => 10,
-            'icon' => 'https://placehold.co/400',
+            'icon' => 'https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715571636/uywh6pdsiqtiawmtmzpn.jpg',
             'is_active' => true,
             'expired_after' => 30,
         ]);
@@ -175,7 +175,7 @@ class ShopSeeder extends Seeder
             'name' => 'Miễn phí 1 phần cơm sườn',
             'description' => 'Miễn phí 1 phần cơm sườn khi tích đủ 20 điểm',
             'require_point' => 20,
-            'icon' => 'https://placehold.co/400',
+            'icon' => 'https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715571636/uywh6pdsiqtiawmtmzpn.jpg',
             'is_active' => true,
             'expired_after' => 30,
         ]);
@@ -221,7 +221,7 @@ class ShopSeeder extends Seeder
             'name' => 'Miễn phí vệ sinh máy lạnh',
             'description' => 'Miễn phí vệ sinh máy lạnh khi tích đủ 15 điểm',
             'require_point' => 15,
-            'icon' => 'https://placehold.co/400',
+            'icon' => 'https://res.cloudinary.com/hmvv5mjf0/image/upload/v1715571636/uywh6pdsiqtiawmtmzpn.jpg',
             'is_active' => true,
             'expired_after' => 30,
         ]);

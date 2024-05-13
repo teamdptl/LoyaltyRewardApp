@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.birjuvachhani.locus.Locus
@@ -67,7 +68,7 @@ class DetailShopActivity : ComponentActivity() {
 }
 
 @Composable
-fun CURShopScreen(navController: NavController = rememberNavController(), shopId: String, screen: String = "R", shopViewModel : AdminCURShopViewModel){
+fun CURShopScreen(navController: NavController = rememberNavController(), shopId: String, screen: String = "R", shopViewModel : AdminCURShopViewModel = hiltViewModel()){
     var shop by remember {shopViewModel.shop}
     var screenState by remember {shopViewModel.screenState}
     var title by remember{mutableStateOf("")}
@@ -278,7 +279,7 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
 
                             Button(
                                 onClick = {
-                                    shopViewModel.createDetailShop(context)
+                                    shopViewModel.createDetailShop(context, navController)
                                 },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -291,7 +292,7 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                                     modifier = Modifier.size(16.dp),
                                     tint = Color.White
                                 )
-                                Text(text = "Tạo khuyến mãi",
+                                Text(text = "Tạo shop",
                                     color = Color.White)
                             }
 
@@ -320,7 +321,7 @@ fun CURShopScreen(navController: NavController = rememberNavController(), shopId
                                     modifier = Modifier.size(16.dp),
                                     tint = Color.White
                                 )
-                                Text(text = "Lưu khuyến mãi",
+                                Text(text = "Lưu shop",
                                     color = Color.White)
                             }
 

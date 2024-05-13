@@ -28,7 +28,7 @@ fun SplashScreen() {
     ) {
 
         Image(
-            painterResource(id = R.drawable.avatar),
+            painterResource(id = R.drawable.splash),
             contentDescription = "Logo",
             modifier = Modifier
                 .width(200.dp) // Width of the logo

@@ -43,7 +43,7 @@ class MainScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         ApiSingleton.initialize(applicationContext)
         
-//        auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
 //        logout
 //        auth.signOut()
@@ -64,6 +64,13 @@ class MainScreen : ComponentActivity() {
 //                    Log.d("User", "signInWithEmail:fail")
 //                }
 //            }
+        val user = auth.currentUser;
+                    user?.getIdToken(false)?.addOnCompleteListener(this) {
+                        if (it.isSuccessful) {
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
+                        }
+                    }
         setContent {
             MaterialTheme {
                 GuestNavigation()

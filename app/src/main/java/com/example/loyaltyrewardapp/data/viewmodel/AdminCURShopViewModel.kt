@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.loyaltyrewardapp.data.api.ApiSingleton
 import com.example.loyaltyrewardapp.data.model.Coupon
 import com.example.loyaltyrewardapp.data.model.CouponRequest
@@ -17,11 +18,15 @@ import com.example.loyaltyrewardapp.data.model.DetailShopService
 import com.example.loyaltyrewardapp.data.model.ResponseMessage
 import com.example.loyaltyrewardapp.data.model.ResponseUpload
 import com.example.loyaltyrewardapp.data.model.ShopRequest
+import com.example.loyaltyrewardapp.navigation.Screens
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.File
+import javax.inject.Inject
 
-class AdminCURShopViewModel : ViewModel(){
+@HiltViewModel
+class AdminCURShopViewModel @Inject constructor() : ViewModel(){
     private val _screenState = mutableStateOf<String>("")
     val screenState get() = _screenState
 
@@ -101,7 +106,7 @@ class AdminCURShopViewModel : ViewModel(){
         }
     }
 
-    fun createDetailShop(context: Context){
+    fun createDetailShop(context: Context, navController : NavController){
         val logoUrl = mutableStateOf<String>(_shop.value?.logo.toString())
         Log.d("Admin CUR Coupon", "update detail shop")
         if (_shop.value?.logo.toString().isNotBlank()){
@@ -116,14 +121,14 @@ class AdminCURShopViewModel : ViewModel(){
                 val url = userhome.uploadImage2(file)
                 Log.d("AdminCURCoupon", url)
                 logoUrl.value = url
-                subCreateShop(context, url)
+                subCreateShop(context, url, navController)
             }
         }else{
-            subCreateShop(context, _shop.value?.logo.toString())
+            subCreateShop(context, _shop.value?.logo.toString(), navController)
         }
     }
 
-    private fun subCreateShop(context: Context, url: String){
+    private fun subCreateShop(context: Context, url: String, navController: NavController){
         val shopRequest = ShopRequest(
             name = _shop.value?.name.toString(),
             description = _shop.value?.description.toString(),
@@ -140,6 +145,7 @@ class AdminCURShopViewModel : ViewModel(){
             viewModelScope.launch {
                 try {
                     val response = ApiSingleton.getApiService().createShop(shopRequest)
+                    navController.navigate(Screens.ManagerNavigationScreen.name)
                     Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
                 } catch (e: HttpException){
                     if (e.code() in 400..499){

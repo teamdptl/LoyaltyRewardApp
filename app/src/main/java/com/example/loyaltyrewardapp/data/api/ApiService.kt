@@ -113,6 +113,11 @@ interface ApiService {
     @GET("shop-daily")
     suspend fun visitedOfADay(): ShopDaily
 
+<<<<<<< Updated upstream
     @GET("shop-history")
     suspend fun historyManager(): List<Visited>
+=======
+    @POST("fcm")
+    suspend fun updateFCM(@Query("fcm_token") fcm_token:String): ResponseMessage
+>>>>>>> Stashed changes
 }
