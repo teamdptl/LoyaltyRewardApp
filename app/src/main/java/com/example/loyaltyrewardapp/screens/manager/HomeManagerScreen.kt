@@ -82,28 +82,28 @@ fun HomeManagerScreen(homeViewModel: UserHomeViewModel = UserHomeViewModel()){
 
             if (visitedManagers != emptyList<Visited>()) {
                 ShopOfManagerItem(user)
-                Row(
-                    modifier = Modifier.padding(start = 22.dp, top = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Các lượt ghé thăm trong ngày",
-                        fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                LazyColumn(
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(
-                        items = visitedManagers,
-                        itemContent = {
-                            VisitorsItem(it)
-                        }
-                    )
-                }
+//                Row(
+//                    modifier = Modifier.padding(start = 22.dp, top = 10.dp),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = "Các lượt ghé thăm trong ngày",
+//                        fontWeight = FontWeight.SemiBold,
+//                        style = MaterialTheme.typography.bodyMedium,
+//                        modifier = Modifier.weight(1f)
+//                    )
+//                }
+//                LazyColumn(
+//                    contentPadding = PaddingValues(horizontal = 16.dp)
+//                ) {
+//                    items(
+//                        items = visitedManagers,
+//                        itemContent = {
+//                            VisitorsItem(it)
+//                        }
+//                    )
+//                }
             }
         }
     }
