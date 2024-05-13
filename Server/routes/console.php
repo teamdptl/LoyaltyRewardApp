@@ -4,5 +4,5 @@ use App\Http\Services\NotifyReminder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
 
-// TODO: Giảm thời gian thông báo
-Schedule::call(new NotifyReminder)->everyFiveMinutes();
+// TODO: Lặp lại hằng ngày và thông báo nhắc nhở
+Schedule::call(new NotifyReminder)->daily();

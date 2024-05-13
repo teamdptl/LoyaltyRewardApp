@@ -86,7 +86,7 @@ fun Title() {
     ) {
 
         Image(
-            painter = painterResource(id = R.drawable.login_background),
+            painter = painterResource(id = R.drawable.splash),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 20.dp)

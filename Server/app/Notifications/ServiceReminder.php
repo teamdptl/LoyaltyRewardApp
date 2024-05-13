@@ -43,7 +43,7 @@ class ServiceReminder extends Notification
                 'title' => $this->reminder->title,
                 'body' => $this->reminder->body,
                 'image' => $this->reminder->image,
-                'shop' => $this->reminder->shop,
+                'shop' => $this->reminder->shop->_id,
             ])
             ->custom([
                 'android' => [

@@ -43,7 +43,7 @@ class MainScreen : ComponentActivity() {
         super.onCreate(savedInstanceState)
         ApiSingleton.initialize(applicationContext)
         
-//        auth = FirebaseAuth.getInstance()
+        auth = FirebaseAuth.getInstance()
 
 //        logout
 //        auth.signOut()
@@ -64,12 +64,19 @@ class MainScreen : ComponentActivity() {
 //                    Log.d("User", "signInWithEmail:fail")
 //                }
 //            }
+        val user = auth.currentUser;
+                    user?.getIdToken(false)?.addOnCompleteListener(this) {
+                        if (it.isSuccessful) {
+                            val idToken = it.result?.token
+                            Log.d("User", "idToken: $idToken")
+                        }
+                    }
         setContent {
             MaterialTheme {
                 GuestNavigation()
 //                LoginScreen()
-                val viewModel = AdminCURCouponViewModel()
-                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "C", couponViewModel = viewModel)
+//                val viewModel = AdminCURCouponViewModel()
+//                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "C", couponViewModel = viewModel)
 
 //                val viewModel = AdminCURShopViewModel()
 //                CURShopScreen(shopId = "663a4e93d3b422b0fe0e2356", screen = "C", shopViewModel = viewModel)

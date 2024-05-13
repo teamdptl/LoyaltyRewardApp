@@ -1,7 +1,6 @@
 package com.example.loyaltyrewardapp.data.viewmodel
 
 import android.net.Uri
-import android.net.http.HttpException
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -30,6 +29,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileNotFoundException
+import retrofit2.HttpException
 
 class UserHomeViewModel: ViewModel() {
     val user: MutableState<User> = mutableStateOf(UserEmptyState)
@@ -47,7 +47,7 @@ class UserHomeViewModel: ViewModel() {
                 val currentUser = ApiSingleton.getApiService().getCurrentUser()
                 user.value = currentUser
                 Log.d("Loading", "fetchCurrentUser: ${user.value}")
-            } catch (e: Exception) {
+            } catch (e: HttpException) {
                 user.value = NotFoundUserState
             }
         }
@@ -55,22 +55,35 @@ class UserHomeViewModel: ViewModel() {
 
     fun fetchRecommendShops(limit: Int = 10) {
         viewModelScope.launch {
-            val shops = ApiSingleton.getApiService().getRecommendedShops(limit)
-            recommendShops.value = shops
+            try{
+                val shops = ApiSingleton.getApiService().getRecommendedShops(limit)
+                recommendShops.value = shops
+            } catch (e: HttpException){
+                Log.d("Loading", "fetchRecommendShops: ${e.response()?.body().toString()}")
+            }
         }
     }
 
     fun fetchVisitedShops() {
         viewModelScope.launch {
-            val shops = ApiSingleton.getApiService().getVisitedShops()
-            visitedShops.value = shops
+            try {
+                val shops = ApiSingleton.getApiService().getVisitedShops()
+                visitedShops.value = shops
+            } catch (e: HttpException){
+                Log.d("Loading", "fetchVisitedShops: ${e.response()?.body().toString()}")
+            }
+
         }
     }
 
     fun fetchAvailableVoucher() {
         viewModelScope.launch {
-            val vouchers = ApiSingleton.getApiService().getAvailableCoupons()
-            availableCoupons.value = vouchers
+            try {
+                val vouchers = ApiSingleton.getApiService().getAvailableCoupons()
+                availableCoupons.value = vouchers
+            } catch (e: HttpException){
+                Log.d("Loading", "fetchAvailableVoucher: ${e.response()?.body().toString()}")
+            }
         }
     }
 

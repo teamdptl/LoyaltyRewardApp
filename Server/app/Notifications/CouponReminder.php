@@ -38,7 +38,7 @@ class CouponReminder extends Notification
                 'title' => "Sắp hết hạn ".$this->coupon->name,
                 'body' => "Hãy đến cửa hàng ".$this->coupon->shop->name." để sử dụng coupon trước khi hết hạn",
                 'image' => $this->coupon->icon,
-                'shop' => $this->coupon->shop,
+                'shop' => $this->coupon->shop->_id,
             ])
             ->custom([
                 'android' => [

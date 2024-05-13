@@ -136,19 +136,21 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
                 }
             }
 
+            if (visitedShops == emptyList<DetailShop>()){
+                Log.d("Loading", "Chua co du lieu")
+            } else {
+                Row(
+                    modifier = Modifier.padding(start = 22.dp, top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-            Row(
-                modifier = Modifier.padding(start = 22.dp, top = 10.dp, bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Text(
-                    text = "Đã ghé thăm",
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.weight(1f)
-                )
+                    Text(
+                        text = "Đã ghé thăm",
+                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.weight(1f)
+                    )
 //                TextButton(
 //                    onClick = {
 //                        navController.navigate(Screens.ShopVerticalScreen.name)
@@ -166,11 +168,7 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
 //                        tint = MainColor
 //                    )
 //                }
-            }
-
-            if (visitedShops == emptyList<DetailShop>()){
-                Log.d("Loading", "Chua co du lieu")
-            } else {
+                }
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp)
                 ) {
