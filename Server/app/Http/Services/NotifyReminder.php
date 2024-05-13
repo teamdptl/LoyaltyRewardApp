@@ -13,7 +13,7 @@ class NotifyReminder
     public function __invoke()
     {
         $today = Carbon::today();
-        $twoDaysLater = Carbon::today()->addDays(2);
+        $twoDaysLater = Carbon::today()->addDays(60);
 
         // Nhắc nhở dịch vụ định kì
         $reminders = Reminder::whereDate('time', '>=', $today)
