@@ -88,7 +88,7 @@ fun HomeManagerScreen(navController: NavController = rememberNavController(), ho
             })
 
             if (visitedManagers != emptyList<Visited>()) {
-                ShopOfManagerItem(user)
+                ShopOfManagerItem(user, {})
 //                Row(
 //                    modifier = Modifier.padding(start = 22.dp, top = 10.dp),
 //                    horizontalArrangement = Arrangement.SpaceBetween,

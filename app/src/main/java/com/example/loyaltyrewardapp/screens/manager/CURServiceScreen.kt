@@ -71,12 +71,12 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
         Log.d("Loading", "Chua co du lieu")
     }else{
         title = if (screenState == "R") {
-            "Thông tin ưu đãi"
+            "Thông tin dịch vụ"
         }else{
             if (screenState == "C") {
-                "Thêm ưu đãi"
+                "Thêm dịch vụ"
             }else{
-                "Cập nhật ưu đãi"
+                "Cập nhật dịch vụ"
             }
         }
     }

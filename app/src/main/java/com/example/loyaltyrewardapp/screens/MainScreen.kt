@@ -47,7 +47,7 @@ class MainScreen : ComponentActivity() {
 
 //        logout
 //        auth.signOut()
-
+//
 //        auth.signInWithEmailAndPassword("+84890516934@app.vn", "1234567")
 //            .addOnCompleteListener(this) { task ->
 //                if (task.isSuccessful) {
@@ -68,8 +68,8 @@ class MainScreen : ComponentActivity() {
             MaterialTheme {
                 GuestNavigation()
 //                LoginScreen()
-                val viewModel = AdminCURCouponViewModel()
-                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "C", couponViewModel = viewModel)
+//                val viewModel = AdminCURCouponViewModel()
+//                CURCouponScreen(couponId = "663a4e93d3b422b0fe0e235b", screen = "C", couponViewModel = viewModel)
 
 //                val viewModel = AdminCURShopViewModel()
 //                CURShopScreen(shopId = "663a4e93d3b422b0fe0e2356", screen = "C", shopViewModel = viewModel)

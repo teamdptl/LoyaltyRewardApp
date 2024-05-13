@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.data.model.NotFoundUserState
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
+import com.example.loyaltyrewardapp.data.viewmodel.AdminCURShopViewModel
 import com.example.loyaltyrewardapp.data.viewmodel.GuestViewModel
 import com.example.loyaltyrewardapp.screens.SplashScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
@@ -93,7 +94,8 @@ fun GuestNavigation(viewModel : GuestViewModel = hiltViewModel()) {
         }
 
         composable(route = Screens.CreateShopScreen.name) {
-            CURShopScreen(navController, "", "C")
+            val shopViewShop = AdminCURShopViewModel()
+            CURShopScreen(navController, "", "C", shopViewShop)
         }
     }
 }
