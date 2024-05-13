@@ -43,7 +43,7 @@ class AdminCURShopViewModel : ViewModel(){
         }
     }
 
-    fun updateDetailShop(context: Context){
+    fun updateDetailShop(context: Context, edited: Boolean){
         val logoUrl = mutableStateOf<String>(_shop.value?.logo.toString())
         Log.d("Admin CUR Coupon", "update detail shop")
         if ("https://res.cloudinary.com" !in _shop.value?.logo.toString()){
@@ -58,16 +58,16 @@ class AdminCURShopViewModel : ViewModel(){
                 val url = userhome.uploadImage2(file)
                 Log.d("AdminCURCoupon", url)
                 logoUrl.value = url
-                subUpdateShop(context, logoUrl = url)
+                subUpdateShop(context, logoUrl = url, edited)
             }
         }else{
-            subUpdateShop(context, logoUrl = _shop.value?.logo.toString())
+            subUpdateShop(context, logoUrl = _shop.value?.logo.toString(), edited)
         }
 
 
     }
 
-    private fun subUpdateShop(context: Context, logoUrl: String){
+    private fun subUpdateShop(context: Context, logoUrl: String, edited: Boolean){
         val shopRequest = ShopRequest(
             name = _shop.value?.name.toString(),
             description = _shop.value?.description.toString(),
@@ -81,7 +81,7 @@ class AdminCURShopViewModel : ViewModel(){
         )
 
         if(checkValidShop(shopRequest)){
-            if(_isEdited.value){
+            if(edited){
                 viewModelScope.launch {
                     try {
                         val response = ApiSingleton.getApiService().updateShop(shopRequest)
@@ -180,6 +180,7 @@ class AdminCURShopViewModel : ViewModel(){
     }
 
     fun updateShopLogo(logo: String) {
+        Log.d("Admin CURShop", "updated image uri: $logo")
         _shop.value = _shop.value?.copy(logo = logo)
     }
 

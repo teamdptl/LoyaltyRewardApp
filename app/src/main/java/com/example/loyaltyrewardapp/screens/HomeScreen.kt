@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.loyaltyrewardapp.components.BannerAdView
 import com.example.loyaltyrewardapp.components.CompaniesItem
 import com.example.loyaltyrewardapp.components.MainUserHeader
 import com.example.loyaltyrewardapp.data.model.Coupon
@@ -242,6 +243,7 @@ fun HomeScreen(navController: NavController = rememberNavController(), homeViewM
                     )
                 }
             }
+            BannerAdView()
         }
     }
 }

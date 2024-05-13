@@ -4,4 +4,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="ad_mob_banner_id">ca-app-pub-5474571366428116/7958806488</string>
+    <string name="ad_mob_test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

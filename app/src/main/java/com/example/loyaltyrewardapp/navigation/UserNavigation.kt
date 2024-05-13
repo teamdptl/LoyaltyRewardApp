@@ -40,7 +40,7 @@ import com.example.loyaltyrewardapp.screens.*
 
 @Composable
 @Preview
-fun UserNavigation(guestNav: NavHostController = rememberNavController()) {
+fun UserNavigation(onLogout: () -> Unit = {}) {
     val navController = rememberNavController()
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(0)
@@ -152,7 +152,7 @@ fun UserNavigation(guestNav: NavHostController = rememberNavController()) {
                 HistoryPreview(navController)
             }
             composable(route = Screens.ProfileActivity.name){
-                ProfileContent(navController)
+                ProfileContent(navController, onLogout)
             }
             composable(route = Screens.ShopVerticalScreen.name){
                 CompaniesListVerticalScreen(navController)

@@ -79,7 +79,7 @@ import java.util.Date
 
 
 @Composable
-fun ProfileContent(navController: NavController = rememberNavController(), homeViewModel: UserHomeViewModel = UserHomeViewModel()){
+fun ProfileContent(navController: NavController = rememberNavController(), onLogout :() -> Unit = {}, homeViewModel: UserHomeViewModel = UserHomeViewModel()){
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val firebaseUser = auth.currentUser
 //    Log.d("UserId", firebaseUser.toString())
@@ -179,7 +179,10 @@ fun ProfileContent(navController: NavController = rememberNavController(), homeV
                         ) {
                             Text(text = "Lưu", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         }
-                        Button(onClick = { /*TODO*/ },
+                        Button(onClick = {
+                            auth.signOut()
+                            onLogout()
+                                         },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xFFFF0E23),
                                 contentColor = Color.White,

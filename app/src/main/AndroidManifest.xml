@@ -49,6 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-5474571366428116~6242400131" />
 <!--        <activity-->
 <!--                android:name=".screens.LoginScreen"-->
 <!--                android:exported="true">-->

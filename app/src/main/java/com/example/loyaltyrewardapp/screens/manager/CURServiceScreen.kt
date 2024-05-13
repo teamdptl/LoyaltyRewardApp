@@ -55,6 +55,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
     var period by remember { mutableStateOf<String>(serviceViewModel.service.value?.period.toString()) }
     var title by remember{ mutableStateOf("") }
     val context = LocalContext.current
+    var edited: Boolean = false
 
     Log.d("CUR Coupon Screen", "render screen")
     LaunchedEffect(key1 = null){
@@ -92,8 +93,8 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     fieldValue = co.name,
                     numOfRow = 1,
                     {
-                        if (!serviceViewModel.isEdited.value){
-                            serviceViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         serviceViewModel.updateServiceName(it)
                         service = service?.copy(name = it)
@@ -105,8 +106,8 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     fieldValue = co.description,
                     numOfRow = 4,
                     {
-                        if (!serviceViewModel.isEdited.value){
-                            serviceViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         serviceViewModel.updateServiceDescription(it)
                         service = service?.copy(description = it)
@@ -119,8 +120,8 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     onValueChange =
                     {
                         point = it
-                        if (!serviceViewModel.isEdited.value){
-                            serviceViewModel.updateIsEdited(true)
+                        if (!edited){
+                            edited = true
                         }
                         if (point.isBlank()){
                             serviceViewModel.updateServicePoint(-1)
@@ -139,8 +140,8 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                         onValueChange =
                         {
                             period = it
-                            if (!serviceViewModel.isEdited.value){
-                                serviceViewModel.updateIsEdited(true)
+                            if (!edited){
+                                edited = true
                             }
                             if (period.isBlank()){
                                 serviceViewModel.updateServicePeriod(0)
@@ -161,8 +162,8 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     Checkbox(checked = co.should_notification,
                         enabled = screenState != "R",
                         onCheckedChange = {
-                            if (!serviceViewModel.isEdited.value){
-                                serviceViewModel.updateIsEdited(true)
+                            if (!edited){
+                                edited = true
                             }
                             serviceViewModel.updateServiceNotify(it)
                             service = service?.copy(should_notification = it)
@@ -182,9 +183,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     horizontalArrangement = Arrangement.Absolute.SpaceBetween) {
                     if (screenState == "R") {
                         Button(
-                            onClick = {
-//                          navController.navigate(Screens.)
-                            },
+                            onClick = {navController.popBackStack()},
                             contentPadding = PaddingValues(30.dp, 10.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = Color(0xf0f0f0fc)
@@ -215,7 +214,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                     } else {
                         if (screenState == "C") {
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = { navController.popBackStack() },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xf0f0f0fc)
@@ -246,7 +245,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                         } else {
 
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = { navController.popBackStack() },
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xf0f0f0fc)
@@ -256,7 +255,7 @@ fun CURServiceScreen(navController: NavController = rememberNavController(), ser
                             }
 
                             Button(
-                                onClick = {serviceViewModel.updateDetailService(context)},
+                                onClick = {serviceViewModel.updateDetailService(context, edited)},
                                 contentPadding = PaddingValues(30.dp, 10.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Color(0xFF46BEF8)

@@ -21,17 +21,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.loyaltyrewardapp.components.HeaderAdmin
 import com.example.loyaltyrewardapp.components.ShopOfManagerItem
 import com.example.loyaltyrewardapp.components.VisitorsItem
 import com.example.loyaltyrewardapp.data.model.UserEmptyState
 import com.example.loyaltyrewardapp.data.model.Visited
 import com.example.loyaltyrewardapp.data.viewmodel.UserHomeViewModel
+import com.example.loyaltyrewardapp.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 @Preview
-fun HomeManagerScreen(homeViewModel: UserHomeViewModel = UserHomeViewModel()){
+fun HomeManagerScreen(navController: NavController = rememberNavController(), homeViewModel: UserHomeViewModel = UserHomeViewModel()){
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val firebaseUser = auth.currentUser
 
@@ -75,10 +78,14 @@ fun HomeManagerScreen(homeViewModel: UserHomeViewModel = UserHomeViewModel()){
                 Text(
                     text = "Cửa hàng sở hữu",
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.weight(1f)
                 )
             }
+
+            ShopOfManagerItem(user, onClick = {
+                navController.navigate(Screens.UpdateShopScreen.name + "/${user.shop?._id}")
+            })
 
             if (visitedManagers != emptyList<Visited>()) {
                 ShopOfManagerItem(user)
@@ -104,6 +111,7 @@ fun HomeManagerScreen(homeViewModel: UserHomeViewModel = UserHomeViewModel()){
 //                        }
 //                    )
 //                }
+
             }
         }
     }
