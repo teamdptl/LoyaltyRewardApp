@@ -38,6 +38,8 @@ class UserHomeViewModel: ViewModel() {
     val availableCoupons: MutableState<List<Coupon>> = mutableStateOf(emptyList<Coupon>())
     val visitedManagers: MutableState<List<Visited>> = mutableStateOf(emptyList<Visited>())
     val shopDaily: MutableState<ShopDaily?> = mutableStateOf(null)
+    val visitedHistorys: MutableState<List<Visited>> = mutableStateOf(emptyList<Visited>())
+
 
     fun fetchCurrentUser() {
         viewModelScope.launch {
@@ -77,6 +79,13 @@ class UserHomeViewModel: ViewModel() {
             val visites = ApiSingleton.getApiService().visitedOfADay()
             visitedManagers.value = visites.visited
             shopDaily.value = visites
+        }
+    }
+
+    fun fetchVisitedHistory(){
+        viewModelScope.launch {
+            val histories = ApiSingleton.getApiService().historyManager()
+            visitedHistorys.value = histories
         }
     }
 

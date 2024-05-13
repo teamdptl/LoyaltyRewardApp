@@ -15,6 +15,7 @@ import com.example.loyaltyrewardapp.data.model.User
 import com.example.loyaltyrewardapp.data.model.UserInfo
 import com.example.loyaltyrewardapp.data.model.UserPoint
 import com.example.loyaltyrewardapp.data.model.ServiceResponse
+import com.example.loyaltyrewardapp.data.model.Visited
 import retrofit2.http.Body
 import okhttp3.MultipartBody
 import retrofit2.http.GET
@@ -111,4 +112,7 @@ interface ApiService {
     suspend fun createAccount(@Query ("name") name: String,@Query("phone") phone: String,@Query("password") password: String,@Query("role") role: String,@Query("otp") otp: String):ResponseMessage
     @GET("shop-daily")
     suspend fun visitedOfADay(): ShopDaily
+
+    @GET("shop-history")
+    suspend fun historyManager(): List<Visited>
 }
