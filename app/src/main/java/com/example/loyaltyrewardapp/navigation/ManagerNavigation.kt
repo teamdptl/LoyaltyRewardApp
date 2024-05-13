@@ -43,6 +43,7 @@ import com.example.loyaltyrewardapp.screens.manager.CURCouponScreen
 import com.example.loyaltyrewardapp.screens.manager.CURServiceScreen
 import com.example.loyaltyrewardapp.screens.manager.CURShopScreen
 import com.example.loyaltyrewardapp.screens.manager.ConfirmScanScreen
+import com.example.loyaltyrewardapp.screens.manager.HistoryManagerPreview
 import com.example.loyaltyrewardapp.screens.manager.HomeManagerScreen
 import com.example.loyaltyrewardapp.screens.manager.RewardScanScreen
 import com.example.loyaltyrewardapp.screens.manager.ScanScreen
@@ -163,7 +164,7 @@ fun ManagerNavigation(onLogout: () -> Unit = {}) {
             }
             composable(route = Screens.NotificationManagerScreen.name){
                 // TODO: Chưa có màn hình notification cho manager
-                HistoryPreview()
+                HistoryManagerPreview()
             }
             composable(route = Screens.ProfileActivity.name){
                 ProfileContent(navController, onLogout)
