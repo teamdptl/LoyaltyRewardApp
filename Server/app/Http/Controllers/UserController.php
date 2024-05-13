@@ -311,7 +311,6 @@ class UserController extends Controller
      *
      */
     public function updateFCMToken(Request $request){
-
         /**
          * Validate các thuôc tính của user từ request
          */
@@ -319,8 +318,12 @@ class UserController extends Controller
             'fcm_token' => 'required|string'
         ]);
 
-        return $request->user->update([
+        $request->user->update([
             'fcm_token' => $validate['fcm_token']
+        ]);
+
+        return Response([
+            'message' => 'Cập nhật FCM token thành công!'
         ]);
     }
 
